@@ -46,43 +46,16 @@ import util.StdOut;
 
 import java.util.Stack;
 
-/**
- * The {@code BreadthFirstPaths} class represents a data type for finding
- * shortest paths (number of edges) from a source vertex <em>source</em>
- * (or a set of source vertices)
- * to every other vertex in an undirected graph.
- * <p>
- * This implementation uses breadth-first search.
- * The constructor takes &Theta;(<em>V</em> + <em>E</em>) time in the
- * worst case, where <em>V</em> is the number of vertices and <em>E</em>
- * is the number of edges.
- * Each instance method takes &Theta;(1) time.
- * It uses &Theta;(<em>V</em>) extra space (not including the graph).
- * <p>
- * For additional documentation,
- * see <a href="https://algs4.cs.princeton.edu/41graph">Section 4.1</a>
- * of <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- * @author Robert Sedgewick
- * @author Kevin Wayne
- */
 public class BreadthFirstPaths {
     private static final int INFINITY = Integer.MAX_VALUE;
     private boolean[] isVisited;  // isVisited[vertex] = is there an source-vertex path
     private int[] fromEdge;      // fromEdge[vertex] = previous edge on shortest source-vertex path
-    private int[] distTo;      // distTo[vertex] = number of edges shortest source-vertex path
+    private int[] distanceTo;      // distanceTo[vertex] = number of edges shortest source-vertex path
 
-    /**
-     * Computes the shortest path between the source vertex {@code source}
-     * and every other vertex in the graph {@code G}.
-     *
-     * @param G the graph
-     * @param source the source vertex
-     * @throws IllegalArgumentException unless {@code 0 <= source < V}
-     */
+
     public BreadthFirstPaths(UndirectedGraph G, int source) {
         isVisited = new boolean[G.getNumberOfVertices()];
-        distTo = new int[G.getNumberOfVertices()];
+        distanceTo = new int[G.getNumberOfVertices()];
         fromEdge = new int[G.getNumberOfVertices()];
         validateVertex(source);
         bfs(G, source);
@@ -102,32 +75,30 @@ public class BreadthFirstPaths {
      */
     public BreadthFirstPaths(UndirectedGraph G, Iterable<Integer> sources) {
         isVisited = new boolean[G.getNumberOfVertices()];
-        distTo = new int[G.getNumberOfVertices()];
+        distanceTo = new int[G.getNumberOfVertices()];
         fromEdge = new int[G.getNumberOfVertices()];
         for (int vertex = 0; vertex < G.getNumberOfVertices(); vertex++)
-            distTo[vertex] = INFINITY;
+            distanceTo[vertex] = INFINITY;
         validateVertices(sources);
         bfs(G, sources);
     }
 
-
-    // breadth-first search from a single source
     private void bfs(UndirectedGraph G, int source) {
-        Queue<Integer> q = new Queue<Integer>();
+        Queue<Integer> queue = new Queue<Integer>();
         for (int vertex = 0; vertex < G.getNumberOfVertices(); vertex++)
-            distTo[vertex] = INFINITY;
-        distTo[source] = 0;
+            distanceTo[vertex] = INFINITY;
+        distanceTo[source] = 0;
         isVisited[source] = true;
-        q.enqueue(source);
+        queue.enqueue(source);
 
-        while (!q.isEmpty()) {
-            int vertex = q.dequeue();
+        while (!queue.isEmpty()) {
+            int vertex = queue.dequeue();
             for (int current : G.getAdjacencyList(vertex)) {
                 if (!isVisited[current]) {
                     fromEdge[current] = vertex;
-                    distTo[current] = distTo[vertex] + 1;
+                    distanceTo[current] = distanceTo[vertex] + 1;
                     isVisited[current] = true;
-                    q.enqueue(current);
+                    queue.enqueue(current);
                 }
             }
         }
@@ -138,7 +109,7 @@ public class BreadthFirstPaths {
         Queue<Integer> q = new Queue<Integer>();
         for (int source : sources) {
             isVisited[source] = true;
-            distTo[source] = 0;
+            distanceTo[source] = 0;
             q.enqueue(source);
         }
         while (!q.isEmpty()) {
@@ -146,7 +117,7 @@ public class BreadthFirstPaths {
             for (int current : G.getAdjacencyList(vertex)) {
                 if (!isVisited[current]) {
                     fromEdge[current] = vertex;
-                    distTo[current] = distTo[vertex] + 1;
+                    distanceTo[current] = distanceTo[vertex] + 1;
                     isVisited[current] = true;
                     q.enqueue(current);
                 }
@@ -176,7 +147,7 @@ public class BreadthFirstPaths {
      */
     public int distTo(int vertex) {
         validateVertex(vertex);
-        return distTo[vertex];
+        return distanceTo[vertex];
     }
 
     /**
@@ -192,7 +163,7 @@ public class BreadthFirstPaths {
         if (!hasPathTo(vertex)) return null;
         Stack<Integer> path = new Stack<Integer>();
         int x;
-        for (x = vertex; distTo[x] != 0; x = fromEdge[x])
+        for (x = vertex; distanceTo[x] != 0; x = fromEdge[x])
             path.push(x);
         path.push(x);
         return path;
@@ -203,8 +174,8 @@ public class BreadthFirstPaths {
     private boolean check(UndirectedGraph G, int source) {
 
         // check that the distance of source = 0
-        if (distTo[source] != 0) {
-            StdOut.println("distance of source " + source + " to itself = " + distTo[source]);
+        if (distanceTo[source] != 0) {
+            StdOut.println("distance of source " + source + " to itself = " + distanceTo[source]);
             return false;
         }
 
@@ -218,10 +189,10 @@ public class BreadthFirstPaths {
                     StdOut.println("hasPathTo(" + current + ") = " + hasPathTo(current));
                     return false;
                 }
-                if (hasPathTo(vertex) && (distTo[current] > distTo[vertex] + 1)) {
+                if (hasPathTo(vertex) && (distanceTo[current] > distanceTo[vertex] + 1)) {
                     StdOut.println("edge " + vertex + "-" + current);
-                    StdOut.println("distTo[" + vertex + "] = " + distTo[vertex]);
-                    StdOut.println("distTo[" + current + "] = " + distTo[current]);
+                    StdOut.println("distTo[" + vertex + "] = " + distanceTo[vertex]);
+                    StdOut.println("distTo[" + current + "] = " + distanceTo[current]);
                     return false;
                 }
             }
@@ -232,10 +203,10 @@ public class BreadthFirstPaths {
         for (int current = 0; current < G.getNumberOfVertices(); current++) {
             if (!hasPathTo(current) || current == source) continue;
             int vertex = fromEdge[current];
-            if (distTo[current] != distTo[vertex] + 1) {
+            if (distanceTo[current] != distanceTo[vertex] + 1) {
                 StdOut.println("shortest path edge " + vertex + "-" + current);
-                StdOut.println("distTo[" + vertex + "] = " + distTo[vertex]);
-                StdOut.println("distTo[" + current + "] = " + distTo[current]);
+                StdOut.println("distTo[" + vertex + "] = " + distanceTo[vertex]);
+                StdOut.println("distTo[" + current + "] = " + distanceTo[current]);
                 return false;
             }
         }
