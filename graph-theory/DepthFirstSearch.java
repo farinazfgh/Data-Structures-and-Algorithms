@@ -1,6 +1,6 @@
 /******************************************************************************
  *  Compilation:  javac DepthFirstSearch.java
- *  Execution:    java DepthFirstSearch filename.txt s
+ *  Execution:    java DepthFirstSearch filename.txt source
  *  Dependencies: UndirectedGraph.java StdOut.java
  *  Data files:   https://algs4.cs.princeton.edu/41graph/tinyG.txt
  *                https://algs4.cs.princeton.edu/41graph/mediumG.txt
@@ -23,12 +23,12 @@ import util.StdOut;
 
 /**
  * The {@code DepthFirstSearch} class represents a data type for
- * determining the vertices connected to a given source vertex <em>s</em>
+ * determining the vertices connected to a given source vertex <em>source</em>
  * in an undirected graph. For versions that find the paths, see
  * {@link DepthFirstPaths} and {@link BreadthFirstPaths}.
  * <p>
  * This implementation uses depth-first search.
- * See {@link NonrecursiveDFS} for a non-recursive version.
+ * See {@link DFSNonRecursive} for a non-recursive version.
  * The constructor takes &Theta;(<em>V</em> + <em>E</em>) time in the worst
  * case, where <em>V</em> is the number of vertices and <em>E</em>
  * is the number of edges.
@@ -43,60 +43,60 @@ import util.StdOut;
  * @author Kevin Wayne
  */
 public class DepthFirstSearch {
-    private boolean[] marked;    // marked[v] = is there an s-v path?
-    private int count;           // number of vertices connected to s
+    private boolean[] isVisited;    // isVisited[vertex] = is there an source-vertex path?
+    private int count;           // number of vertices connected to source
 
     /**
      * Computes the vertices in graph {@code G} that are
-     * connected to the source vertex {@code s}.
+     * connected to the source vertex {@code source}.
      *
      * @param G the graph
-     * @param s the source vertex
-     * @throws IllegalArgumentException unless {@code 0 <= s < V}
+     * @param source the source vertex
+     * @throws IllegalArgumentException unless {@code 0 <= source < V}
      */
-    public DepthFirstSearch(UndirectedGraph G, int s) {
-        marked = new boolean[G.V()];
-        validateVertex(s);
-        dfs(G, s);
+    public DepthFirstSearch(UndirectedGraph G, int source) {
+        isVisited = new boolean[G.getNumberOfVertices()];
+        validateVertex(source);
+        dfs(G, source);
     }
 
-    // depth first search from v
-    private void dfs(UndirectedGraph G, int v) {
+    // depth first search from vertex
+    private void dfs(UndirectedGraph G, int vertex) {
         count++;
-        marked[v] = true;
-        for (int w : G.adj(v)) {
-            if (!marked[w]) {
-                dfs(G, w);
+        isVisited[vertex] = true;
+        for (int current : G.getAdjacencyList(vertex)) {
+            if (!isVisited[current]) {
+                dfs(G, current);
             }
         }
     }
 
     /**
-     * Is there a path between the source vertex {@code s} and vertex {@code v}?
+     * Is there a path between the source vertex {@code source} and vertex {@code vertex}?
      *
-     * @param v the vertex
+     * @param vertex the vertex
      * @return {@code true} if there is a path, {@code false} otherwise
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public boolean marked(int v) {
-        validateVertex(v);
-        return marked[v];
+    public boolean isVisited(int vertex) {
+        validateVertex(vertex);
+        return isVisited[vertex];
     }
 
     /**
-     * Returns the number of vertices connected to the source vertex {@code s}.
+     * Returns the number of vertices connected to the source vertex {@code source}.
      *
-     * @return the number of vertices connected to the source vertex {@code s}
+     * @return the number of vertices connected to the source vertex {@code source}
      */
     public int count() {
         return count;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
-        int V = marked.length;
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
+    private void validateVertex(int vertex) {
+        int V = isVisited.length;
+        if (vertex < 0 || vertex >= V)
+            throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V - 1));
     }
 
     /**
@@ -107,15 +107,15 @@ public class DepthFirstSearch {
     public static void main(String[] args) {
         In in = new In(args[0]);
         UndirectedGraph G = new UndirectedGraph(in);
-        int s = Integer.parseInt(args[1]);
-        DepthFirstSearch search = new DepthFirstSearch(G, s);
-        for (int v = 0; v < G.V(); v++) {
-            if (search.marked(v))
-                StdOut.print(v + " ");
+        int source = Integer.parseInt(args[1]);
+        DepthFirstSearch search = new DepthFirstSearch(G, source);
+        for (int vertex = 0; vertex < G.getNumberOfVertices(); vertex++) {
+            if (search.isVisited(vertex))
+                StdOut.print(vertex + " ");
         }
 
         StdOut.println();
-        if (search.count() != G.V()) StdOut.println("NOT connected");
+        if (search.count() != G.getNumberOfVertices()) StdOut.println("NOT connected");
         else StdOut.println("connected");
     }
 

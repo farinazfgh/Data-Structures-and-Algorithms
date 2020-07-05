@@ -83,74 +83,74 @@ public class SymbolDigraph {
         in = new In(filename);
         while (in.hasNextLine()) {
             String[] a = in.readLine().split(delimiter);
-            int v = st.get(a[0]);
+            int vertex = st.get(a[0]);
             for (int i = 1; i < a.length; i++) {
-                int w = st.get(a[i]);
-                graph.addEdge(v, w);
+                int current = st.get(a[i]);
+                graph.addEdge(vertex, current);
             }
         }
     }
 
     /**
-     * Does the digraph contain the vertex named {@code s}?
+     * Does the digraph contain the vertex named {@code source}?
      *
-     * @param s the name of a vertex
-     * @return {@code true} if {@code s} is the name of a vertex, and {@code false} otherwise
+     * @param source the name of a vertex
+     * @return {@code true} if {@code source} is the name of a vertex, and {@code false} otherwise
      */
-    public boolean contains(String s) {
-        return st.contains(s);
+    public boolean contains(String source) {
+        return st.contains(source);
     }
 
     /**
-     * Returns the integer associated with the vertex named {@code s}.
+     * Returns the integer associated with the vertex named {@code source}.
      *
-     * @param s the name of a vertex
-     * @return the integer (between 0 and <em>V</em> - 1) associated with the vertex named {@code s}
+     * @param source the name of a vertex
+     * @return the integer (between 0 and <em>V</em> - 1) associated with the vertex named {@code source}
      * @deprecated Replaced by {@link #indexOf(String)}.
      */
     @Deprecated
-    public int index(String s) {
-        return st.get(s);
+    public int index(String source) {
+        return st.get(source);
     }
 
     /**
-     * Returns the integer associated with the vertex named {@code s}.
+     * Returns the integer associated with the vertex named {@code source}.
      *
-     * @param s the name of a vertex
-     * @return the integer (between 0 and <em>V</em> - 1) associated with the vertex named {@code s}
+     * @param source the name of a vertex
+     * @return the integer (between 0 and <em>V</em> - 1) associated with the vertex named {@code source}
      */
-    public int indexOf(String s) {
-        return st.get(s);
+    public int indexOf(String source) {
+        return st.get(source);
     }
 
     /**
-     * Returns the name of the vertex associated with the integer {@code v}.
+     * Returns the name of the vertex associated with the integer {@code vertex}.
      *
-     * @param v the integer corresponding to a vertex (between 0 and <em>V</em> - 1)
-     * @return the name of the vertex associated with the integer {@code v}
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @param vertex the integer corresponding to a vertex (between 0 and <em>V</em> - 1)
+     * @return the name of the vertex associated with the integer {@code vertex}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      * @deprecated Replaced by {@link #nameOf(int)}.
      */
     @Deprecated
-    public String name(int v) {
-        validateVertex(v);
-        return keys[v];
+    public String name(int vertex) {
+        validateVertex(vertex);
+        return keys[vertex];
     }
 
     /**
-     * Returns the name of the vertex associated with the integer {@code v}.
+     * Returns the name of the vertex associated with the integer {@code vertex}.
      *
-     * @param v the integer corresponding to a vertex (between 0 and <em>V</em> - 1)
-     * @return the name of the vertex associated with the integer {@code v}
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @param vertex the integer corresponding to a vertex (between 0 and <em>V</em> - 1)
+     * @return the name of the vertex associated with the integer {@code vertex}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public String nameOf(int v) {
-        validateVertex(v);
-        return keys[v];
+    public String nameOf(int vertex) {
+        validateVertex(vertex);
+        return keys[vertex];
     }
 
     /**
-     * Returns the digraph assoicated with the symbol graph. It is the client's responsibility
+     * Returns the digraph assoicated with the symbol graph. It is the client'source responsibility
      * not to mutate the digraph.
      *
      * @return the digraph associated with the symbol digraph
@@ -162,7 +162,7 @@ public class SymbolDigraph {
     }
 
     /**
-     * Returns the digraph assoicated with the symbol graph. It is the client's responsibility
+     * Returns the digraph assoicated with the symbol graph. It is the client'source responsibility
      * not to mutate the digraph.
      *
      * @return the digraph associated with the symbol digraph
@@ -171,11 +171,11 @@ public class SymbolDigraph {
         return graph;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
+    private void validateVertex(int vertex) {
         int V = graph.V();
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+        if (vertex < 0 || vertex >= V)
+            throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V - 1));
     }
 
     /**
@@ -190,9 +190,9 @@ public class SymbolDigraph {
         Digraph graph = sg.digraph();
         while (!StdIn.isEmpty()) {
             String t = StdIn.readLine();
-            for (int v : graph.adj(sg.index(t))) {
+            for (int vertex : graph.adj(sg.index(t))) {
 
-                StdOut.println("   " + sg.name(v));
+                StdOut.println("   " + sg.name(vertex));
             }
         }
     }

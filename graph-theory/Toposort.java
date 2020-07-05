@@ -10,7 +10,7 @@ public class Toposort {
         return order;
     }
 
-    private static void dfs(ArrayList<Integer>[] adj, int[] used, ArrayList<Integer> order, int s) {
+    private static void dfs(ArrayList<Integer>[] adj, int[] used, ArrayList<Integer> order, int source) {
       //write your code here
     }
 

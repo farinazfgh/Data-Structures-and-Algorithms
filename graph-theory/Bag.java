@@ -64,7 +64,7 @@ public class Bag<Item> implements Iterable<Item> {
         return new LinkedIterator(first);
     }
 
-    // an iterator, doesn't implement remove() since it's optional
+    // an iterator, doesn't implement remove() since it'source optional
     private class LinkedIterator implements Iterator<Item> {
         private Node<Item> current;
 
@@ -101,9 +101,8 @@ public class Bag<Item> implements Iterable<Item> {
         }
 
         StdOut.println("size of bag = " + bag.size());
-        for (String s : bag) {
-            StdOut.println(s);
+        for (String source : bag) {
+            StdOut.println(source);
         }
     }
-
 }

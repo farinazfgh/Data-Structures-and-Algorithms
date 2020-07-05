@@ -2,7 +2,7 @@ import java.util.*;
 
 public class ShortestPaths {
 
-    private static void shortestPaths(ArrayList<Integer>[] adj, ArrayList<Integer>[] cost, int s, long[] distance, int[] reachable, int[] shortest) {
+    private static void shortestPaths(ArrayList<Integer>[] adj, ArrayList<Integer>[] cost, int source, long[] distance, int[] reachable, int[] shortest) {
       //write your code here
     }
 
@@ -17,14 +17,14 @@ public class ShortestPaths {
             cost[i] = new ArrayList<Integer>();
         }
         for (int i = 0; i < m; i++) {
-            int x, y, w;
+            int x, y, current;
             x = scanner.nextInt();
             y = scanner.nextInt();
-            w = scanner.nextInt();
+            current = scanner.nextInt();
             adj[x - 1].add(y - 1);
-            cost[x - 1].add(w);
+            cost[x - 1].add(current);
         }
-        int s = scanner.nextInt() - 1;
+        int source = scanner.nextInt() - 1;
         long distance[] = new long[n];
         int reachable[] = new int[n];
         int shortest[] = new int[n];
@@ -33,7 +33,7 @@ public class ShortestPaths {
             reachable[i] = 0;
             shortest[i] = 1;
         }
-        shortestPaths(adj, cost, s, distance, reachable, shortest);
+        shortestPaths(adj, cost, source, distance, reachable, shortest);
         for (int i = 0; i < n; i++) {
             if (reachable[i] == 0) {
                 System.out.println('*');

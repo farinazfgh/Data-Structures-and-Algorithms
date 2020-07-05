@@ -4,7 +4,7 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class BFS {
-    private static int distance(ArrayList<Integer>[] adj, int s, int t) {
+    private static int distance(ArrayList<Integer>[] adj, int source, int t) {
         //write your code here
         return -1;
     }

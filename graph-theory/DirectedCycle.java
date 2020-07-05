@@ -45,9 +45,9 @@ import java.util.Stack;
  * @author Kevin Wayne
  */
 public class DirectedCycle {
-    private boolean[] marked;        // marked[v] = has vertex v been marked?
-    private int[] edgeTo;            // edgeTo[v] = previous vertex on path to v
-    private boolean[] onStack;       // onStack[v] = is vertex on the stack?
+    private boolean[] isVisited;        // isVisited[vertex] = has vertex vertex been isVisited?
+    private int[] fromEdge;            // fromEdge[vertex] = previous vertex on path to vertex
+    private boolean[] onStack;       // onStack[vertex] = is vertex on the stack?
     private Stack<Integer> cycle;    // directed cycle (or null if no such cycle)
 
     /**
@@ -57,40 +57,40 @@ public class DirectedCycle {
      * @param G the digraph
      */
     public DirectedCycle(Digraph G) {
-        marked = new boolean[G.V()];
+        isVisited = new boolean[G.V()];
         onStack = new boolean[G.V()];
-        edgeTo = new int[G.V()];
-        for (int v = 0; v < G.V(); v++)
-            if (!marked[v] && cycle == null) dfs(G, v);
+        fromEdge = new int[G.V()];
+        for (int vertex = 0; vertex < G.V(); vertex++)
+            if (!isVisited[vertex] && cycle == null) dfs(G, vertex);
     }
 
     // check that algorithm computes either the topological order or finds a directed cycle
-    private void dfs(Digraph G, int v) {
-        onStack[v] = true;
-        marked[v] = true;
-        for (int w : G.adj(v)) {
+    private void dfs(Digraph G, int vertex) {
+        onStack[vertex] = true;
+        isVisited[vertex] = true;
+        for (int current : G.adj(vertex)) {
 
             // short circuit if directed cycle found
             if (cycle != null) return;
 
                 // found new vertex, so recur
-            else if (!marked[w]) {
-                edgeTo[w] = v;
-                dfs(G, w);
+            else if (!isVisited[current]) {
+                fromEdge[current] = vertex;
+                dfs(G, current);
             }
 
             // trace back directed cycle
-            else if (onStack[w]) {
+            else if (onStack[current]) {
                 cycle = new Stack<Integer>();
-                for (int x = v; x != w; x = edgeTo[x]) {
+                for (int x = vertex; x != current; x = fromEdge[x]) {
                     cycle.push(x);
                 }
-                cycle.push(w);
-                cycle.push(v);
+                cycle.push(current);
+                cycle.push(vertex);
                 assert check();
             }
         }
-        onStack[v] = false;
+        onStack[vertex] = false;
     }
 
     /**
@@ -119,9 +119,9 @@ public class DirectedCycle {
         if (hasCycle()) {
             // verify cycle
             int first = -1, last = -1;
-            for (int v : cycle()) {
-                if (first == -1) first = v;
-                last = v;
+            for (int vertex : cycle()) {
+                if (first == -1) first = vertex;
+                last = vertex;
             }
             if (first != last) {
                 System.err.printf("cycle begins with %d and ends with %d\n", first, last);
@@ -145,8 +145,8 @@ public class DirectedCycle {
         DirectedCycle finder = new DirectedCycle(G);
         if (finder.hasCycle()) {
             StdOut.print("Directed cycle: ");
-            for (int v : finder.cycle()) {
-                StdOut.print(v + " ");
+            for (int vertex : finder.cycle()) {
+                StdOut.print(vertex + " ");
             }
             StdOut.println();
         } else {

@@ -1,6 +1,6 @@
 /******************************************************************************
  *  Compilation:  javac BreadthFirstDirectedPaths.java
- *  Execution:    java BreadthFirstDirectedPaths digraph.txt s
+ *  Execution:    java BreadthFirstDirectedPaths digraph.txt source
  *  Dependencies: Digraph.java Queue.java Stack.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/tinyDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/mediumDG.txt
@@ -34,7 +34,7 @@ import java.util.Stack;
 
 /**
  * The {@code BreadthDirectedFirstPaths} class represents a data type for
- * finding shortest paths (number of edges) from a source vertex <em>s</em>
+ * finding shortest paths (number of edges) from a source vertex <em>source</em>
  * (or set of source vertices) to every other vertex in the digraph.
  * <p>
  * This implementation uses breadth-first search.
@@ -53,25 +53,25 @@ import java.util.Stack;
  */
 public class BreadthFirstDirectedPaths {
     private static final int INFINITY = Integer.MAX_VALUE;
-    private boolean[] marked;  // marked[v] = is there an s->v path?
-    private int[] edgeTo;      // edgeTo[v] = last edge on shortest s->v path
-    private int[] distTo;      // distTo[v] = length of shortest s->v path
+    private boolean[] isVisited;  // isVisited[vertex] = is there an source->vertex path?
+    private int[] fromEdge;      // fromEdge[vertex] = last edge on shortest source->vertex path
+    private int[] distTo;      // distTo[vertex] = length of shortest source->vertex path
 
     /**
-     * Computes the shortest path from {@code s} and every other vertex in graph {@code G}.
+     * Computes the shortest path from {@code source} and every other vertex in graph {@code G}.
      *
      * @param G the digraph
-     * @param s the source vertex
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @param source the source vertex
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public BreadthFirstDirectedPaths(Digraph G, int s) {
-        marked = new boolean[G.V()];
+    public BreadthFirstDirectedPaths(Digraph G, int source) {
+        isVisited = new boolean[G.V()];
         distTo = new int[G.V()];
-        edgeTo = new int[G.V()];
-        for (int v = 0; v < G.V(); v++)
-            distTo[v] = INFINITY;
-        validateVertex(s);
-        bfs(G, s);
+        fromEdge = new int[G.V()];
+        for (int vertex = 0; vertex < G.V(); vertex++)
+            distTo[vertex] = INFINITY;
+        validateVertex(source);
+        bfs(G, source);
     }
 
     /**
@@ -81,33 +81,33 @@ public class BreadthFirstDirectedPaths {
      * @param G       the digraph
      * @param sources the source vertices
      * @throws IllegalArgumentException if {@code sources} is {@code null}
-     * @throws IllegalArgumentException unless each vertex {@code v} in
-     *                                  {@code sources} satisfies {@code 0 <= v < V}
+     * @throws IllegalArgumentException unless each vertex {@code vertex} in
+     *                                  {@code sources} satisfies {@code 0 <= vertex < V}
      */
     public BreadthFirstDirectedPaths(Digraph G, Iterable<Integer> sources) {
-        marked = new boolean[G.V()];
+        isVisited = new boolean[G.V()];
         distTo = new int[G.V()];
-        edgeTo = new int[G.V()];
-        for (int v = 0; v < G.V(); v++)
-            distTo[v] = INFINITY;
+        fromEdge = new int[G.V()];
+        for (int vertex = 0; vertex < G.V(); vertex++)
+            distTo[vertex] = INFINITY;
         validateVertices(sources);
         bfs(G, sources);
     }
 
     // BFS from single source
-    private void bfs(Digraph G, int s) {
+    private void bfs(Digraph G, int source) {
         Queue<Integer> q = new Queue<Integer>();
-        marked[s] = true;
-        distTo[s] = 0;
-        q.enqueue(s);
+        isVisited[source] = true;
+        distTo[source] = 0;
+        q.enqueue(source);
         while (!q.isEmpty()) {
-            int v = q.dequeue();
-            for (int w : G.adj(v)) {
-                if (!marked[w]) {
-                    edgeTo[w] = v;
-                    distTo[w] = distTo[v] + 1;
-                    marked[w] = true;
-                    q.enqueue(w);
+            int vertex = q.dequeue();
+            for (int current : G.adj(vertex)) {
+                if (!isVisited[current]) {
+                    fromEdge[current] = vertex;
+                    distTo[current] = distTo[vertex] + 1;
+                    isVisited[current] = true;
+                    q.enqueue(current);
                 }
             }
         }
@@ -116,86 +116,86 @@ public class BreadthFirstDirectedPaths {
     // BFS from multiple sources
     private void bfs(Digraph G, Iterable<Integer> sources) {
         Queue<Integer> q = new Queue<Integer>();
-        for (int s : sources) {
-            marked[s] = true;
-            distTo[s] = 0;
-            q.enqueue(s);
+        for (int source : sources) {
+            isVisited[source] = true;
+            distTo[source] = 0;
+            q.enqueue(source);
         }
         while (!q.isEmpty()) {
-            int v = q.dequeue();
-            for (int w : G.adj(v)) {
-                if (!marked[w]) {
-                    edgeTo[w] = v;
-                    distTo[w] = distTo[v] + 1;
-                    marked[w] = true;
-                    q.enqueue(w);
+            int vertex = q.dequeue();
+            for (int current : G.adj(vertex)) {
+                if (!isVisited[current]) {
+                    fromEdge[current] = vertex;
+                    distTo[current] = distTo[vertex] + 1;
+                    isVisited[current] = true;
+                    q.enqueue(current);
                 }
             }
         }
     }
 
     /**
-     * Is there a directed path from the source {@code s} (or sources) to vertex {@code v}?
+     * Is there a directed path from the source {@code source} (or sources) to vertex {@code vertex}?
      *
-     * @param v the vertex
+     * @param vertex the vertex
      * @return {@code true} if there is a directed path, {@code false} otherwise
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public boolean hasPathTo(int v) {
-        validateVertex(v);
-        return marked[v];
+    public boolean hasPathTo(int vertex) {
+        validateVertex(vertex);
+        return isVisited[vertex];
     }
 
     /**
-     * Returns the number of edges in a shortest path from the source {@code s}
-     * (or sources) to vertex {@code v}?
+     * Returns the number of edges in a shortest path from the source {@code source}
+     * (or sources) to vertex {@code vertex}?
      *
-     * @param v the vertex
+     * @param vertex the vertex
      * @return the number of edges in a shortest path
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public int distTo(int v) {
-        validateVertex(v);
-        return distTo[v];
+    public int distTo(int vertex) {
+        validateVertex(vertex);
+        return distTo[vertex];
     }
 
     /**
-     * Returns a shortest path from {@code s} (or sources) to {@code v}, or
+     * Returns a shortest path from {@code source} (or sources) to {@code vertex}, or
      * {@code null} if no such path.
      *
-     * @param v the vertex
+     * @param vertex the vertex
      * @return the sequence of vertices on a shortest path, as an Iterable
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public Iterable<Integer> pathTo(int v) {
-        validateVertex(v);
+    public Iterable<Integer> pathTo(int vertex) {
+        validateVertex(vertex);
 
-        if (!hasPathTo(v)) return null;
+        if (!hasPathTo(vertex)) return null;
         Stack<Integer> path = new Stack<Integer>();
         int x;
-        for (x = v; distTo[x] != 0; x = edgeTo[x])
+        for (x = vertex; distTo[x] != 0; x = fromEdge[x])
             path.push(x);
         path.push(x);
         return path;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
-        int V = marked.length;
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
+    private void validateVertex(int vertex) {
+        int V = isVisited.length;
+        if (vertex < 0 || vertex >= V)
+            throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V - 1));
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
     private void validateVertices(Iterable<Integer> vertices) {
         if (vertices == null) {
             throw new IllegalArgumentException("argument is null");
         }
-        for (Integer v : vertices) {
-            if (v == null) {
+        for (Integer vertex : vertices) {
+            if (vertex == null) {
                 throw new IllegalArgumentException("vertex is null");
             }
-            validateVertex(v);
+            validateVertex(vertex);
         }
     }
 
@@ -210,19 +210,19 @@ public class BreadthFirstDirectedPaths {
         Digraph G = new Digraph(in);
         // StdOut.println(G);
 
-        int s = Integer.parseInt(args[1]);
-        BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(G, s);
+        int source = Integer.parseInt(args[1]);
+        BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(G, source);
 
-        for (int v = 0; v < G.V(); v++) {
-            if (bfs.hasPathTo(v)) {
-                StdOut.printf("%d to %d (%d):  ", s, v, bfs.distTo(v));
-                for (int x : bfs.pathTo(v)) {
-                    if (x == s) StdOut.print(x);
+        for (int vertex = 0; vertex < G.V(); vertex++) {
+            if (bfs.hasPathTo(vertex)) {
+                StdOut.printf("%d to %d (%d):  ", source, vertex, bfs.distTo(vertex));
+                for (int x : bfs.pathTo(vertex)) {
+                    if (x == source) StdOut.print(x);
                     else StdOut.print("->" + x);
                 }
                 StdOut.println();
             } else {
-                StdOut.printf("%d to %d (-):  not connected\n", s, v);
+                StdOut.printf("%d to %d (-):  not connected\n", source, vertex);
             }
 
         }

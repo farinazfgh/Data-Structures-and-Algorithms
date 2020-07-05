@@ -25,7 +25,7 @@
  *
  *  Note: This implementation uses a recursive DFS. To avoid needing
  *        a potentially very large stack size, replace with a non-recurisve
- *        DFS ala NonrecursiveDFS.java.
+ *        DFS ala DFSNonRecursive.java.
  *
  ******************************************************************************/
 
@@ -63,8 +63,8 @@ import util.StdOut;
  *  @author Kevin Wayne
  */
 public class CC {
-    private boolean[] marked;   // marked[v] = has vertex v been marked?
-    private int[] id;           // id[v] = id of connected component containing v
+    private boolean[] isVisited;   // isVisited[vertex] = has vertex vertex been isVisited?
+    private int[] id;           // id[vertex] = id of connected component containing vertex
     private int[] size;         // size[id] = number of vertices in given component
     private int count;          // number of connected components
 
@@ -74,12 +74,12 @@ public class CC {
      * @param G the undirected graph
      */
     public CC(UndirectedGraph G) {
-        marked = new boolean[G.V()];
-        id = new int[G.V()];
-        size = new int[G.V()];
-        for (int v = 0; v < G.V(); v++) {
-            if (!marked[v]) {
-                dfs(G, v);
+        isVisited = new boolean[G.getNumberOfVertices()];
+        id = new int[G.getNumberOfVertices()];
+        size = new int[G.getNumberOfVertices()];
+        for (int vertex = 0; vertex < G.getNumberOfVertices(); vertex++) {
+            if (!isVisited[vertex]) {
+                dfs(G, vertex);
                 count++;
             }
         }
@@ -91,65 +91,65 @@ public class CC {
      * @param G the edge-weighted graph
      */
     public CC(EdgeWeightedGraph G) {
-        marked = new boolean[G.V()];
+        isVisited = new boolean[G.V()];
         id = new int[G.V()];
         size = new int[G.V()];
-        for (int v = 0; v < G.V(); v++) {
-            if (!marked[v]) {
-                dfs(G, v);
+        for (int vertex = 0; vertex < G.V(); vertex++) {
+            if (!isVisited[vertex]) {
+                dfs(G, vertex);
                 count++;
             }
         }
     }
 
     // depth-first search for a UndirectedGraph
-    private void dfs(UndirectedGraph G, int v) {
-        marked[v] = true;
-        id[v] = count;
+    private void dfs(UndirectedGraph G, int vertex) {
+        isVisited[vertex] = true;
+        id[vertex] = count;
         size[count]++;
-        for (int w : G.adj(v)) {
-            if (!marked[w]) {
-                dfs(G, w);
+        for (int current : G.getAdjacencyList(vertex)) {
+            if (!isVisited[current]) {
+                dfs(G, current);
             }
         }
     }
 
     // depth-first search for an EdgeWeightedGraph
-    private void dfs(EdgeWeightedGraph G, int v) {
-        marked[v] = true;
-        id[v] = count;
+    private void dfs(EdgeWeightedGraph G, int vertex) {
+        isVisited[vertex] = true;
+        id[vertex] = count;
         size[count]++;
-        for (Edge e : G.adj(v)) {
-            int w = e.other(v);
-            if (!marked[w]) {
-                dfs(G, w);
+        for (Edge e : G.adj(vertex)) {
+            int current = e.other(vertex);
+            if (!isVisited[current]) {
+                dfs(G, current);
             }
         }
     }
 
 
     /**
-     * Returns the component id of the connected component containing vertex {@code v}.
+     * Returns the component id of the connected component containing vertex {@code vertex}.
      *
-     * @param  v the vertex
-     * @return the component id of the connected component containing vertex {@code v}
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @param  vertex the vertex
+     * @return the component id of the connected component containing vertex {@code vertex}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public int id(int v) {
-        validateVertex(v);
-        return id[v];
+    public int id(int vertex) {
+        validateVertex(vertex);
+        return id[vertex];
     }
 
     /**
-     * Returns the number of vertices in the connected component containing vertex {@code v}.
+     * Returns the number of vertices in the connected component containing vertex {@code vertex}.
      *
-     * @param  v the vertex
-     * @return the number of vertices in the connected component containing vertex {@code v}
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @param  vertex the vertex
+     * @return the number of vertices in the connected component containing vertex {@code vertex}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public int size(int v) {
-        validateVertex(v);
-        return size[id[v]];
+    public int size(int vertex) {
+        validateVertex(vertex);
+        return size[id[vertex]];
     }
 
     /**
@@ -162,46 +162,46 @@ public class CC {
     }
 
     /**
-     * Returns true if vertices {@code v} and {@code w} are in the same
+     * Returns true if vertices {@code vertex} and {@code current} are in the same
      * connected component.
      *
-     * @param  v one vertex
-     * @param  w the other vertex
-     * @return {@code true} if vertices {@code v} and {@code w} are in the same
+     * @param  vertex one vertex
+     * @param  current the other vertex
+     * @return {@code true} if vertices {@code vertex} and {@code current} are in the same
      *         connected component; {@code false} otherwise
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
-     * @throws IllegalArgumentException unless {@code 0 <= w < V}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
+     * @throws IllegalArgumentException unless {@code 0 <= current < V}
      */
-    public boolean connected(int v, int w) {
-        validateVertex(v);
-        validateVertex(w);
-        return id(v) == id(w);
+    public boolean connected(int vertex, int current) {
+        validateVertex(vertex);
+        validateVertex(current);
+        return id(vertex) == id(current);
     }
 
     /**
-     * Returns true if vertices {@code v} and {@code w} are in the same
+     * Returns true if vertices {@code vertex} and {@code current} are in the same
      * connected component.
      *
-     * @param  v one vertex
-     * @param  w the other vertex
-     * @return {@code true} if vertices {@code v} and {@code w} are in the same
+     * @param  vertex one vertex
+     * @param  current the other vertex
+     * @return {@code true} if vertices {@code vertex} and {@code current} are in the same
      *         connected component; {@code false} otherwise
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
-     * @throws IllegalArgumentException unless {@code 0 <= w < V}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
+     * @throws IllegalArgumentException unless {@code 0 <= current < V}
      * @deprecated Replaced by {@link #connected(int, int)}.
      */
     @Deprecated
-    public boolean areConnected(int v, int w) {
-        validateVertex(v);
-        validateVertex(w);
-        return id(v) == id(w);
+    public boolean areConnected(int vertex, int current) {
+        validateVertex(vertex);
+        validateVertex(current);
+        return id(vertex) == id(current);
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
-        int V = marked.length;
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
+    private void validateVertex(int vertex) {
+        int V = isVisited.length;
+        if (vertex < 0 || vertex >= V)
+            throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V-1));
     }
 
     /**
@@ -223,14 +223,14 @@ public class CC {
         for (int i = 0; i < m; i++) {
             components[i] = new Queue<Integer>();
         }
-        for (int v = 0; v < G.V(); v++) {
-            components[cc.id(v)].enqueue(v);
+        for (int vertex = 0; vertex < G.getNumberOfVertices(); vertex++) {
+            components[cc.id(vertex)].enqueue(vertex);
         }
 
         // print results
         for (int i = 0; i < m; i++) {
-            for (int v : components[i]) {
-                StdOut.print(v + " ");
+            for (int vertex : components[i]) {
+                StdOut.print(vertex + " ");
             }
             StdOut.println();
         }

@@ -93,10 +93,10 @@ public final class StdRandom {
      * number for each execution of the program.
      * Ordinarily, you should call this method at most once per program.
      *
-     * @param s the seed
+     * @param source the seed
      */
-    public static void setSeed(long s) {
-        seed = s;
+    public static void setSeed(long source) {
+        seed = source;
         random = new Random(seed);
     }
 
@@ -641,8 +641,8 @@ public final class StdRandom {
             StdOut.printf("%1d ", discrete(frequencies));
             StdOut.printf("%11d ", uniform(100000000000L));
             StdRandom.shuffle(a);
-            for (String s : a)
-                StdOut.print(s);
+            for (String source : a)
+                StdOut.print(source);
             StdOut.println();
         }
     }

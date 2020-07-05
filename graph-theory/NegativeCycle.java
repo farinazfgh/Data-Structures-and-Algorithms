@@ -20,12 +20,12 @@ public class NegativeCycle {
             cost[i] = new ArrayList<Integer>();
         }
         for (int i = 0; i < m; i++) {
-            int x, y, w;
+            int x, y, current;
             x = scanner.nextInt();
             y = scanner.nextInt();
-            w = scanner.nextInt();
+            current = scanner.nextInt();
             adj[x - 1].add(y - 1);
-            cost[x - 1].add(w);
+            cost[x - 1].add(current);
         }
         System.out.println(negativeCycle(adj, cost));
     }

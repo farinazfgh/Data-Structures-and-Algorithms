@@ -1,6 +1,6 @@
 /******************************************************************************
  *  Compilation:  javac DirectedDFS.java
- *  Execution:    java DirectedDFS digraph.txt s
+ *  Execution:    java DirectedDFS digraph.txt source
  *  Dependencies: Digraph.java Bag.java In.java StdOut.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/tinyDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/mediumDG.txt
@@ -26,7 +26,7 @@ import util.StdOut;
 
 /**
  *  The {@code DirectedDFS} class represents a data type for 
- *  determining the vertices reachable from a given source vertex <em>s</em>
+ *  determining the vertices reachable from a given source vertex <em>source</em>
  *  (or set of source vertices) in a digraph. For versions that find the paths,
  *  see {@link DepthFirstDirectedPaths} and {@link BreadthFirstDirectedPaths}.
  *  <p>
@@ -45,20 +45,20 @@ import util.StdOut;
  *  @author Kevin Wayne
  */
 public class DirectedDFS {
-    private boolean[] marked;  // marked[v] = true iff v is reachable from source(s)
-    private int count;         // number of vertices reachable from source(s)
+    private boolean[] isVisited;  // isVisited[vertex] = true iff vertex is reachable from source(source)
+    private int count;         // number of vertices reachable from source(source)
 
     /**
      * Computes the vertices in digraph {@code G} that are
-     * reachable from the source vertex {@code s}.
+     * reachable from the source vertex {@code source}.
      * @param G the digraph
-     * @param s the source vertex
-     * @throws IllegalArgumentException unless {@code 0 <= s < V}
+     * @param source the source vertex
+     * @throws IllegalArgumentException unless {@code 0 <= source < V}
      */
-    public DirectedDFS(Digraph G, int s) {
-        marked = new boolean[G.V()];
-        validateVertex(s);
-        dfs(G, s);
+    public DirectedDFS(Digraph G, int source) {
+        isVisited = new boolean[G.V()];
+        validateVertex(source);
+        dfs(G, source);
     }
 
     /**
@@ -67,35 +67,35 @@ public class DirectedDFS {
      * @param G the graph
      * @param sources the source vertices
      * @throws IllegalArgumentException if {@code sources} is {@code null}
-     * @throws IllegalArgumentException unless {@code 0 <= s < V}
-     *         for each vertex {@code s} in {@code sources}
+     * @throws IllegalArgumentException unless {@code 0 <= source < V}
+     *         for each vertex {@code source} in {@code sources}
      */
     public DirectedDFS(Digraph G, Iterable<Integer> sources) {
-        marked = new boolean[G.V()];
+        isVisited = new boolean[G.V()];
         validateVertices(sources);
-        for (int v : sources) {
-            if (!marked[v]) dfs(G, v);
+        for (int vertex : sources) {
+            if (!isVisited[vertex]) dfs(G, vertex);
         }
     }
 
-    private void dfs(Digraph G, int v) {
+    private void dfs(Digraph G, int vertex) {
         count++;
-        marked[v] = true;
-        for (int w : G.adj(v)) {
-            if (!marked[w]) dfs(G, w);
+        isVisited[vertex] = true;
+        for (int current : G.adj(vertex)) {
+            if (!isVisited[current]) dfs(G, current);
         }
     }
 
     /**
      * Is there a directed path from the source vertex (or any
-     * of the source vertices) and vertex {@code v}?
-     * @param  v the vertex
+     * of the source vertices) and vertex {@code vertex}?
+     * @param  vertex the vertex
      * @return {@code true} if there is a directed path, {@code false} otherwise
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public boolean marked(int v) {
-        validateVertex(v);
-        return marked[v];
+    public boolean isVisited(int vertex) {
+        validateVertex(vertex);
+        return isVisited[vertex];
     }
 
     /**
@@ -108,23 +108,23 @@ public class DirectedDFS {
         return count;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
-        int V = marked.length;
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
+    private void validateVertex(int vertex) {
+        int V = isVisited.length;
+        if (vertex < 0 || vertex >= V)
+            throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V-1));
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
     private void validateVertices(Iterable<Integer> vertices) {
         if (vertices == null) {
             throw new IllegalArgumentException("argument is null");
         }
-        for (Integer v : vertices) {
-            if (v == null) {
+        for (Integer vertex : vertices) {
+            if (vertex == null) {
                 throw new IllegalArgumentException("vertex is null");
             }
-            validateVertex(v);
+            validateVertex(vertex);
         }
     }
 
@@ -143,16 +143,16 @@ public class DirectedDFS {
         // read in sources from command-line arguments
         Bag<Integer> sources = new Bag<Integer>();
         for (int i = 1; i < args.length; i++) {
-            int s = Integer.parseInt(args[i]);
-            sources.add(s);
+            int source = Integer.parseInt(args[i]);
+            sources.add(source);
         }
 
         // multiple-source reachability
         DirectedDFS dfs = new DirectedDFS(G, sources);
 
         // print out vertices reachable from sources
-        for (int v = 0; v < G.V(); v++) {
-            if (dfs.marked(v)) StdOut.print(v + " ");
+        for (int vertex = 0; vertex < G.V(); vertex++) {
+            if (dfs.isVisited(vertex)) StdOut.print(vertex + " ");
         }
         StdOut.println();
     }

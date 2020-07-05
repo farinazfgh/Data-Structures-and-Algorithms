@@ -38,9 +38,9 @@ import java.util.Stack;
  * methods for returning the degree of a vertex, the number of vertices
  * <em>V</em> in the graph, and the number of edges <em>E</em> in the graph.
  * Parallel edges and self-loops are permitted.
- * By convention, a self-loop <em>v</em>-<em>v</em> appears in the
- * adjacency list of <em>v</em> twice and contributes two to the degree
- * of <em>v</em>.
+ * By convention, a self-loop <em>vertex</em>-<em>vertex</em> appears in the
+ * adjacency list of <em>vertex</em> twice and contributes two to the degree
+ * of <em>vertex</em>.
  * <p>
  * This implementation uses an <em>adjacency-lists representation</em>, which
  * is a vertex-indexed array of {@link Bag} objects.
@@ -79,8 +79,8 @@ public class EdgeWeightedGraph {
         this.V = V;
         this.E = 0;
         adj = (Bag<Edge>[]) new Bag[V];
-        for (int v = 0; v < V; v++) {
-            adj[v] = new Bag<Edge>();
+        for (int vertex = 0; vertex < V; vertex++) {
+            adj[vertex] = new Bag<Edge>();
         }
     }
 
@@ -96,10 +96,10 @@ public class EdgeWeightedGraph {
         this(V);
         if (E < 0) throw new IllegalArgumentException("Number of edges must be nonnegative");
         for (int i = 0; i < E; i++) {
-            int v = StdRandom.uniform(V);
-            int w = StdRandom.uniform(V);
+            int vertex = StdRandom.uniform(V);
+            int current = StdRandom.uniform(V);
             double weight = Math.round(100 * StdRandom.uniform()) / 100.0;
-            Edge e = new Edge(v, w, weight);
+            Edge e = new Edge(vertex, current, weight);
             addEdge(e);
         }
     }
@@ -122,19 +122,19 @@ public class EdgeWeightedGraph {
         try {
             V = in.readInt();
             adj = (Bag<Edge>[]) new Bag[V];
-            for (int v = 0; v < V; v++) {
-                adj[v] = new Bag<Edge>();
+            for (int vertex = 0; vertex < V; vertex++) {
+                adj[vertex] = new Bag<Edge>();
             }
 
             int E = in.readInt();
             if (E < 0) throw new IllegalArgumentException("Number of edges must be nonnegative");
             for (int i = 0; i < E; i++) {
-                int v = in.readInt();
-                int w = in.readInt();
-                validateVertex(v);
-                validateVertex(w);
+                int vertex = in.readInt();
+                int current = in.readInt();
+                validateVertex(vertex);
+                validateVertex(current);
                 double weight = in.readDouble();
-                Edge e = new Edge(v, w, weight);
+                Edge e = new Edge(vertex, current, weight);
                 addEdge(e);
             }
         } catch (NoSuchElementException e) {
@@ -151,14 +151,14 @@ public class EdgeWeightedGraph {
     public EdgeWeightedGraph(EdgeWeightedGraph G) {
         this(G.V());
         this.E = G.E();
-        for (int v = 0; v < G.V(); v++) {
+        for (int vertex = 0; vertex < G.V(); vertex++) {
             // reverse so that adjacency list is in same order as original
             Stack<Edge> reverse = new Stack<Edge>();
-            for (Edge e : G.adj[v]) {
+            for (Edge e : G.adj[vertex]) {
                 reverse.push(e);
             }
             for (Edge e : reverse) {
-                adj[v].add(e);
+                adj[vertex].add(e);
             }
         }
     }
@@ -182,10 +182,10 @@ public class EdgeWeightedGraph {
         return E;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
+    private void validateVertex(int vertex) {
+        if (vertex < 0 || vertex >= V)
+            throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V - 1));
     }
 
     /**
@@ -195,37 +195,37 @@ public class EdgeWeightedGraph {
      * @throws IllegalArgumentException unless both endpoints are between {@code 0} and {@code V-1}
      */
     public void addEdge(Edge e) {
-        int v = e.either();
-        int w = e.other(v);
-        validateVertex(v);
-        validateVertex(w);
-        adj[v].add(e);
-        adj[w].add(e);
+        int vertex = e.either();
+        int current = e.other(vertex);
+        validateVertex(vertex);
+        validateVertex(current);
+        adj[vertex].add(e);
+        adj[current].add(e);
         E++;
     }
 
     /**
-     * Returns the edges incident on vertex {@code v}.
+     * Returns the edges incident on vertex {@code vertex}.
      *
-     * @param v the vertex
-     * @return the edges incident on vertex {@code v} as an Iterable
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @param vertex the vertex
+     * @return the edges incident on vertex {@code vertex} as an Iterable
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public Iterable<Edge> adj(int v) {
-        validateVertex(v);
-        return adj[v];
+    public Iterable<Edge> adj(int vertex) {
+        validateVertex(vertex);
+        return adj[vertex];
     }
 
     /**
-     * Returns the degree of vertex {@code v}.
+     * Returns the degree of vertex {@code vertex}.
      *
-     * @param v the vertex
-     * @return the degree of vertex {@code v}
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @param vertex the vertex
+     * @return the degree of vertex {@code vertex}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public int degree(int v) {
-        validateVertex(v);
-        return adj[v].size();
+    public int degree(int vertex) {
+        validateVertex(vertex);
+        return adj[vertex].size();
     }
 
     /**
@@ -237,14 +237,14 @@ public class EdgeWeightedGraph {
      */
     public Iterable<Edge> edges() {
         Bag<Edge> list = new Bag<Edge>();
-        for (int v = 0; v < V; v++) {
+        for (int vertex = 0; vertex < V; vertex++) {
             int selfLoops = 0;
-            for (Edge e : adj(v)) {
-                if (e.other(v) > v) {
+            for (Edge e : adj(vertex)) {
+                if (e.other(vertex) > vertex) {
                     list.add(e);
                 }
                 // add only one copy of each self loop (self loops will be consecutive)
-                else if (e.other(v) == v) {
+                else if (e.other(vertex) == vertex) {
                     if (selfLoops % 2 == 0) list.add(e);
                     selfLoops++;
                 }
@@ -261,16 +261,16 @@ public class EdgeWeightedGraph {
      * followed by the <em>V</em> adjacency lists of edges
      */
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append(V + " " + E + NEWLINE);
-        for (int v = 0; v < V; v++) {
-            s.append(v + ": ");
-            for (Edge e : adj[v]) {
-                s.append(e + "  ");
+        StringBuilder source = new StringBuilder();
+        source.append(V + " " + E + NEWLINE);
+        for (int vertex = 0; vertex < V; vertex++) {
+            source.append(vertex + ": ");
+            for (Edge e : adj[vertex]) {
+                source.append(e + "  ");
             }
-            s.append(NEWLINE);
+            source.append(NEWLINE);
         }
-        return s.toString();
+        return source.toString();
     }
 
     /**

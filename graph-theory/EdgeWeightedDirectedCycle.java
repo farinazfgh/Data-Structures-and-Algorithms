@@ -41,9 +41,9 @@ import java.util.Stack;
  * @author Kevin Wayne
  */
 public class EdgeWeightedDirectedCycle {
-    private boolean[] marked;             // marked[v] = has vertex v been marked?
-    private DirectedEdge[] edgeTo;        // edgeTo[v] = previous edge on path to v
-    private boolean[] onStack;            // onStack[v] = is vertex on the stack?
+    private boolean[] isVisited;             // isVisited[vertex] = has vertex vertex been isVisited?
+    private DirectedEdge[] fromEdge;        // fromEdge[vertex] = previous edge on path to vertex
+    private boolean[] onStack;            // onStack[vertex] = is vertex on the stack?
     private Stack<DirectedEdge> cycle;    // directed cycle (or null if no such cycle)
 
     /**
@@ -53,40 +53,40 @@ public class EdgeWeightedDirectedCycle {
      * @param G the edge-weighted digraph
      */
     public EdgeWeightedDirectedCycle(EdgeWeightedDigraph G) {
-        marked = new boolean[G.V()];
+        isVisited = new boolean[G.V()];
         onStack = new boolean[G.V()];
-        edgeTo = new DirectedEdge[G.V()];
-        for (int v = 0; v < G.V(); v++)
-            if (!marked[v]) dfs(G, v);
+        fromEdge = new DirectedEdge[G.V()];
+        for (int vertex = 0; vertex < G.V(); vertex++)
+            if (!isVisited[vertex]) dfs(G, vertex);
 
         // check that digraph has a cycle
         assert check();
     }
 
     // check that algorithm computes either the topological order or finds a directed cycle
-    private void dfs(EdgeWeightedDigraph G, int v) {
-        onStack[v] = true;
-        marked[v] = true;
-        for (DirectedEdge e : G.adj(v)) {
-            int w = e.to();
+    private void dfs(EdgeWeightedDigraph G, int vertex) {
+        onStack[vertex] = true;
+        isVisited[vertex] = true;
+        for (DirectedEdge e : G.adj(vertex)) {
+            int current = e.to();
 
             // short circuit if directed cycle found
             if (cycle != null) return;
 
                 // found new vertex, so recur
-            else if (!marked[w]) {
-                edgeTo[w] = e;
-                dfs(G, w);
+            else if (!isVisited[current]) {
+                fromEdge[current] = e;
+                dfs(G, current);
             }
 
             // trace back directed cycle
-            else if (onStack[w]) {
+            else if (onStack[current]) {
                 cycle = new Stack<DirectedEdge>();
 
                 DirectedEdge f = e;
-                while (f.from() != w) {
+                while (f.from() != current) {
                     cycle.push(f);
-                    f = edgeTo[f.from()];
+                    f = fromEdge[f.from()];
                 }
                 cycle.push(f);
 
@@ -94,7 +94,7 @@ public class EdgeWeightedDirectedCycle {
             }
         }
 
-        onStack[v] = false;
+        onStack[vertex] = false;
     }
 
     /**
@@ -130,7 +130,7 @@ public class EdgeWeightedDirectedCycle {
                 if (first == null) first = e;
                 if (last != null) {
                     if (last.to() != e.from()) {
-                        System.err.printf("cycle edges %s and %s not incident\n", last, e);
+                        System.err.printf("cycle edges %source and %source not incident\n", last, e);
                         return false;
                     }
                 }
@@ -138,7 +138,7 @@ public class EdgeWeightedDirectedCycle {
             }
 
             if (last.to() != first.from()) {
-                System.err.printf("cycle edges %s and %s not incident\n", last, first);
+                System.err.printf("cycle edges %source and %source not incident\n", last, first);
                 return false;
             }
         }
@@ -164,21 +164,21 @@ public class EdgeWeightedDirectedCycle {
             vertices[i] = i;
         StdRandom.shuffle(vertices);
         for (int i = 0; i < E; i++) {
-            int v, w;
+            int vertex, current;
             do {
-                v = StdRandom.uniform(V);
-                w = StdRandom.uniform(V);
-            } while (v >= w);
+                vertex = StdRandom.uniform(V);
+                current = StdRandom.uniform(V);
+            } while (vertex >= current);
             double weight = StdRandom.uniform();
-            G.addEdge(new DirectedEdge(v, w, weight));
+            G.addEdge(new DirectedEdge(vertex, current, weight));
         }
 
         // add F extra edges
         for (int i = 0; i < F; i++) {
-            int v = StdRandom.uniform(V);
-            int w = StdRandom.uniform(V);
+            int vertex = StdRandom.uniform(V);
+            int current = StdRandom.uniform(V);
             double weight = StdRandom.uniform(0.0, 1.0);
-            G.addEdge(new DirectedEdge(v, w, weight));
+            G.addEdge(new DirectedEdge(vertex, current, weight));
         }
 
         StdOut.println(G);

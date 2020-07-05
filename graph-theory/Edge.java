@@ -24,27 +24,27 @@ import util.StdOut;
  */
 public class Edge implements Comparable<Edge> {
 
-    private final int v;
-    private final int w;
+    private final int vertex;
+    private final int current;
     private final double weight;
 
     /**
-     * Initializes an edge between vertices {@code v} and {@code w} of
+     * Initializes an edge between vertices {@code vertex} and {@code current} of
      * the given {@code weight}.
      *
-     * @param v      one vertex
-     * @param w      the other vertex
+     * @param vertex      one vertex
+     * @param current      the other vertex
      * @param weight the weight of this edge
-     * @throws IllegalArgumentException if either {@code v} or {@code w}
+     * @throws IllegalArgumentException if either {@code vertex} or {@code current}
      *                                  is a negative integer
      * @throws IllegalArgumentException if {@code weight} is {@code NaN}
      */
-    public Edge(int v, int w, double weight) {
-        if (v < 0) throw new IllegalArgumentException("vertex index must be a nonnegative integer");
-        if (w < 0) throw new IllegalArgumentException("vertex index must be a nonnegative integer");
+    public Edge(int vertex, int current, double weight) {
+        if (vertex < 0) throw new IllegalArgumentException("vertex index must be a nonnegative integer");
+        if (current < 0) throw new IllegalArgumentException("vertex index must be a nonnegative integer");
         if (Double.isNaN(weight)) throw new IllegalArgumentException("Weight is NaN");
-        this.v = v;
-        this.w = w;
+        this.vertex = vertex;
+        this.current = current;
         this.weight = weight;
     }
 
@@ -63,7 +63,7 @@ public class Edge implements Comparable<Edge> {
      * @return either endpoint of this edge
      */
     public int either() {
-        return v;
+        return vertex;
     }
 
     /**
@@ -75,8 +75,8 @@ public class Edge implements Comparable<Edge> {
      *                                  endpoints of this edge
      */
     public int other(int vertex) {
-        if (vertex == v) return w;
-        else if (vertex == w) return v;
+        if (vertex == vertex) return current;
+        else if (vertex == current) return vertex;
         else throw new IllegalArgumentException("Illegal endpoint");
     }
 
@@ -101,7 +101,7 @@ public class Edge implements Comparable<Edge> {
      * @return a string representation of this edge
      */
     public String toString() {
-        return String.format("%d-%d %.5f", v, w, weight);
+        return String.format("%d-%d %.5f", vertex, current, weight);
     }
 
     /**

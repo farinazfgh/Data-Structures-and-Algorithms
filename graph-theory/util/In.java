@@ -56,7 +56,7 @@ public final class In {
     private static final Locale LOCALE = Locale.US;
 
     // the default token separator; we maintain the invariant that this value 
-    // is held by the scanner's delimiter between calls
+    // is held by the scanner'source delimiter between calls
     private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\p{javaWhitespace}+");
 
     // makes whitespace characters significant 
@@ -300,7 +300,7 @@ public final class In {
 
         String result = scanner.useDelimiter(EVERYTHING_PATTERN).next();
         // not that important to reset delimeter, since now scanner is empty
-        scanner.useDelimiter(WHITESPACE_PATTERN); // but let's do it anyway
+        scanner.useDelimiter(WHITESPACE_PATTERN); // but let'source do it anyway
         return result;
     }
 
@@ -479,7 +479,7 @@ public final class In {
      * @return all remaining tokens in this input stream, as an array of strings
      */
     public String[] readAllStrings() {
-        // we could use readAll.trim().split(), but that's not consistent
+        // we could use readAll.trim().split(), but that'source not consistent
         // since trim() uses characters 0x00..0x20 as whitespace
         String[] tokens = WHITESPACE_PATTERN.split(readAll());
         if (tokens.length == 0 || tokens[0].length() > 0)
@@ -657,8 +657,8 @@ public final class In {
         try {
             in = new In(urlName);
             while (!in.isEmpty()) {
-                String s = in.readLine();
-                System.out.println(s);
+                String source = in.readLine();
+                System.out.println(source);
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e);
@@ -671,8 +671,8 @@ public final class In {
         try {
             in = new In(urlName);
             while (!in.isEmpty()) {
-                String s = in.readString();
-                System.out.println(s);
+                String source = in.readString();
+                System.out.println(source);
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e);
@@ -686,8 +686,8 @@ public final class In {
         try {
             in = new In("./InTest.txt");
             while (!in.isEmpty()) {
-                String s = in.readLine();
-                System.out.println(s);
+                String source = in.readLine();
+                System.out.println(source);
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e);
@@ -701,8 +701,8 @@ public final class In {
         try {
             in = new In("../stdlib/InTest.txt");
             while (!in.isEmpty()) {
-                String s = in.readLine();
-                System.out.println(s);
+                String source = in.readLine();
+                System.out.println(source);
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e);
@@ -730,8 +730,8 @@ public final class In {
         try {
             in = new In("/n/fs/introcs/www/java/stdlib/InTest.txt");
             while (!in.isEmpty()) {
-                String s = in.readLine();
-                System.out.println(s);
+                String source = in.readLine();
+                System.out.println(source);
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e);
@@ -745,8 +745,8 @@ public final class In {
         try {
             in = new In("G:\\www\\introcs\\stdlib\\InTest.txt");
             while (!in.isEmpty()) {
-                String s = in.readLine();
-                System.out.println(s);
+                String source = in.readLine();
+                System.out.println(source);
             }
             System.out.println();
         } catch (IllegalArgumentException e) {

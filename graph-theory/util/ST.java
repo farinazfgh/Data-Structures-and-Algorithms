@@ -237,8 +237,8 @@ public class ST<Key extends Comparable<Key>, Value> implements Iterable<Key> {
             String key = StdIn.readString();
             st.put(key, i);
         }
-        for (String s : st.keys())
-            StdOut.println(s + " " + st.get(s));
+        for (String source : st.keys())
+            StdOut.println(source + " " + st.get(source));
     }
 }
 

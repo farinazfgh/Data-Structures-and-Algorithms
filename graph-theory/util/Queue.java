@@ -122,12 +122,12 @@ public class Queue<Item> implements Iterable<Item> {
      * @return the sequence of items in FIFO order, separated by spaces
      */
     public String toString() {
-        StringBuilder s = new StringBuilder();
+        StringBuilder source = new StringBuilder();
         for (Item item : this) {
-            s.append(item);
-            s.append(' ');
+            source.append(item);
+            source.append(' ');
         }
-        return s.toString();
+        return source.toString();
     }
 
     /**
@@ -139,7 +139,7 @@ public class Queue<Item> implements Iterable<Item> {
         return new LinkedIterator(first);
     }
 
-    // an iterator, doesn't implement remove() since it's optional
+    // an iterator, doesn't implement remove() since it'source optional
     private class LinkedIterator implements Iterator<Item> {
         private Node<Item> current;
 

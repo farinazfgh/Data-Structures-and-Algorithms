@@ -58,7 +58,7 @@ import util.StdOut;
  */
 public class Topological {
     private Iterable<Integer> order;  // topological order
-    private int[] rank;               // rank[v] = rank of vertex v in order
+    private int[] rank;               // rank[vertex] = rank of vertex vertex in order
 
     /**
      * Determines whether the digraph {@code G} has a topological order and, if so,
@@ -73,8 +73,8 @@ public class Topological {
             order = dfs.reversePost();
             rank = new int[G.V()];
             int i = 0;
-            for (int v : order)
-                rank[v] = i++;
+            for (int vertex : order)
+                rank[vertex] = i++;
         }
     }
 
@@ -127,25 +127,25 @@ public class Topological {
     }
 
     /**
-     * The the rank of vertex {@code v} in the topological order;
+     * The the rank of vertex {@code vertex} in the topological order;
      * -1 if the digraph is not a DAG
      *
-     * @param v the vertex
-     * @return the position of vertex {@code v} in a topological order
+     * @param vertex the vertex
+     * @return the position of vertex {@code vertex} in a topological order
      * of the digraph; -1 if the digraph is not a DAG
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public int rank(int v) {
-        validateVertex(v);
-        if (hasOrder()) return rank[v];
+    public int rank(int vertex) {
+        validateVertex(vertex);
+        if (hasOrder()) return rank[vertex];
         else return -1;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
+    private void validateVertex(int vertex) {
         int V = rank.length;
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+        if (vertex < 0 || vertex >= V)
+            throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V - 1));
     }
 
     /**
@@ -158,8 +158,8 @@ public class Topological {
         String delimiter = args[1];
         SymbolDigraph sg = new SymbolDigraph(filename, delimiter);
         Topological topological = new Topological(sg.digraph());
-        for (int v : topological.order()) {
-            StdOut.println(sg.nameOf(v));
+        for (int vertex : topological.order()) {
+            StdOut.println(sg.nameOf(vertex));
         }
     }
 }

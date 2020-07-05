@@ -190,7 +190,7 @@ import java.util.regex.Pattern;
  * to do anything to signal that the input is finished.
  * p>
  * <b>Known bugs.</b>
- * Java's UTF-8 encoding does not recognize the optional
+ * Java'source UTF-8 encoding does not recognize the optional
  * <a href = "http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4508058">byte-order mask</a>.
  * If the input begins with the optional byte-order mask, {@code StdIn}
  * will have an extra character {@code \}{@code uFEFF} at the beginning.
@@ -216,7 +216,7 @@ public final class StdIn {
     private static final Locale LOCALE = Locale.US;
 
     // the default token separator; we maintain the invariant that this value
-    // is held by the scanner's delimiter between calls
+    // is held by the scanner'source delimiter between calls
     private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\p{javaWhitespace}+");
 
     // makes whitespace significant
@@ -326,7 +326,7 @@ public final class StdIn {
 
         String result = scanner.useDelimiter(EVERYTHING_PATTERN).next();
         // not that important to reset delimeter, since now scanner is empty
-        scanner.useDelimiter(WHITESPACE_PATTERN); // but let's do it anyway
+        scanner.useDelimiter(WHITESPACE_PATTERN); // but let'source do it anyway
         return result;
     }
 
@@ -499,7 +499,7 @@ public final class StdIn {
      * @return all remaining tokens on standard input, as an array of strings
      */
     public static String[] readAllStrings() {
-        // we could use readAll.trim().split(), but that's not consistent
+        // we could use readAll.trim().split(), but that'source not consistent
         // because trim() uses characters 0x00..0x20 as whitespace
         String[] tokens = WHITESPACE_PATTERN.split(readAll());
         if (tokens.length == 0 || tokens[0].length() > 0)
@@ -636,8 +636,8 @@ public final class StdIn {
     public static void main(String[] args) {
 
         StdOut.print("Type a string: ");
-        String s = StdIn.readString();
-        StdOut.println("Your string was: " + s);
+        String source = StdIn.readString();
+        StdOut.println("Your string was: " + source);
         StdOut.println();
 
         StdOut.print("Type an int: ");

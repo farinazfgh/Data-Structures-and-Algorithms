@@ -3,7 +3,7 @@ import util.StdOut;
 import java.util.Stack;
 /******************************************************************************
  *  Compilation:  javac DepthFirstDirectedPaths.java
- *  Execution:    java DepthFirstDirectedPaths digraph.txt s
+ *  Execution:    java DepthFirstDirectedPaths digraph.txt source
  *  Dependencies: Digraph.java Stack.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/tinyDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/mediumDG.txt
@@ -32,7 +32,7 @@ import java.util.Stack;
 
 /**
  * The {@code DepthFirstDirectedPaths} class represents a data type for
- * finding directed paths from a source vertex <em>s</em> to every
+ * finding directed paths from a source vertex <em>source</em> to every
  * other vertex in the digraph.
  * <p>
  * This implementation uses depth-first search.
@@ -51,73 +51,73 @@ import java.util.Stack;
  * @author Kevin Wayne
  */
 public class DepthFirstDirectedPaths {
-    private boolean[] marked;  // marked[v] = true iff v is reachable from s
-    private int[] edgeTo;      // edgeTo[v] = last edge on path from s to v
-    private final int s;       // source vertex
+    private boolean[] isVisited;  // isVisited[vertex] = true iff vertex is reachable from source
+    private int[] fromEdge;      // fromEdge[vertex] = last edge on path from source to vertex
+    private final int source;       // source vertex
 
     /**
-     * Computes a directed path from {@code s} to every other vertex in digraph {@code G}.
+     * Computes a directed path from {@code source} to every other vertex in digraph {@code G}.
      *
      * @param G the digraph
-     * @param s the source vertex
-     * @throws IllegalArgumentException unless {@code 0 <= s < V}
+     * @param source the source vertex
+     * @throws IllegalArgumentException unless {@code 0 <= source < V}
      */
-    public DepthFirstDirectedPaths(Digraph G, int s) {
-        marked = new boolean[G.V()];
-        edgeTo = new int[G.V()];
-        this.s = s;
-        validateVertex(s);
-        dfs(G, s);
+    public DepthFirstDirectedPaths(Digraph G, int source) {
+        isVisited = new boolean[G.V()];
+        fromEdge = new int[G.V()];
+        this.source = source;
+        validateVertex(source);
+        dfs(G, source);
     }
 
-    private void dfs(Digraph G, int v) {
-        marked[v] = true;
-        for (int w : G.adj(v)) {
-            if (!marked[w]) {
-                edgeTo[w] = v;
-                dfs(G, w);
+    private void dfs(Digraph G, int vertex) {
+        isVisited[vertex] = true;
+        for (int current : G.adj(vertex)) {
+            if (!isVisited[current]) {
+                fromEdge[current] = vertex;
+                dfs(G, current);
             }
         }
     }
 
     /**
-     * Is there a directed path from the source vertex {@code s} to vertex {@code v}?
+     * Is there a directed path from the source vertex {@code source} to vertex {@code vertex}?
      *
-     * @param v the vertex
+     * @param vertex the vertex
      * @return {@code true} if there is a directed path from the source
-     * vertex {@code s} to vertex {@code v}, {@code false} otherwise
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * vertex {@code source} to vertex {@code vertex}, {@code false} otherwise
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public boolean hasPathTo(int v) {
-        validateVertex(v);
-        return marked[v];
+    public boolean hasPathTo(int vertex) {
+        validateVertex(vertex);
+        return isVisited[vertex];
     }
 
 
     /**
-     * Returns a directed path from the source vertex {@code s} to vertex {@code v}, or
+     * Returns a directed path from the source vertex {@code source} to vertex {@code vertex}, or
      * {@code null} if no such path.
      *
-     * @param v the vertex
+     * @param vertex the vertex
      * @return the sequence of vertices on a directed path from the source vertex
-     * {@code s} to vertex {@code v}, as an Iterable
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * {@code source} to vertex {@code vertex}, as an Iterable
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public Iterable<Integer> pathTo(int v) {
-        validateVertex(v);
-        if (!hasPathTo(v)) return null;
+    public Iterable<Integer> pathTo(int vertex) {
+        validateVertex(vertex);
+        if (!hasPathTo(vertex)) return null;
         Stack<Integer> path = new Stack<Integer>();
-        for (int x = v; x != s; x = edgeTo[x])
+        for (int x = vertex; x != source; x = fromEdge[x])
             path.push(x);
-        path.push(s);
+        path.push(source);
         return path;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
-        int V = marked.length;
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
+    private void validateVertex(int vertex) {
+        int V = isVisited.length;
+        if (vertex < 0 || vertex >= V)
+            throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V - 1));
     }
 
     /**
@@ -130,19 +130,19 @@ public class DepthFirstDirectedPaths {
         Digraph G = new Digraph(in);
         // StdOut.println(G);
 
-        int s = Integer.parseInt(args[1]);
-        DepthFirstDirectedPaths dfs = new DepthFirstDirectedPaths(G, s);
+        int source = Integer.parseInt(args[1]);
+        DepthFirstDirectedPaths dfs = new DepthFirstDirectedPaths(G, source);
 
-        for (int v = 0; v < G.V(); v++) {
-            if (dfs.hasPathTo(v)) {
-                StdOut.printf("%d to %d:  ", s, v);
-                for (int x : dfs.pathTo(v)) {
-                    if (x == s) StdOut.print(x);
+        for (int vertex = 0; vertex < G.V(); vertex++) {
+            if (dfs.hasPathTo(vertex)) {
+                StdOut.printf("%d to %d:  ", source, vertex);
+                for (int x : dfs.pathTo(vertex)) {
+                    if (x == source) StdOut.print(x);
                     else StdOut.print("-" + x);
                 }
                 StdOut.println();
             } else {
-                StdOut.printf("%d to %d:  not connected\n", s, v);
+                StdOut.printf("%d to %d:  not connected\n", source, vertex);
             }
 
         }

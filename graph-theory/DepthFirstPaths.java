@@ -1,7 +1,7 @@
 
 /******************************************************************************
  *  Compilation:  javac DepthFirstPaths.java
- *  Execution:    java DepthFirstPaths G s
+ *  Execution:    java DepthFirstPaths G source
  *  Dependencies: UndirectedGraph.java Stack.java StdOut.java
  *  Data files:   https://algs4.cs.princeton.edu/41graph/tinyCG.txt
  *                https://algs4.cs.princeton.edu/41graph/tinyG.txt
@@ -36,7 +36,7 @@ import java.util.Stack;
 
 /**
  * The {@code DepthFirstPaths} class represents a data type for finding
- * paths from a source vertex <em>s</em> to every other vertex
+ * paths from a source vertex <em>source</em> to every other vertex
  * in an undirected graph.
  * <p>
  * This implementation uses depth-first search.
@@ -54,72 +54,72 @@ import java.util.Stack;
  * @author Kevin Wayne
  */
 public class DepthFirstPaths {
-    private boolean[] marked;    // marked[v] = is there an s-v path?
-    private int[] edgeTo;        // edgeTo[v] = last edge on s-v path
-    private final int s;         // source vertex
+    private boolean[] isVisited;    // isVisited[vertex] = is there an source-vertex path?
+    private int[] fromEdge;        // fromEdge[vertex] = last edge on source-vertex path
+    private final int source;         // source vertex
 
     /**
-     * Computes a path between {@code s} and every other vertex in graph {@code G}.
+     * Computes a path between {@code source} and every other vertex in graph {@code G}.
      *
-     * @param G the graph
-     * @param s the source vertex
-     * @throws IllegalArgumentException unless {@code 0 <= s < V}
+     * @param G      the graph
+     * @param source the source vertex
+     * @throws IllegalArgumentException unless {@code 0 <= source < V}
      */
-    public DepthFirstPaths(UndirectedGraph G, int s) {
-        this.s = s;
-        edgeTo = new int[G.V()];
-        marked = new boolean[G.V()];
-        validateVertex(s);
-        dfs(G, s);
+    public DepthFirstPaths(UndirectedGraph G, int source) {
+        this.source = source;
+        fromEdge = new int[G.getNumberOfVertices()];
+        isVisited = new boolean[G.getNumberOfVertices()];
+        validateVertex(source);
+        dfs(G, source);
     }
 
-    // depth first search from v
-    private void dfs(UndirectedGraph G, int v) {
-        marked[v] = true;
-        for (int w : G.adj(v)) {
-            if (!marked[w]) {
-                edgeTo[w] = v;
-                dfs(G, w);
+    // depth first search from vertex
+    private void dfs(UndirectedGraph G, int vertex) {
+        isVisited[vertex] = true;
+        for (int current : G.getAdjacencyList(vertex)) {
+            if (!isVisited[current]) {
+                fromEdge[current] = vertex;
+                dfs(G, current);
             }
         }
     }
 
     /**
-     * Is there a path between the source vertex {@code s} and vertex {@code v}?
+     * Is there a path between the source vertex {@code source} and vertex {@code vertex}?
      *
-     * @param v the vertex
+     * @param vertex the vertex
      * @return {@code true} if there is a path, {@code false} otherwise
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public boolean hasPathTo(int v) {
-        validateVertex(v);
-        return marked[v];
+    public boolean hasPathTo(int vertex) {
+        validateVertex(vertex);
+        return isVisited[vertex];
     }
 
     /**
-     * Returns a path between the source vertex {@code s} and vertex {@code v}, or
+     * Returns a path between the source vertex {@code source} and vertex {@code vertex}, or
      * {@code null} if no such path.
      *
-     * @param v the vertex
+     * @param vertex the vertex
      * @return the sequence of vertices on a path between the source vertex
-     * {@code s} and vertex {@code v}, as an Iterable
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * {@code source} and vertex {@code vertex}, as an Iterable
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public Iterable<Integer> pathTo(int v) {
-        validateVertex(v);
-        if (!hasPathTo(v)) return null;
+    public Iterable<Integer> pathTo(int vertex) {
+        validateVertex(vertex);
+        if (!hasPathTo(vertex)) return null;
         Stack<Integer> path = new Stack<Integer>();
-        for (int x = v; x != s; x = edgeTo[x])
+        for (int x = vertex; x != source; x = fromEdge[x])
             path.push(x);
-        path.push(s);
+        path.push(source);
         return path;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
-        int V = marked.length;
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
+    private void validateVertex(int vertex) {
+        int V = isVisited.length;
+        if (vertex < 0 || vertex >= V)
+            throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V - 1));
     }
 
     /**
@@ -130,22 +130,20 @@ public class DepthFirstPaths {
     public static void main(String[] args) {
         In in = new In(args[0]);
         UndirectedGraph G = new UndirectedGraph(in);
-        int s = Integer.parseInt(args[1]);
-        DepthFirstPaths dfs = new DepthFirstPaths(G, s);
+        int source = Integer.parseInt(args[1]);
+        DepthFirstPaths dfs = new DepthFirstPaths(G, source);
 
-        for (int v = 0; v < G.V(); v++) {
-            if (dfs.hasPathTo(v)) {
-                StdOut.printf("%d to %d:  ", s, v);
-                for (int x : dfs.pathTo(v)) {
-                    if (x == s) StdOut.print(x);
+        for (int vertex = 0; vertex < G.getNumberOfVertices(); vertex++) {
+            if (dfs.hasPathTo(vertex)) {
+                StdOut.printf("%d to %d:  ", source, vertex);
+                for (int x : dfs.pathTo(vertex)) {
+                    if (x == source) StdOut.print(x);
                     else StdOut.print("-" + x);
                 }
                 StdOut.println();
             } else {
-                StdOut.printf("%d to %d:  not connected\n", s, v);
+                StdOut.printf("%d to %d:  not connected\n", source, vertex);
             }
-
         }
     }
-
 }

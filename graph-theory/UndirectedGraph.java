@@ -12,16 +12,16 @@ import java.util.Stack;
  * methods for returning the degree of a vertex, the number of vertices
  * <em>V</em> in the graph, and the number of edges <em>E</em> in the graph.
  * Parallel edges and self-loops are permitted.
- * By convention, a self-loop <em>v</em>-<em>v</em> appears in the
- * adjacency list of <em>v</em> twice and contributes two to the degree
- * of <em>v</em>.
+ * By convention, a self-loop <em>vertex</em>-<em>vertex</em> appears in the
+ * adjacency list of <em>vertex</em> twice and contributes two to the degree
+ * of <em>vertex</em>.
  * <p>
  * This implementation uses an <em>adjacency-lists representation</em>, which
  * is a vertex-indexed array of {@link Bag} objects.
  * It uses &Theta;(<em>E</em> + <em>V</em>) space, where <em>E</em> is
  * the number of edges and <em>V</em> is the number of vertices.
  * All instance methods take &Theta;(1) time. (Though, iterating over
- * the vertices returned by {@link #adj(int)} takes time proportional
+ * the vertices returned by {@link #getAdjacencyList(int)} takes time proportional
  * to the degree of the vertex.)
  * Constructing an empty graph with <em>V</em> vertices takes
  * &Theta;(<em>V</em>) time; constructing a graph with <em>E</em> edges
@@ -39,7 +39,7 @@ public class UndirectedGraph {
 
     private final int V;
     private int E;
-    private Bag<Integer>[] adj;
+    private Bag<Integer>[] adjacencyList;
 
     /**
      * Initializes an empty graph with {@code V} vertices and 0 edges.
@@ -52,9 +52,9 @@ public class UndirectedGraph {
         if (V < 0) throw new IllegalArgumentException("Number of vertices must be nonnegative");
         this.V = V;
         this.E = 0;
-        adj = (Bag<Integer>[]) new Bag[V];
-        for (int v = 0; v < V; v++) {
-            adj[v] = new Bag<Integer>();
+        adjacencyList = (Bag<Integer>[]) new Bag[V];
+        for (int vertex = 0; vertex < V; vertex++) {
+            adjacencyList[vertex] = new Bag<Integer>();
         }
     }
 
@@ -75,18 +75,18 @@ public class UndirectedGraph {
         try {
             this.V = in.readInt();
             if (V < 0) throw new IllegalArgumentException("number of vertices in a Graph must be nonnegative");
-            adj = (Bag<Integer>[]) new Bag[V];
-            for (int v = 0; v < V; v++) {
-                adj[v] = new Bag<Integer>();
+            adjacencyList = (Bag<Integer>[]) new Bag[V];
+            for (int vertex = 0; vertex < V; vertex++) {
+                adjacencyList[vertex] = new Bag<Integer>();
             }
             int E = in.readInt();
             if (E < 0) throw new IllegalArgumentException("number of edges in a Graph must be nonnegative");
             for (int i = 0; i < E; i++) {
-                int v = in.readInt();
-                int w = in.readInt();
-                validateVertex(v);
-                validateVertex(w);
-                addEdge(v, w);
+                int vertex = in.readInt();
+                int current = in.readInt();
+                validateVertex(vertex);
+                validateVertex(current);
+                addEdge(vertex, current);
             }
         } catch (NoSuchElementException e) {
             throw new IllegalArgumentException("invalid input format in UndirectedGraph constructor", e);
@@ -101,24 +101,24 @@ public class UndirectedGraph {
      * @throws IllegalArgumentException if {@code G} is {@code null}
      */
     public UndirectedGraph(UndirectedGraph G) {
-        this.V = G.V();
+        this.V = G.getNumberOfVertices();
         this.E = G.E();
         if (V < 0) throw new IllegalArgumentException("Number of vertices must be nonnegative");
 
         // update adjacency lists
-        adj = (Bag<Integer>[]) new Bag[V];
-        for (int v = 0; v < V; v++) {
-            adj[v] = new Bag<Integer>();
+        adjacencyList = (Bag<Integer>[]) new Bag[V];
+        for (int vertex = 0; vertex < V; vertex++) {
+            adjacencyList[vertex] = new Bag<Integer>();
         }
 
-        for (int v = 0; v < G.V(); v++) {
+        for (int vertex = 0; vertex < G.getNumberOfVertices(); vertex++) {
             // reverse so that adjacency list is in same order as original
             Stack<Integer> reverse = new Stack<Integer>();
-            for (int w : G.adj[v]) {
-                reverse.push(w);
+            for (int current : G.adjacencyList[vertex]) {
+                reverse.push(current);
             }
-            for (int w : reverse) {
-                adj[v].add(w);
+            for (int current : reverse) {
+                adjacencyList[vertex].add(current);
             }
         }
     }
@@ -128,7 +128,7 @@ public class UndirectedGraph {
      *
      * @return the number of vertices in this graph
      */
-    public int V() {
+    public int getNumberOfVertices() {
         return V;
     }
 
@@ -141,50 +141,50 @@ public class UndirectedGraph {
         return E;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
-    private void validateVertex(int v) {
-        if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+    // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
+    private void validateVertex(int vertex) {
+        if (vertex < 0 || vertex >= V)
+            throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V - 1));
     }
 
     /**
-     * Adds the undirected edge v-w to this graph.
+     * Adds the undirected edge vertex-current to this graph.
      *
-     * @param v one vertex in the edge
-     * @param w the other vertex in the edge
-     * @throws IllegalArgumentException unless both {@code 0 <= v < V} and {@code 0 <= w < V}
+     * @param vertex one vertex in the edge
+     * @param current the other vertex in the edge
+     * @throws IllegalArgumentException unless both {@code 0 <= vertex < V} and {@code 0 <= current < V}
      */
-    public void addEdge(int v, int w) {
-        validateVertex(v);
-        validateVertex(w);
+    public void addEdge(int vertex, int current) {
+        validateVertex(vertex);
+        validateVertex(current);
         E++;
-        adj[v].add(w);
-        adj[w].add(v);
+        adjacencyList[vertex].add(current);
+        adjacencyList[current].add(vertex);
     }
 
 
     /**
-     * Returns the vertices adjacent to vertex {@code v}.
+     * Returns the vertices adjacent to vertex {@code vertex}.
      *
-     * @param v the vertex
-     * @return the vertices adjacent to vertex {@code v}, as an iterable
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @param vertex the vertex
+     * @return the vertices adjacent to vertex {@code vertex}, as an iterable
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public Iterable<Integer> adj(int v) {
-        validateVertex(v);
-        return adj[v];
+    public Iterable<Integer> getAdjacencyList(int vertex) {
+        validateVertex(vertex);
+        return adjacencyList[vertex];
     }
 
     /**
-     * Returns the degree of vertex {@code v}.
+     * Returns the degree of vertex {@code vertex}.
      *
-     * @param v the vertex
-     * @return the degree of vertex {@code v}
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
+     * @param vertex the vertex
+     * @return the degree of vertex {@code vertex}
+     * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
-    public int degree(int v) {
-        validateVertex(v);
-        return adj[v].size();
+    public int degree(int vertex) {
+        validateVertex(vertex);
+        return adjacencyList[vertex].size();
     }
 
 
@@ -195,16 +195,16 @@ public class UndirectedGraph {
      * followed by the <em>V</em> adjacency lists
      */
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append(V + " vertices, " + E + " edges " + NEWLINE);
-        for (int v = 0; v < V; v++) {
-            s.append(v + ": ");
-            for (int w : adj[v]) {
-                s.append(w + " ");
+        StringBuilder source = new StringBuilder();
+        source.append(V + " vertices, " + E + " edges " + NEWLINE);
+        for (int vertex = 0; vertex < V; vertex++) {
+            source.append(vertex + ": ");
+            for (int current : adjacencyList[vertex]) {
+                source.append(current + " ");
             }
-            s.append(NEWLINE);
+            source.append(NEWLINE);
         }
-        return s.toString();
+        return source.toString();
     }
 
 
