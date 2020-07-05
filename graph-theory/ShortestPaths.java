@@ -1,5 +1,3 @@
-package paths;
-
 import java.util.*;
 
 public class ShortestPaths {

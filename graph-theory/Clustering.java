@@ -1,5 +1,3 @@
-package mst;
-
 import java.util.Scanner;
 
 public class Clustering {
