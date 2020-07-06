@@ -1,27 +1,37 @@
 import java.util.*;
 
 public class Acyclicity {
-    private static int acyclic(Map<Integer, List<Integer>> adjacencyList) {
-        int round = 0;
-        if (adjacencyList.isEmpty()) return 0;
+    static Map<Integer, List<Integer>> adjacencyList;
+    static Stack<Integer> cycle = null;
+
+    private static int acyclic() {
+        if (adjacencyList == null || adjacencyList.size() == 0) return 0;
         boolean[] isVisited = new boolean[adjacencyList.size()];
-        boolean[] isRecursiveStack = new boolean[adjacencyList.size()];
+        boolean[] isOnStack = new boolean[adjacencyList.size()];
         Set<Integer> vertices = adjacencyList.keySet();
-        Stack<Integer> stack = new Stack<>();
-        for (Integer source : vertices) {
-            stack.push(source);
-            while (!stack.isEmpty()) {
-                int current = stack.pop();
-                isVisited[current] = true;
-                if (current == source && round != 0) return 1;
-                for (Integer vertex : adjacencyList.get(current)) {
-                    if (!isVisited[vertex]) stack.push(vertex);
-                }
-                round++;
+        for (Integer vertex : vertices) {
+            if (!isVisited[vertex] && cycle == null) {
+                isVisited[vertex] = true;
+                dfs(vertex, isVisited, isOnStack);
             }
-            round = 0;
+
         }
-        return 0;
+        if (cycle == null) return 0;
+        else return 1;
+    }
+
+    static public void dfs(int vertex, boolean[] isVisited, boolean[] isOnStack) {
+        isVisited[vertex] = true;
+        isOnStack[vertex] = true;
+        for (Integer current : adjacencyList.get(vertex)) {
+            if (cycle != null) return;
+            else if (!isVisited[current])
+                dfs(current, isVisited, isOnStack);
+            else if (isOnStack[current]) { // it is already visited; is on stack still-> cycle detected
+                cycle = new Stack<>();
+            }
+        }
+        isOnStack[vertex] = false;
     }
 
     public static void main(String[] args) {
@@ -38,14 +48,13 @@ public class Acyclicity {
             y = scanner.nextInt();
             adj[x - 1].add(y - 1);
         }
-        Map<Integer, List<Integer>> adjacencyList = new HashMap<>();
+        adjacencyList = new HashMap<>();
 
         for (int i = 0; i < adj.length; i++) {
             adjacencyList.putIfAbsent(i, adj[i]);
-
         }
 
-        System.out.println(acyclic(adjacencyList));
+        System.out.println(acyclic());
     }
 }
 
