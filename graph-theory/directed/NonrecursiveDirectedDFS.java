@@ -54,14 +54,14 @@ public class NonrecursiveDirectedDFS {
      * @throws IllegalArgumentException unless {@code 0 <= source < V}
      */
     public NonrecursiveDirectedDFS(Digraph G, int source) {
-        isVisited = new boolean[G.V()];
+        isVisited = new boolean[G.getNumberofVertices()];
         validateVertex(source);
 
         // to be able to iterate over each adjacency list, keeping track of which
         // vertex in each adjacency list needs to be explored next
-        Iterator<Integer>[] adj = (Iterator<Integer>[]) new Iterator[G.V()];
-        for (int vertex = 0; vertex < G.V(); vertex++)
-            adj[vertex] = G.adj(vertex).iterator();
+        Iterator<Integer>[] adj = (Iterator<Integer>[]) new Iterator[G.getNumberofVertices()];
+        for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++)
+            adj[vertex] = G.getAdjacencyList(vertex).iterator();
 
         // depth-first search using an explicit stack
         Stack<Integer> stack = new Stack<Integer>();
@@ -116,7 +116,7 @@ public class NonrecursiveDirectedDFS {
         Digraph G = new Digraph(in);
         int source = Integer.parseInt(args[1]);
         NonrecursiveDirectedDFS dfs = new NonrecursiveDirectedDFS(G, source);
-        for (int vertex = 0; vertex < G.V(); vertex++)
+        for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++)
             if (dfs.isVisited(vertex))
                 StdOut.print(vertex + " ");
         StdOut.println();

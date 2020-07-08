@@ -65,10 +65,10 @@ public class BreadthFirstDirectedPaths {
      * @throws IllegalArgumentException unless {@code 0 <= vertex < V}
      */
     public BreadthFirstDirectedPaths(Digraph G, int source) {
-        isVisited = new boolean[G.V()];
-        distTo = new int[G.V()];
-        fromEdge = new int[G.V()];
-        for (int vertex = 0; vertex < G.V(); vertex++)
+        isVisited = new boolean[G.getNumberofVertices()];
+        distTo = new int[G.getNumberofVertices()];
+        fromEdge = new int[G.getNumberofVertices()];
+        for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++)
             distTo[vertex] = INFINITY;
         validateVertex(source);
         bfs(G, source);
@@ -85,10 +85,10 @@ public class BreadthFirstDirectedPaths {
      *                                  {@code sources} satisfies {@code 0 <= vertex < V}
      */
     public BreadthFirstDirectedPaths(Digraph G, Iterable<Integer> sources) {
-        isVisited = new boolean[G.V()];
-        distTo = new int[G.V()];
-        fromEdge = new int[G.V()];
-        for (int vertex = 0; vertex < G.V(); vertex++)
+        isVisited = new boolean[G.getNumberofVertices()];
+        distTo = new int[G.getNumberofVertices()];
+        fromEdge = new int[G.getNumberofVertices()];
+        for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++)
             distTo[vertex] = INFINITY;
         validateVertices(sources);
         bfs(G, sources);
@@ -102,7 +102,7 @@ public class BreadthFirstDirectedPaths {
         q.enqueue(source);
         while (!q.isEmpty()) {
             int vertex = q.dequeue();
-            for (int current : G.adj(vertex)) {
+            for (int current : G.getAdjacencyList(vertex)) {
                 if (!isVisited[current]) {
                     fromEdge[current] = vertex;
                     distTo[current] = distTo[vertex] + 1;
@@ -123,7 +123,7 @@ public class BreadthFirstDirectedPaths {
         }
         while (!q.isEmpty()) {
             int vertex = q.dequeue();
-            for (int current : G.adj(vertex)) {
+            for (int current : G.getAdjacencyList(vertex)) {
                 if (!isVisited[current]) {
                     fromEdge[current] = vertex;
                     distTo[current] = distTo[vertex] + 1;
@@ -213,7 +213,7 @@ public class BreadthFirstDirectedPaths {
         int source = Integer.parseInt(args[1]);
         BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(G, source);
 
-        for (int vertex = 0; vertex < G.V(); vertex++) {
+        for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++) {
             if (bfs.hasPathTo(vertex)) {
                 StdOut.printf("%d to %d (%d):  ", source, vertex, bfs.distTo(vertex));
                 for (int x : bfs.pathTo(vertex)) {

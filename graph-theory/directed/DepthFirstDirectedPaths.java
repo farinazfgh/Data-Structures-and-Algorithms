@@ -63,8 +63,8 @@ public class DepthFirstDirectedPaths {
      * @throws IllegalArgumentException unless {@code 0 <= source < V}
      */
     public DepthFirstDirectedPaths(Digraph G, int source) {
-        isVisited = new boolean[G.V()];
-        fromEdge = new int[G.V()];
+        isVisited = new boolean[G.getNumberofVertices()];
+        fromEdge = new int[G.getNumberofVertices()];
         this.source = source;
         validateVertex(source);
         dfs(G, source);
@@ -72,7 +72,7 @@ public class DepthFirstDirectedPaths {
 
     private void dfs(Digraph G, int vertex) {
         isVisited[vertex] = true;
-        for (int current : G.adj(vertex)) {
+        for (int current : G.getAdjacencyList(vertex)) {
             if (!isVisited[current]) {
                 fromEdge[current] = vertex;
                 dfs(G, current);
@@ -133,7 +133,7 @@ public class DepthFirstDirectedPaths {
         int source = Integer.parseInt(args[1]);
         DepthFirstDirectedPaths dfs = new DepthFirstDirectedPaths(G, source);
 
-        for (int vertex = 0; vertex < G.V(); vertex++) {
+        for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++) {
             if (dfs.hasPathTo(vertex)) {
                 StdOut.printf("%d to %d:  ", source, vertex);
                 for (int x : dfs.pathTo(vertex)) {

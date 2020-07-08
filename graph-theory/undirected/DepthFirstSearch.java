@@ -50,7 +50,7 @@ public class DepthFirstSearch {
      * Computes the vertices in graph {@code G} that are
      * connected to the source vertex {@code source}.
      *
-     * @param G the graph
+     * @param G      the graph
      * @param source the source vertex
      * @throws IllegalArgumentException unless {@code 0 <= source < V}
      */
@@ -62,6 +62,7 @@ public class DepthFirstSearch {
 
     // depth first search from vertex
     private void dfs(UndirectedGraph G, int vertex) {
+        System.out.println("visiting:" + vertex);
         count++;
         isVisited[vertex] = true;
         for (int current : G.getAdjacencyList(vertex)) {

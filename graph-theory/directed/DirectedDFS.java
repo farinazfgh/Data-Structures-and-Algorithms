@@ -56,7 +56,7 @@ public class DirectedDFS {
      * @throws IllegalArgumentException unless {@code 0 <= source < V}
      */
     public DirectedDFS(Digraph G, int source) {
-        isVisited = new boolean[G.V()];
+        isVisited = new boolean[G.getNumberofVertices()];
         validateVertex(source);
         dfs(G, source);
     }
@@ -71,7 +71,7 @@ public class DirectedDFS {
      *         for each vertex {@code source} in {@code sources}
      */
     public DirectedDFS(Digraph G, Iterable<Integer> sources) {
-        isVisited = new boolean[G.V()];
+        isVisited = new boolean[G.getNumberofVertices()];
         validateVertices(sources);
         for (int vertex : sources) {
             if (!isVisited[vertex]) dfs(G, vertex);
@@ -81,7 +81,7 @@ public class DirectedDFS {
     private void dfs(Digraph G, int vertex) {
         count++;
         isVisited[vertex] = true;
-        for (int current : G.adj(vertex)) {
+        for (int current : G.getAdjacencyList(vertex)) {
             if (!isVisited[current]) dfs(G, current);
         }
     }
@@ -151,7 +151,7 @@ public class DirectedDFS {
         DirectedDFS dfs = new DirectedDFS(G, sources);
 
         // print out vertices reachable from sources
-        for (int vertex = 0; vertex < G.V(); vertex++) {
+        for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++) {
             if (dfs.isVisited(vertex)) StdOut.print(vertex + " ");
         }
         StdOut.println();
