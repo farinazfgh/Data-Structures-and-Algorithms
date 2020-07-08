@@ -1,3 +1,5 @@
+package undirected;
+
 import util.In;
 import util.StdOut;
 
@@ -25,7 +27,7 @@ public class Cycle {
     }
 
     /**
-     * Unit tests the {@code Cycle} data type.
+     * Unit tests the {@code undirected.Cycle} data type.
      *
      * @param args the command-line arguments
      */
@@ -39,7 +41,7 @@ public class Cycle {
             }
             StdOut.println();
         } else {
-            StdOut.println("UndirectedGraph is acyclic");
+            StdOut.println("undirected.UndirectedGraph is acyclic");
         }
     }
 

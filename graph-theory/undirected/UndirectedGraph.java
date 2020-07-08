@@ -1,3 +1,6 @@
+package undirected;
+
+import util.Bag;
 import util.In;
 import util.StdOut;
 
@@ -89,7 +92,7 @@ public class UndirectedGraph {
                 addEdge(vertex, current);
             }
         } catch (NoSuchElementException e) {
-            throw new IllegalArgumentException("invalid input format in UndirectedGraph constructor", e);
+            throw new IllegalArgumentException("invalid input format in undirected.UndirectedGraph constructor", e);
         }
     }
 
@@ -209,7 +212,7 @@ public class UndirectedGraph {
 
 
     /**
-     * Unit tests the {@code UndirectedGraph} data type.
+     * Unit tests the {@code undirected.UndirectedGraph} data type.
      *
      * @param args the command-line arguments
      */

@@ -1,7 +1,7 @@
-/******************************************************************************
- *  Compilation:  javac DirectedCycleNonRecursive.java
- *  Execution:    java DirectedCycleNonRecursive V E F
- *  Dependencies: Queue.java Digraph.java Stack.java
+package directed; /******************************************************************************
+ *  Compilation:  javac directed.DirectedCycleNonRecursive.java
+ *  Execution:    java directed.DirectedCycleNonRecursive V E F
+ *  Dependencies: Queue.java directed.Digraph.java Stack.java
  *
  *  Find a directed cycle in a digraph, using a nonrecursive, queue-based
  *  algorithm. Runs in O(E + V) time.

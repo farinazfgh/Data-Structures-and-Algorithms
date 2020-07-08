@@ -1,3 +1,5 @@
+package undirected;
+
 import util.In;
 import util.StdOut;
 
@@ -55,7 +57,7 @@ public class DFSNonRecursive {
     }
 
     /**
-     * Unit tests the {@code DFSNonRecursive} data type.
+     * Unit tests the {@code undirected.DFSNonRecursive} data type.
      *
      * @param args the command-line arguments
      */

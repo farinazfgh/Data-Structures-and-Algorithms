@@ -1,8 +1,8 @@
-
+package undirected;
 /******************************************************************************
- *  Compilation:  javac BreadthFirstPaths.java
- *  Execution:    java BreadthFirstPaths G source
- *  Dependencies: UndirectedGraph.java Queue.java Stack.java StdOut.java
+ *  Compilation:  javac undirected.BreadthFirstPaths.java
+ *  Execution:    java undirected.BreadthFirstPaths G source
+ *  Dependencies: undirected.UndirectedGraph.java Queue.java Stack.java StdOut.java
  *  Data files:   https://algs4.cs.princeton.edu/41graph/tinyCG.txt
  *                https://algs4.cs.princeton.edu/41graph/tinyG.txt
  *                https://algs4.cs.princeton.edu/41graph/mediumG.txt
@@ -11,7 +11,7 @@
  *  Run breadth first search on an undirected graph.
  *  Runs in O(E + V) time.
  *
- *  %  java UndirectedGraph tinyCG.txt
+ *  %  java undirected.UndirectedGraph tinyCG.txt
  *  6 8
  *  0: 2 1 5 
  *  1: 0 2 
@@ -20,7 +20,7 @@
  *  4: 3 2 
  *  5: 3 0 
  *
- *  %  java BreadthFirstPaths tinyCG.txt 0
+ *  %  java undirected.BreadthFirstPaths tinyCG.txt 0
  *  0 to 0 (0):  0
  *  0 to 1 (1):  0-1
  *  0 to 2 (1):  0-2
@@ -28,7 +28,7 @@
  *  0 to 4 (2):  0-2-4
  *  0 to 5 (1):  0-5
  *
- *  %  java BreadthFirstPaths largeG.txt 0
+ *  %  java undirected.BreadthFirstPaths largeG.txt 0
  *  0 to 0 (0):  0
  *  0 to 1 (418):  0-932942-474885-82707-879889-971961-...
  *  0 to 2 (323):  0-460790-53370-594358-780059-287921-...
@@ -235,7 +235,7 @@ public class BreadthFirstPaths {
     }
 
     /**
-     * Unit tests the {@code BreadthFirstPaths} data type.
+     * Unit tests the {@code undirected.BreadthFirstPaths} data type.
      *
      * @param args the command-line arguments
      */

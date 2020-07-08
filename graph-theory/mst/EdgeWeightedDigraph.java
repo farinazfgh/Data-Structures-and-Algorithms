@@ -1,6 +1,6 @@
-/******************************************************************************
- *  Compilation:  javac EdgeWeightedDigraph.java
- *  Execution:    java EdgeWeightedDigraph digraph.txt
+package mst; /******************************************************************************
+ *  Compilation:  javac mst.EdgeWeightedDigraph.java
+ *  Execution:    java mst.EdgeWeightedDigraph digraph.txt
  *  Dependencies: util.Bag.java directed.DirectedEdge.java
  *  Data files:   https://algs4.cs.princeton.edu/44sp/tinyEWD.txt
  *                https://algs4.cs.princeton.edu/44sp/mediumEWD.txt
@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.Stack;
 
 /**
- * The {@code EdgeWeightedDigraph} class represents a edge-weighted
+ * The {@code mst.EdgeWeightedDigraph} class represents a edge-weighted
  * digraph of vertices named 0 through <em>numberofVertices</em> - 1, where each
  * directed edge is of type {@link DirectedEdge} and has a real-valued weight.
  * It supports the following two primary operations: add a directed edge
@@ -54,7 +54,7 @@ public class EdgeWeightedDigraph {
 
     private final int numberofVertices;                // number of vertices in this digraph
     private int E;                      // number of edges in this digraph
-    private Bag<DirectedEdge>[] adj;    // adj[vertex] = adjacency list for vertex vertex
+    private Bag<DirectedEdge>[] adjacencyList;    // adj[vertex] = adjacency list for vertex vertex
     private int[] indegree;             // indegree[vertex] = indegree of vertex vertex
 
     /**
@@ -69,9 +69,9 @@ public class EdgeWeightedDigraph {
         this.numberofVertices = numberofVertices;
         this.E = 0;
         this.indegree = new int[numberofVertices];
-        adj = (Bag<DirectedEdge>[]) new Bag[numberofVertices];
+        adjacencyList = (Bag<DirectedEdge>[]) new Bag[numberofVertices];
         for (int vertex = 0; vertex < numberofVertices; vertex++)
-            adj[vertex] = new Bag<DirectedEdge>();
+            adjacencyList[vertex] = new Bag<DirectedEdge>();
     }
 
     /**
@@ -113,9 +113,9 @@ public class EdgeWeightedDigraph {
             if (numberofVertices < 0)
                 throw new IllegalArgumentException("number of vertices in a directed.Digraph must be nonnegative");
             indegree = new int[numberofVertices];
-            adj = (Bag<DirectedEdge>[]) new Bag[numberofVertices];
+            adjacencyList = (Bag<DirectedEdge>[]) new Bag[numberofVertices];
             for (int vertex = 0; vertex < numberofVertices; vertex++) {
-                adj[vertex] = new Bag<DirectedEdge>();
+                adjacencyList[vertex] = new Bag<DirectedEdge>();
             }
 
             int E = in.readInt();
@@ -129,7 +129,7 @@ public class EdgeWeightedDigraph {
                 addEdge(new DirectedEdge(vertex, current, weight));
             }
         } catch (NoSuchElementException e) {
-            throw new IllegalArgumentException("invalid input format in EdgeWeightedDigraph constructor", e);
+            throw new IllegalArgumentException("invalid input format in mst.EdgeWeightedDigraph constructor", e);
         }
     }
 
@@ -146,11 +146,11 @@ public class EdgeWeightedDigraph {
         for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++) {
             // reverse so that adjacency list is in same order as original
             Stack<DirectedEdge> reverse = new Stack<DirectedEdge>();
-            for (DirectedEdge e : G.adj[vertex]) {
+            for (DirectedEdge e : G.adjacencyList[vertex]) {
                 reverse.push(e);
             }
             for (DirectedEdge e : reverse) {
-                adj[vertex].add(e);
+                adjacencyList[vertex].add(e);
             }
         }
     }
@@ -191,7 +191,7 @@ public class EdgeWeightedDigraph {
         int current = e.to();
         validateVertex(vertex);
         validateVertex(current);
-        adj[vertex].add(e);
+        adjacencyList[vertex].add(e);
         indegree[current]++;
         E++;
     }
@@ -206,7 +206,7 @@ public class EdgeWeightedDigraph {
      */
     public Iterable<DirectedEdge> getAdjacencyList(int vertex) {
         validateVertex(vertex);
-        return adj[vertex];
+        return adjacencyList[vertex];
     }
 
     /**
@@ -219,7 +219,7 @@ public class EdgeWeightedDigraph {
      */
     public int outdegree(int vertex) {
         validateVertex(vertex);
-        return adj[vertex].size();
+        return adjacencyList[vertex].size();
     }
 
     /**
@@ -263,7 +263,7 @@ public class EdgeWeightedDigraph {
         source.append(numberofVertices + " " + E + NEWLINE);
         for (int vertex = 0; vertex < numberofVertices; vertex++) {
             source.append(vertex + ": ");
-            for (DirectedEdge e : adj[vertex]) {
+            for (DirectedEdge e : adjacencyList[vertex]) {
                 source.append(e + "  ");
             }
             source.append(NEWLINE);
@@ -272,7 +272,7 @@ public class EdgeWeightedDigraph {
     }
 
     /**
-     * Unit tests the {@code EdgeWeightedDigraph} data type.
+     * Unit tests the {@code mst.EdgeWeightedDigraph} data type.
      *
      * @param args the command-line arguments
      */

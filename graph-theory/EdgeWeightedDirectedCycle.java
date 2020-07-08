@@ -1,15 +1,18 @@
 
 /******************************************************************************
  *  Compilation:  javac EdgeWeightedDirectedCycle.java
- *  Execution:    java EdgeWeightedDirectedCycle V E F
- *  Dependencies: EdgeWeightedDigraph.java DirectedEdge.java Stack.java
+ *  Execution:    java EdgeWeightedDirectedCycle getNumberofVertices E F
+ *  Dependencies: mst.EdgeWeightedDigraph.java directed.DirectedEdge.java Stack.java
  *
  *  Finds a directed cycle in an edge-weighted digraph.
- *  Runs in O(E + V) time.
+ *  Runs in O(E + getNumberofVertices) time.
  *
  *
  ******************************************************************************/
 
+import directed.DirectedEdge;
+import directed.Topological;
+import mst.EdgeWeightedDigraph;
 import util.StdOut;
 import util.StdRandom;
 
@@ -23,11 +26,11 @@ import java.util.Stack;
  * returns one.
  * <p>
  * This implementation uses <em>depth-first search</em>.
- * The constructor takes &Theta;(<em>V</em> + <em>E</em>) time in the
- * worst case, where <em>V</em> is the number of vertices and
+ * The constructor takes &Theta;(<em>getNumberofVertices</em> + <em>E</em>) time in the
+ * worst case, where <em>getNumberofVertices</em> is the number of vertices and
  * <em>E</em> is the number of edges.
  * Each instance method takes &Theta;(1) time.
- * It uses &Theta;(<em>V</em>) extra space (not including the
+ * It uses &Theta;(<em>getNumberofVertices</em>) extra space (not including the
  * edge-weighted digraph).
  * <p>
  * See {@link Topological} to compute a topological order if the
@@ -53,10 +56,10 @@ public class EdgeWeightedDirectedCycle {
      * @param G the edge-weighted digraph
      */
     public EdgeWeightedDirectedCycle(EdgeWeightedDigraph G) {
-        isVisited = new boolean[G.V()];
-        onStack = new boolean[G.V()];
-        fromEdge = new DirectedEdge[G.V()];
-        for (int vertex = 0; vertex < G.V(); vertex++)
+        isVisited = new boolean[G.getNumberofVertices()];
+        onStack = new boolean[G.getNumberofVertices()];
+        fromEdge = new DirectedEdge[G.getNumberofVertices()];
+        for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++)
             if (!isVisited[vertex]) dfs(G, vertex);
 
         // check that digraph has a cycle
@@ -67,7 +70,7 @@ public class EdgeWeightedDirectedCycle {
     private void dfs(EdgeWeightedDigraph G, int vertex) {
         onStack[vertex] = true;
         isVisited[vertex] = true;
-        for (DirectedEdge e : G.adj(vertex)) {
+        for (DirectedEdge e : G.getAdjacencyList(vertex)) {
             int current = e.to();
 
             // short circuit if directed cycle found
@@ -154,20 +157,20 @@ public class EdgeWeightedDirectedCycle {
      */
     public static void main(String[] args) {
 
-        // create random DAG with V vertices and E edges; then add F random edges
-        int V = Integer.parseInt(args[0]);
+        // create random DAG with getNumberofVertices vertices and E edges; then add F random edges
+        int getNumberofVertices = Integer.parseInt(args[0]);
         int E = Integer.parseInt(args[1]);
         int F = Integer.parseInt(args[2]);
-        EdgeWeightedDigraph G = new EdgeWeightedDigraph(V);
-        int[] vertices = new int[V];
-        for (int i = 0; i < V; i++)
+        EdgeWeightedDigraph G = new EdgeWeightedDigraph(getNumberofVertices);
+        int[] vertices = new int[getNumberofVertices];
+        for (int i = 0; i < getNumberofVertices; i++)
             vertices[i] = i;
         StdRandom.shuffle(vertices);
         for (int i = 0; i < E; i++) {
             int vertex, current;
             do {
-                vertex = StdRandom.uniform(V);
-                current = StdRandom.uniform(V);
+                vertex = StdRandom.uniform(getNumberofVertices);
+                current = StdRandom.uniform(getNumberofVertices);
             } while (vertex >= current);
             double weight = StdRandom.uniform();
             G.addEdge(new DirectedEdge(vertex, current, weight));
@@ -175,8 +178,8 @@ public class EdgeWeightedDirectedCycle {
 
         // add F extra edges
         for (int i = 0; i < F; i++) {
-            int vertex = StdRandom.uniform(V);
-            int current = StdRandom.uniform(V);
+            int vertex = StdRandom.uniform(getNumberofVertices);
+            int current = StdRandom.uniform(getNumberofVertices);
             double weight = StdRandom.uniform(0.0, 1.0);
             G.addEdge(new DirectedEdge(vertex, current, weight));
         }
@@ -186,7 +189,7 @@ public class EdgeWeightedDirectedCycle {
         // find a directed cycle
         EdgeWeightedDirectedCycle finder = new EdgeWeightedDirectedCycle(G);
         if (finder.hasCycle()) {
-            StdOut.print("Cycle: ");
+            StdOut.print("undirected.Cycle: ");
             for (DirectedEdge e : finder.cycle()) {
                 StdOut.print(e + " ");
             }

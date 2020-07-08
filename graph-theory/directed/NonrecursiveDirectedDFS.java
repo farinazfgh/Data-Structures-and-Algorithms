@@ -1,7 +1,7 @@
-/******************************************************************************
- *  Compilation:  javac NonrecursiveDirectedDFS.java
- *  Execution:    java NonrecursiveDirectedDFS digraph.txt source
- *  Dependencies: Digraph.java Queue.java Stack.java StdOut.java
+package directed; /******************************************************************************
+ *  Compilation:  javac directed.NonrecursiveDirectedDFS.java
+ *  Execution:    java directed.NonrecursiveDirectedDFS digraph.txt source
+ *  Dependencies: directed.Digraph.java Queue.java Stack.java StdOut.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/tinyDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/mediumDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/largeDG.txt
@@ -9,13 +9,13 @@
  *  Run nonrecurisve depth-first search on an directed graph.
  *  Runs in O(E + V) time.
  *
- *  Explores the vertices in exactly the same order as DirectedDFS.java.
+ *  Explores the vertices in exactly the same order as directed.DirectedDFS.java.
  *
  *
- *  % java NonrecursiveDirectedDFS tinyDG.txt 1
+ *  % java directed.NonrecursiveDirectedDFS tinyDG.txt 1
  *  1
  *
- *  % java NonrecursiveDirectedDFS tinyDG.txt 2
+ *  % java directed.NonrecursiveDirectedDFS tinyDG.txt 2
  *  0 1 2 3 4 5
  *
  ******************************************************************************/
@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.Stack;
 
 /**
- *  The {@code NonrecursiveDirectedDFS} class represents a data type for finding
+ *  The {@code directed.NonrecursiveDirectedDFS} class represents a data type for finding
  *  the vertices reachable from a source vertex <em>source</em> in the digraph.
  *  <p>
  *  This implementation uses a nonrecursive version of depth-first search
@@ -107,7 +107,7 @@ public class NonrecursiveDirectedDFS {
     }
 
     /**
-     * Unit tests the {@code NonrecursiveDirectedDFS} data type.
+     * Unit tests the {@code directed.NonrecursiveDirectedDFS} data type.
      *
      * @param args the command-line arguments
      */

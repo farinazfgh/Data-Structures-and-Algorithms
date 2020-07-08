@@ -1,7 +1,7 @@
-/******************************************************************************
- *  Compilation:  javac DigraphGenerator.java
- *  Execution:    java DigraphGenerator getNumberofVertices getNumberOfEdges
- *  Dependencies: Digraph.java
+package directed; /******************************************************************************
+ *  Compilation:  javac directed.DigraphGenerator.java
+ *  Execution:    java directed.DigraphGenerator getNumberofVertices getNumberOfEdges
+ *  Dependencies: directed.Digraph.java
  *
  *  A digraph generator.
  *
@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The {@code DigraphGenerator} class provides static methods for creating
+ * The {@code directed.DigraphGenerator} class provides static methods for creating
  * various digraphs, including Erdos-Renyi random digraphs, random DAGs,
  * random rooted trees, random rooted DAGs, random tournaments, path digraphs,
  * cycle digraphs, and the complete digraph.
@@ -509,7 +509,7 @@ public class DigraphGenerator {
     }
 
     /**
-     * Unit tests the {@code DigraphGenerator} library.
+     * Unit tests the {@code directed.DigraphGenerator} library.
      *
      * @param args the command-line arguments
      */

@@ -1,7 +1,7 @@
 /******************************************************************************
  *  Compilation:  javac SymbolDigraph.java
  *  Execution:    java SymbolDigraph
- *  Dependencies: ST.java Digraph.java In.java
+ *  Dependencies: ST.java directed.Digraph.java In.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/routes.txt
  *
  *  %  java SymbolDigraph routes.txt " "
@@ -16,6 +16,7 @@
  *
  ******************************************************************************/
 
+import directed.Digraph;
 import util.In;
 import util.ST;
 import util.StdIn;
@@ -173,7 +174,7 @@ public class SymbolDigraph {
 
     // throw an IllegalArgumentException unless {@code 0 <= vertex < V}
     private void validateVertex(int vertex) {
-        int V = graph.V();
+        int V = graph.getNumberofVertices();
         if (vertex < 0 || vertex >= V)
             throw new IllegalArgumentException("vertex " + vertex + " is not between 0 and " + (V - 1));
     }
@@ -190,7 +191,7 @@ public class SymbolDigraph {
         Digraph graph = sg.digraph();
         while (!StdIn.isEmpty()) {
             String t = StdIn.readLine();
-            for (int vertex : graph.adj(sg.index(t))) {
+            for (int vertex : graph.getAdjacencyList(sg.index(t))) {
 
                 StdOut.println("   " + sg.name(vertex));
             }

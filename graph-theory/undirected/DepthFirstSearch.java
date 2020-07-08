@@ -1,18 +1,18 @@
-/******************************************************************************
- *  Compilation:  javac DepthFirstSearch.java
- *  Execution:    java DepthFirstSearch filename.txt source
- *  Dependencies: UndirectedGraph.java StdOut.java
+package undirected; /******************************************************************************
+ *  Compilation:  javac undirected.DepthFirstSearch.java
+ *  Execution:    java undirected.DepthFirstSearch filename.txt source
+ *  Dependencies: undirected.UndirectedGraph.java StdOut.java
  *  Data files:   https://algs4.cs.princeton.edu/41graph/tinyG.txt
  *                https://algs4.cs.princeton.edu/41graph/mediumG.txt
  *
  *  Run depth first search on an undirected graph.
  *  Runs in O(E + V) time.
  *
- *  % java DepthFirstSearch tinyG.txt 0
+ *  % java undirected.DepthFirstSearch tinyG.txt 0
  *  0 1 2 3 4 5 6 
  *  NOT connected
  *
- *  % java DepthFirstSearch tinyG.txt 9
+ *  % java undirected.DepthFirstSearch tinyG.txt 9
  *  9 10 11 12 
  *  NOT connected
  *
@@ -22,7 +22,7 @@ import util.In;
 import util.StdOut;
 
 /**
- * The {@code DepthFirstSearch} class represents a data type for
+ * The {@code undirected.DepthFirstSearch} class represents a data type for
  * determining the vertices connected to a given source vertex <em>source</em>
  * in an undirected graph. For versions that find the paths, see
  * {@link DepthFirstPaths} and {@link BreadthFirstPaths}.
@@ -101,7 +101,7 @@ public class DepthFirstSearch {
     }
 
     /**
-     * Unit tests the {@code DepthFirstSearch} data type.
+     * Unit tests the {@code undirected.DepthFirstSearch} data type.
      *
      * @param args the command-line arguments
      */

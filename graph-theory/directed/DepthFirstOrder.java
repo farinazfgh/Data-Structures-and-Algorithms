@@ -1,4 +1,4 @@
-/******************************************************************************
+package directed; /******************************************************************************
  *  Compute preorder and postorder for a digraph or edge-weighted digraph.
  *  Runs in O(E + getNumberofVertices) time.
  ******************************************************************************/
@@ -10,7 +10,7 @@ import util.StdOut;
 import java.util.Stack;
 
 /**
- * The  DepthFirstOrder class represents a data type for
+ * The  directed.DepthFirstOrder class represents a data type for
  * determining depth-first search ordering of the vertices in a digraph
  * or edge-weighted digraph, including preorder, postorder, and reverse postorder.
  */
@@ -38,23 +38,10 @@ public class DepthFirstOrder {
         assert check();
     }
 
-    /**
-     * Determines a depth-first order for the edge-weighted digraph {@code G}.
-     *
-     * @param G the edge-weighted digraph
-     */
-    public DepthFirstOrder(EdgeWeightedDigraph G) {
-        pre = new int[G.getNumberofVertices()];
-        post = new int[G.getNumberofVertices()];
-        postorder = new Queue<Integer>();
-        preorder = new Queue<Integer>();
-        isVisited = new boolean[G.getNumberofVertices()];
-        for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++)
-            if (!isVisited[vertex]) dfs(G, vertex);
-    }
+
 
     /**
-     * Unit tests the {@code DepthFirstOrder} data type.
+     * Unit tests the {@code directed.DepthFirstOrder} data type.
      *
      * @param args the command-line arguments
      */
@@ -104,20 +91,7 @@ public class DepthFirstOrder {
         post[vertex] = postCounter++;
     }
 
-    // run DFS in edge-weighted digraph G from vertex vertex and compute preorder/postorder
-    private void dfs(EdgeWeightedDigraph G, int vertex) {
-        isVisited[vertex] = true;
-        pre[vertex] = preCounter++;
-        preorder.enqueue(vertex);
-        for (DirectedEdge e : G.getAdjacencyList(vertex)) {
-            int current = e.to();
-            if (!isVisited[current]) {
-                dfs(G, current);
-            }
-        }
-        postorder.enqueue(vertex);
-        post[vertex] = postCounter++;
-    }
+
 
     /**
      * Returns the preorder number of vertex {@code vertex}.

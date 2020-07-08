@@ -1,5 +1,4 @@
-import util.StdIn;
-import util.StdOut;
+package util;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -89,7 +88,7 @@ public class Bag<Item> implements Iterable<Item> {
     }
 
     /**
-     * Unit tests the {@code Bag} data type.
+     * Unit tests the {@code util.Bag} data type.
      *
      * @param args the command-line arguments
      */

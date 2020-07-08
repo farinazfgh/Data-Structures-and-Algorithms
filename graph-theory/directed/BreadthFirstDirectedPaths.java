@@ -1,7 +1,7 @@
-/******************************************************************************
- *  Compilation:  javac BreadthFirstDirectedPaths.java
- *  Execution:    java BreadthFirstDirectedPaths digraph.txt source
- *  Dependencies: Digraph.java Queue.java Stack.java
+package directed; /******************************************************************************
+ *  Compilation:  javac directed.BreadthFirstDirectedPaths.java
+ *  Execution:    java directed.BreadthFirstDirectedPaths digraph.txt source
+ *  Dependencies: directed.Digraph.java Queue.java Stack.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/tinyDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/mediumDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/largeDG.txt
@@ -9,7 +9,7 @@
  *  Run breadth-first search on a digraph.
  *  Runs in O(E + V) time.
  *
- *  % java BreadthFirstDirectedPaths tinyDG.txt 3
+ *  % java directed.BreadthFirstDirectedPaths tinyDG.txt 3
  *  3 to 0 (2):  3->2->0
  *  3 to 1 (3):  3->2->0->1
  *  3 to 2 (1):  3->2
@@ -201,7 +201,7 @@ public class BreadthFirstDirectedPaths {
 
 
     /**
-     * Unit tests the {@code BreadthFirstDirectedPaths} data type.
+     * Unit tests the {@code directed.BreadthFirstDirectedPaths} data type.
      *
      * @param args the command-line arguments
      */

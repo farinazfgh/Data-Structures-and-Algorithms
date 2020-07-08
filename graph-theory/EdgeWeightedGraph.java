@@ -1,7 +1,7 @@
 /******************************************************************************
  *  Compilation:  javac EdgeWeightedGraph.java
  *  Execution:    java EdgeWeightedGraph filename.txt
- *  Dependencies: Bag.java Edge.java In.java StdOut.java
+ *  Dependencies: util.Bag.java mst.Edge.java In.java StdOut.java
  *  Data files:   https://algs4.cs.princeton.edu/43mst/tinyEWG.txt
  *                https://algs4.cs.princeton.edu/43mst/mediumEWG.txt
  *                https://algs4.cs.princeton.edu/43mst/largeEWG.txt
@@ -22,6 +22,8 @@
  *
  ******************************************************************************/
 
+import mst.Edge;
+import util.Bag;
 import util.In;
 import util.StdOut;
 import util.StdRandom;
@@ -66,7 +68,7 @@ public class EdgeWeightedGraph {
 
     private final int V;
     private int E;
-    private Bag<Edge>[] adj;
+    private Bag<Edge>[] adjacenyList;
 
     /**
      * Initializes an empty edge-weighted graph with {@code V} vertices and 0 edges.
@@ -78,9 +80,9 @@ public class EdgeWeightedGraph {
         if (V < 0) throw new IllegalArgumentException("Number of vertices must be nonnegative");
         this.V = V;
         this.E = 0;
-        adj = (Bag<Edge>[]) new Bag[V];
+        adjacenyList = (Bag<Edge>[]) new Bag[V];
         for (int vertex = 0; vertex < V; vertex++) {
-            adj[vertex] = new Bag<Edge>();
+            adjacenyList[vertex] = new Bag<Edge>();
         }
     }
 
@@ -121,9 +123,9 @@ public class EdgeWeightedGraph {
 
         try {
             V = in.readInt();
-            adj = (Bag<Edge>[]) new Bag[V];
+            adjacenyList = (Bag<Edge>[]) new Bag[V];
             for (int vertex = 0; vertex < V; vertex++) {
-                adj[vertex] = new Bag<Edge>();
+                adjacenyList[vertex] = new Bag<Edge>();
             }
 
             int E = in.readInt();
@@ -154,11 +156,11 @@ public class EdgeWeightedGraph {
         for (int vertex = 0; vertex < G.V(); vertex++) {
             // reverse so that adjacency list is in same order as original
             Stack<Edge> reverse = new Stack<Edge>();
-            for (Edge e : G.adj[vertex]) {
+            for (Edge e : G.adjacenyList[vertex]) {
                 reverse.push(e);
             }
             for (Edge e : reverse) {
-                adj[vertex].add(e);
+                adjacenyList[vertex].add(e);
             }
         }
     }
@@ -199,8 +201,8 @@ public class EdgeWeightedGraph {
         int current = e.other(vertex);
         validateVertex(vertex);
         validateVertex(current);
-        adj[vertex].add(e);
-        adj[current].add(e);
+        adjacenyList[vertex].add(e);
+        adjacenyList[current].add(e);
         E++;
     }
 
@@ -213,7 +215,7 @@ public class EdgeWeightedGraph {
      */
     public Iterable<Edge> adj(int vertex) {
         validateVertex(vertex);
-        return adj[vertex];
+        return adjacenyList[vertex];
     }
 
     /**
@@ -225,13 +227,13 @@ public class EdgeWeightedGraph {
      */
     public int degree(int vertex) {
         validateVertex(vertex);
-        return adj[vertex].size();
+        return adjacenyList[vertex].size();
     }
 
     /**
      * Returns all edges in this edge-weighted graph.
      * To iterate over the edges in this edge-weighted graph, use foreach notation:
-     * {@code for (Edge e : G.edges())}.
+     * {@code for (mst.Edge e : G.edges())}.
      *
      * @return all edges in this edge-weighted graph, as an iterable
      */
@@ -265,7 +267,7 @@ public class EdgeWeightedGraph {
         source.append(V + " " + E + NEWLINE);
         for (int vertex = 0; vertex < V; vertex++) {
             source.append(vertex + ": ");
-            for (Edge e : adj[vertex]) {
+            for (Edge e : adjacenyList[vertex]) {
                 source.append(e + "  ");
             }
             source.append(NEWLINE);

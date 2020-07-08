@@ -1,19 +1,20 @@
-/******************************************************************************
- *  Compilation:  javac TopologicalX.java
- *  Execution:    java TopologicalX getNumberofVertices E F
- *  Dependencies: Queue.java Digraph.java
+package directed; /******************************************************************************
+ *  Compilation:  javac directed.TopologicalX.java
+ *  Execution:    java directed.TopologicalX getNumberofVertices E F
+ *  Dependencies: Queue.java directed.Digraph.java
  *
  *  Compute topological ordering of a DAG using queue-based algorithm.
  *  Runs in O(E + getNumberofVertices) time.
  *
  ******************************************************************************/
 
+import mst.EdgeWeightedDigraph;
 import util.Queue;
 import util.StdOut;
 import util.StdRandom;
 
 /**
- * The {@code TopologicalX} class represents a data type for
+ * The {@code directed.TopologicalX} class represents a data type for
  * determining a topological order of a <em>directed acyclic graph</em> (DAG).
  * A digraph has a topological order if and only if it is a DAG.
  * The <em>hasOrder</em> operation determines whether the digraph has
@@ -260,7 +261,7 @@ public class TopologicalX {
     }
 
     /**
-     * Unit tests the {@code TopologicalX} data type.
+     * Unit tests the {@code directed.TopologicalX} data type.
      *
      * @param args the command-line arguments
      */
@@ -299,7 +300,7 @@ public class TopologicalX {
 
         // or give topologial sort
         else {
-            StdOut.print("Topological order: ");
+            StdOut.print("directed.Topological order: ");
             for (int v : topological1.order()) {
                 StdOut.print(v + " ");
             }
@@ -314,7 +315,7 @@ public class TopologicalX {
 
         // or give topologial sort
         else {
-            StdOut.print("Topological order: ");
+            StdOut.print("directed.Topological order: ");
             for (int v : topological2.order()) {
                 StdOut.print(v + " ");
             }

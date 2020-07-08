@@ -1,3 +1,5 @@
+import util.Queue;
+
 import java.util.*;
 
 public class Graph {
@@ -65,5 +67,47 @@ public class Graph {
             if (!isVisited[vertex]) topologicalSortRecursive(vertex, isVisited, result);
         }
         result.addFirst(current);
+    }
+
+    private void bfs(int source) {
+        boolean[] isVisited = new boolean[adjacentVertices.size()];
+
+        Queue<Integer> queue = new Queue<Integer>();
+        isVisited[source] = true;
+        queue.enqueue(source);
+
+        while (!queue.isEmpty()) {
+            int vertex = queue.dequeue();
+            visit(vertex);
+            for (int current : adjacentVertices.get(vertex)) {
+                if (!isVisited[current]) {
+                    isVisited[current] = true;
+                    queue.enqueue(current);
+                }
+            }
+        }
+    }
+
+
+    public static void main(String[] args) {
+        Graph graph = new Graph();
+        graph.addVertex(0);
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addVertex(5);
+        graph.addVertex(6);
+        graph.addEdge(0, 5);
+        graph.addEdge(4, 3);
+        graph.addEdge(0, 1);
+        graph.addEdge(6, 4);
+        graph.addEdge(5, 4);
+        graph.addEdge(0, 2);
+        graph.addEdge(0, 6);
+        graph.addEdge(5, 3);
+        graph.dfs(0);
+        System.out.println();
+        graph.bfs(0);
     }
 }

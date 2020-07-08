@@ -1,3 +1,5 @@
+package directed;
+
 import util.In;
 import util.StdOut;
 
@@ -69,7 +71,7 @@ public class DirectedCycle {
     }
 
     public static void main(String[] args) {
-        System.out.println("DirectedCycle");
+        System.out.println("directed.DirectedCycle");
         In in = new In(args[0]);
         Digraph G = new Digraph(in);
 

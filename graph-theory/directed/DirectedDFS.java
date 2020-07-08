@@ -1,7 +1,7 @@
-/******************************************************************************
- *  Compilation:  javac DirectedDFS.java
- *  Execution:    java DirectedDFS digraph.txt source
- *  Dependencies: Digraph.java Bag.java In.java StdOut.java
+package directed; /******************************************************************************
+ *  Compilation:  javac directed.DirectedDFS.java
+ *  Execution:    java directed.DirectedDFS digraph.txt source
+ *  Dependencies: directed.Digraph.java util.Bag.java In.java StdOut.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/tinyDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/mediumDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/largeDG.txt
@@ -10,22 +10,23 @@
  *  using depth first search.
  *  Runs in O(E + V) time.
  *
- *  % java DirectedDFS tinyDG.txt 1
+ *  % java directed.DirectedDFS tinyDG.txt 1
  *  1
  *
- *  % java DirectedDFS tinyDG.txt 2
+ *  % java directed.DirectedDFS tinyDG.txt 2
  *  0 1 2 3 4 5
  *
- *  % java DirectedDFS tinyDG.txt 1 2 6
+ *  % java directed.DirectedDFS tinyDG.txt 1 2 6
  *  0 1 2 3 4 5 6 8 9 10 11 12 
  *
  ******************************************************************************/
 
+import util.Bag;
 import util.In;
 import util.StdOut;
 
 /**
- *  The {@code DirectedDFS} class represents a data type for 
+ *  The {@code directed.DirectedDFS} class represents a data type for
  *  determining the vertices reachable from a given source vertex <em>source</em>
  *  (or set of source vertices) in a digraph. For versions that find the paths,
  *  see {@link DepthFirstDirectedPaths} and {@link BreadthFirstDirectedPaths}.
@@ -130,7 +131,7 @@ public class DirectedDFS {
 
 
     /**
-     * Unit tests the {@code DirectedDFS} data type.
+     * Unit tests the {@code directed.DirectedDFS} data type.
      *
      * @param args the command-line arguments
      */

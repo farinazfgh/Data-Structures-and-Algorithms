@@ -1,3 +1,6 @@
+package directed;
+
+import util.Bag;
 import util.In;
 import util.StdOut;
 
@@ -13,7 +16,7 @@ public class Digraph {
     private int[] indegree;        // indegree[vertex] = indegree of vertex vertex
 
     public Digraph(int V) {
-        if (V < 0) throw new IllegalArgumentException("Number of vertices in a Digraph must be nonnegative");
+        if (V < 0) throw new IllegalArgumentException("Number of vertices in a directed.Digraph must be nonnegative");
         this.V = V;
         this.E = 0;
         indegree = new int[V];
@@ -27,21 +30,21 @@ public class Digraph {
         if (in == null) throw new IllegalArgumentException("argument is null");
         try {
             this.V = in.readInt();
-            if (V < 0) throw new IllegalArgumentException("number of vertices in a Digraph must be nonnegative");
+            if (V < 0) throw new IllegalArgumentException("number of vertices in a directed.Digraph must be nonnegative");
             indegree = new int[V];
             adjacencyList = (Bag<Integer>[]) new Bag[V];
             for (int vertex = 0; vertex < V; vertex++) {
                 adjacencyList[vertex] = new Bag<Integer>();
             }
             int E = in.readInt();
-            if (E < 0) throw new IllegalArgumentException("number of edges in a Digraph must be nonnegative");
+            if (E < 0) throw new IllegalArgumentException("number of edges in a directed.Digraph must be nonnegative");
             for (int i = 0; i < E; i++) {
                 int vertex = in.readInt();
                 int current = in.readInt();
                 addEdge(vertex, current);
             }
         } catch (NoSuchElementException e) {
-            throw new IllegalArgumentException("invalid input format in Digraph constructor", e);
+            throw new IllegalArgumentException("invalid input format in directed.Digraph constructor", e);
         }
     }
 
@@ -50,7 +53,7 @@ public class Digraph {
 
         this.V = G.getNumberofVertices();
         this.E = G.getNumberOfEdges();
-        if (V < 0) throw new IllegalArgumentException("Number of vertices in a Digraph must be nonnegative");
+        if (V < 0) throw new IllegalArgumentException("Number of vertices in a directed.Digraph must be nonnegative");
 
         // update indegrees
         indegree = new int[V];
@@ -140,7 +143,7 @@ public class Digraph {
     }
 
     /**
-     * Unit tests the {@code Digraph} data type.
+     * Unit tests the {@code directed.Digraph} data type.
      *
      * @param args the command-line arguments
      */

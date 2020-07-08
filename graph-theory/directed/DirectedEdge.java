@@ -1,6 +1,6 @@
-/******************************************************************************
- *  Compilation:  javac DirectedEdge.java
- *  Execution:    java DirectedEdge
+package directed; /******************************************************************************
+ *  Compilation:  javac directed.DirectedEdge.java
+ *  Execution:    java directed.DirectedEdge
  *  Dependencies: StdOut.java
  *
  *  Immutable weighted directed edge.
@@ -10,7 +10,7 @@
 import util.StdOut;
 
 /**
- * The {@code DirectedEdge} class represents a weighted edge in an
+ * The {@code directed.DirectedEdge} class represents a weighted edge in an
  * {@link EdgeWeightedDigraph}. Each edge consists of two integers
  * (naming the two vertices) and a real-value weight. The data type
  * provides methods for accessing the two endpoints of the directed edge and
@@ -85,7 +85,7 @@ public class DirectedEdge {
     }
 
     /**
-     * Unit tests the {@code DirectedEdge} data type.
+     * Unit tests the {@code directed.DirectedEdge} data type.
      *
      * @param args the command-line arguments
      */

@@ -1,10 +1,12 @@
+package directed;
+
 import util.In;
 import util.StdOut;
 import java.util.Stack;
 /******************************************************************************
- *  Compilation:  javac DepthFirstDirectedPaths.java
- *  Execution:    java DepthFirstDirectedPaths digraph.txt source
- *  Dependencies: Digraph.java Stack.java
+ *  Compilation:  javac directed.DepthFirstDirectedPaths.java
+ *  Execution:    java directed.DepthFirstDirectedPaths digraph.txt source
+ *  Dependencies: directed.Digraph.java Stack.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/tinyDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/mediumDG.txt
  *                https://algs4.cs.princeton.edu/42digraph/largeDG.txt
@@ -13,7 +15,7 @@ import java.util.Stack;
  *  depth-first search.
  *  Runs in O(E + V) time.
  *
- *  % java DepthFirstDirectedPaths tinyDG.txt 3
+ *  % java directed.DepthFirstDirectedPaths tinyDG.txt 3
  *  3 to 0:  3-5-4-2-0
  *  3 to 1:  3-5-4-2-0-1
  *  3 to 2:  3-5-4-2
@@ -31,7 +33,7 @@ import java.util.Stack;
  ******************************************************************************/
 
 /**
- * The {@code DepthFirstDirectedPaths} class represents a data type for
+ * The {@code directed.DepthFirstDirectedPaths} class represents a data type for
  * finding directed paths from a source vertex <em>source</em> to every
  * other vertex in the digraph.
  * <p>
@@ -121,7 +123,7 @@ public class DepthFirstDirectedPaths {
     }
 
     /**
-     * Unit tests the {@code DepthFirstDirectedPaths} data type.
+     * Unit tests the {@code directed.DepthFirstDirectedPaths} data type.
      *
      * @param args the command-line arguments
      */

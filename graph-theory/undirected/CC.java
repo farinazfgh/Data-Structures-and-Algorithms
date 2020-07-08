@@ -1,3 +1,5 @@
+package undirected;
+
 import util.In;
 import util.Queue;
 import util.StdOut;
@@ -20,7 +22,7 @@ public class CC {
         }
     }
 
-    public CC(EdgeWeightedGraph G) {
+/*    public CC(EdgeWeightedGraph G) {
         isVisited = new boolean[G.V()];
         id = new int[G.V()];
         size = new int[G.V()];
@@ -31,8 +33,8 @@ public class CC {
             }
         }
     }
-
-    // depth-first search for a UndirectedGraph
+*/
+    // depth-first search for a undirected.UndirectedGraph
     private void dfs(UndirectedGraph G, int vertex) {
         isVisited[vertex] = true;
         id[vertex] = count;
@@ -44,18 +46,7 @@ public class CC {
         }
     }
 
-    // depth-first search for an EdgeWeightedGraph
-    private void dfs(EdgeWeightedGraph G, int vertex) {
-        isVisited[vertex] = true;
-        id[vertex] = count;
-        size[count]++;
-        for (Edge e : G.adj(vertex)) {
-            int current = e.other(vertex);
-            if (!isVisited[current]) {
-                dfs(G, current);
-            }
-        }
-    }
+
 
 
     public int id(int vertex) {
@@ -93,7 +84,7 @@ public class CC {
     }
 
     public static void main(String[] args) {
-        System.out.println("CC");
+        System.out.println("undirected.CC");
         In in = new In(args[0]);
         UndirectedGraph G = new UndirectedGraph(in);
         CC connectedComponent = new CC(G);
