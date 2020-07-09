@@ -8,8 +8,8 @@ import util.StdOut;
 
 /**
  * This implementation uses  weighted quick union by size (without path compression).
- * The constructor takes O( n ), where  n  is the number of elements.
- * The  union  and  find operations  take O(log  n ) time in the worst case. which is the heigh of the tree
+ * The constructor takes O(n), where  n  is the number of elements.
+ * The  union  and  find operations  take O(log n) time in the worst case. which is the heigh of the tree
  * The  count  operation takes O(1) time.
  */
 public class WeightedQuickUnionUF {
