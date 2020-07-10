@@ -2,7 +2,6 @@ package datastructures;
 
 /******************************************************************************
  *  Stack implementation with a resizing array.
- *  to be or not to - be - - that - - - is
  ******************************************************************************/
 
 import util.StdIn;
@@ -36,6 +35,23 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
         return size;
     }
 
+    /**
+     * Java Array Copy Methods
+     * Object.clone():
+     * Object class provides clone() method and since array in java is also an Object, you can use this method to achieve full array copy.
+     * This method will not suit you if you want partial copy of the array.
+     *
+     * System.arraycopy():
+     * System class arraycopy() is the best way to do partial copy of an array.
+     * It provides you an easy way to specify the total number of elements to copy and the source and destination array index positions.
+     *
+     * Arrays.copyOf():
+     * If you want to copy first few elements of an array or full copy of array, you can use this method.
+     * Obviously it’s not versatile like System.arraycopy() but it’s also not confusing and easy to use.
+     *
+     * Arrays.copyOfRange():
+     * If you want few elements of an array to be copied, where starting index is not 0, you can use this method to copy partial array.
+     */
     private void resize(int capacity) {
         assert capacity >= size;
 
