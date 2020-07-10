@@ -32,8 +32,8 @@ public class StackWithMax {
                 stack.push(value);
             } else if ("pop".equals(operation)) {
                 stack.pop();
-            } else if ("max".equals(operation)) {
-                System.out.println(Collections.max(stack));
+            } else if ("max".equals(operation)) {//todo fix Farinaz
+                //System.out.println(Collections.max(stack));
             }
         }
     }

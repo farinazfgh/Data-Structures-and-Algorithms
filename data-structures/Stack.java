@@ -1,12 +1,8 @@
-package datastructures;
-
 /******************************************************************************
  *  A generic stack, implemented using a singly linked list.
  *  Each stack element is of type Item.
  ******************************************************************************/
 
-import util.StdIn;
-import util.StdOut;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -94,6 +90,7 @@ public class Stack<Item> implements Iterable<Item> {
         }
     }
 
+/*
     public static void main(String[] args) {
         Stack<String> stack = new Stack<String>();
         while (!StdIn.isEmpty()) {
@@ -105,4 +102,6 @@ public class Stack<Item> implements Iterable<Item> {
         }
         StdOut.println("(" + stack.size() + " left on stack)");
     }
+
+ */
 }

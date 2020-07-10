@@ -1,11 +1,7 @@
-package datastructures;
-
 /******************************************************************************
  *  Stack implementation with a resizing array.
  ******************************************************************************/
 
-import util.StdIn;
-import util.StdOut;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -113,7 +109,7 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
     }
 
 
-    public static void main(String[] args) {
+ /*   public static void main(String[] args) {
         ResizingArrayStack<String> stack = new ResizingArrayStack<String>();
         while (!StdIn.isEmpty()) {
             String item = StdIn.readString();
@@ -122,6 +118,7 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
         }
         StdOut.println("(" + stack.size() + " left on stack)");
     }
+    */
 }
 
 
