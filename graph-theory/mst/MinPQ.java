@@ -1,22 +1,11 @@
 package mst;
 
 /******************************************************************************
- *  Compilation:  javac MinPQ.java
- *  Execution:    java MinPQ < input.txt
- *  Dependencies: StdIn.java StdOut.java
- *  Data files:   https://algs4.cs.princeton.edu/24pq/tinyPQ.txt
- *
  *  Generic min priority queue implementation with a binary heap.
  *  Can be used with a comparator instead of the natural order.
- *
- *  % java MinPQ < tinyPQ.txt
- *  E A E (6 left on pq)
- *
  *  We use a one-based array to simplify parent and child calculations.
- *
  *  Can be optimized by replacing full exchanges with half exchanges
  *  (ala insertion sort).
- *
  ******************************************************************************/
 
 import util.StdIn;
