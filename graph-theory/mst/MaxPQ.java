@@ -210,13 +210,16 @@ public class MaxPQ<Key> implements Iterable<Key> {
 
 
     public static void main(String[] args) {
-        MaxPQ<String> pq = new MaxPQ<>();
+        MaxPQ<String> priorityQueue = new MaxPQ<>();
         while (!StdIn.isEmpty()) {
             String item = StdIn.readString();
-            if (!item.equals("-")) pq.insert(item);
-            else if (!pq.isEmpty()) StdOut.print(pq.delMax() + " ");
+            if (!item.equals("-")) {
+                priorityQueue.insert(item);
+            } else if (!priorityQueue.isEmpty()) {
+                StdOut.print(priorityQueue.delMax() + " ");
+            }
         }
-        StdOut.println("(" + pq.size() + " left on pq)");
+        StdOut.println("(" + priorityQueue.size() + " left on priorityQueue)");
     }
 }
 
