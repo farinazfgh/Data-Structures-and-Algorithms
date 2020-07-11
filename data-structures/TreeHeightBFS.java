@@ -3,7 +3,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class tree_height {
+/**
+ * in both ways recursive and BFS an auxilary array depth[] is required
+ */
+public class TreeHeightBFS {
     class FastScanner {
         StringTokenizer tok = new StringTokenizer("");
         BufferedReader in;
@@ -79,7 +82,7 @@ public class tree_height {
         new Thread(null, new Runnable() {
             public void run() {
                 try {
-                    new tree_height().run();
+                    new TreeHeightBFS().run();
                 } catch (IOException e) {
                 }
             }
@@ -90,5 +93,28 @@ public class tree_height {
         TreeHeight tree = new TreeHeight();
         tree.read();
         System.out.println(tree.computeHeight());
+    }
+
+    void findDepthRecursive(int parent[], int i, int depth[]) {
+
+        // If depth[i] is already filled
+        if (depth[i] != 0) {
+            return;
+        }
+
+        // If node at index i is root
+        if (parent[i] == -1) {
+            depth[i] = 1;
+            return;
+        }
+
+        // If depth of parent is not evaluated before, then evaluate
+        // depth of parent first
+        if (depth[parent[i]] == 0) {
+            findDepthRecursive(parent, parent[i], depth);
+        }
+
+        // Depth of this node is depth of parent plus 1
+        depth[i] = depth[parent[i]] + 1;
     }
 }
