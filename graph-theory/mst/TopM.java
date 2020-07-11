@@ -63,7 +63,7 @@ public class TopM {
             // remove minimum if m+1 entries on the PQ
             if (pq.size() > m)
                 pq.delMin();
-        }   // top m entries are on the PQ
+        }   // top m entries are on the PQ everytime a large once comes we remove a smaller one
 
         // print entries on PQ in reverse order
         Stack<Transaction> stack = new Stack<Transaction>();
