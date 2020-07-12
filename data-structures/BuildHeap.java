@@ -1,17 +1,18 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class BuildHeap {
     private int[] data;
+    private int[] priorityQueue;
     private List<Swap> swaps;
 
     private FastScanner in;
     private PrintWriter out;
 
     public static void main(String[] args) throws IOException {
+
         new BuildHeap().solve();
     }
 
@@ -19,37 +20,50 @@ public class BuildHeap {
         int n = in.nextInt();
         data = new int[n];
         for (int i = 0; i < n; ++i) {
-          data[i] = in.nextInt();
+            data[i] = in.nextInt();
         }
     }
 
     private void writeResponse() {
         out.println(swaps.size());
         for (Swap swap : swaps) {
-          out.println(swap.index1 + " " + swap.index2);
+            out.println(swap.index1 + " " + swap.index2);
         }
     }
 
     private void generateSwaps() {
-      swaps = new ArrayList<Swap>();
-      // The following naive implementation just sorts 
-      // the given sequence using selection sort algorithm
-      // and saves the resulting sequence of swaps.
-      // This turns the given array into a heap, 
-      // but in the worst case gives a quadratic number of swaps.
-      //
-      // TODO: replace by a more efficient implementation
-      for (int i = 0; i < data.length; ++i) {
-        for (int j = i + 1; j < data.length; ++j) {
-          if (data[i] > data[j]) {
-            swaps.add(new Swap(i, j));
-            int tmp = data[i];
-            data[i] = data[j];
-            data[j] = tmp;
-          }
-        }
-      }
+        int size = data.length;
+        priorityQueue = new int[data.length + 1];
+        System.arraycopy(data, 0, priorityQueue, 1, size);
+        swaps = new ArrayList<Swap>();
+        for (int k = data.length / 2; k >= 1; k--)
+            sink(k);
     }
+
+    private void sink(int k) {
+        while (2 * k <= data.length) {
+            int j = 2 * k;
+            if (j < data.length && greater(j, j + 1)) j++;//decide which child is the larger of the two
+            if (!greater(k, j)) break;
+            exchange(k, j);
+            k = j;
+        }
+    }
+
+    /***************************************************************************
+     * Helper functions for compares and swaps.
+     ***************************************************************************/
+    private boolean greater(int i, int j) {
+        return priorityQueue[i] >= priorityQueue[j];
+    }
+
+    private void exchange(int i, int j) {
+        swaps.add(new Swap(i-1, j-1));
+        int swap = priorityQueue[i];
+        priorityQueue[i] = priorityQueue[j];
+        priorityQueue[j] = swap;
+    }
+
 
     public void solve() throws IOException {
         in = new FastScanner();
