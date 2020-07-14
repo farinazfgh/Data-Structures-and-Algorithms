@@ -89,8 +89,8 @@ public class LazyPrimMST {
     public LazyPrimMST(EdgeWeightedGraph G) {
         mst = new Queue<Edge>();
         pq = new MinPQ<Edge>();
-        marked = new boolean[G.V()];
-        for (int v = 0; v < G.V(); v++)     // run Prim from all vertices to
+        marked = new boolean[G.getNumberOfVertices()];
+        for (int v = 0; v < G.getNumberOfVertices(); v++)     // run Prim from all vertices to
             if (!marked[v]) prim(G, v);     // get a minimum spanning forest
 
         // check optimality conditions
@@ -102,7 +102,7 @@ public class LazyPrimMST {
         scan(G, s);
         while (!pq.isEmpty()) {                        // better to stop when mst has V-1 edges
             Edge e = pq.delMin();                      // smallest edge on pq
-            int v = e.either(), w = e.other(v);        // two endpoints
+            int v = e.either(), w = e.edgeOtherVertex(v);        // two endpoints
             assert marked[v] || marked[w];
             if (marked[v] && marked[w]) continue;      // lazy, both v and w already scanned
             mst.enqueue(e);                            // add e to MST
@@ -116,8 +116,8 @@ public class LazyPrimMST {
     private void scan(EdgeWeightedGraph G, int v) {
         assert !marked[v];
         marked[v] = true;
-        for (Edge e : G.adj(v))
-            if (!marked[e.other(v)]) pq.insert(e);
+        for (Edge e : G.getAdjacenyEdges(v))
+            if (!marked[e.edgeOtherVertex(v)]) pq.insert(e);
     }
 
     /**
@@ -151,9 +151,9 @@ public class LazyPrimMST {
         }
 
         // check that it is acyclic
-        UF uf = new UF(G.V());
+        UF uf = new UF(G.getNumberOfVertices());
         for (Edge e : edges()) {
-            int v = e.either(), w = e.other(v);
+            int v = e.either(), w = e.edgeOtherVertex(v);
             if (uf.find(v) == uf.find(w)) {
                 System.err.println("Not a forest");
                 return false;
@@ -163,7 +163,7 @@ public class LazyPrimMST {
 
         // check that it is a spanning forest
         for (Edge e : G.edges()) {
-            int v = e.either(), w = e.other(v);
+            int v = e.either(), w = e.edgeOtherVertex(v);
             if (uf.find(v) != uf.find(w)) {
                 System.err.println("Not a spanning forest");
                 return false;
@@ -174,15 +174,15 @@ public class LazyPrimMST {
         for (Edge e : edges()) {
 
             // all edges in MST except e
-            uf = new UF(G.V());
+            uf = new UF(G.getNumberOfVertices());
             for (Edge f : mst) {
-                int x = f.either(), y = f.other(x);
+                int x = f.either(), y = f.edgeOtherVertex(x);
                 if (f != e) uf.union(x, y);
             }
 
             // check that e is min weight edge in crossing cut
             for (Edge f : G.edges()) {
-                int x = f.either(), y = f.other(x);
+                int x = f.either(), y = f.edgeOtherVertex(x);
                 if (uf.find(x) != uf.find(y)) {
                     if (f.weight() < e.weight()) {
                         System.err.println("Edge " + f + " violates cut optimality conditions");

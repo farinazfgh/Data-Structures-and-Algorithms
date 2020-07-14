@@ -66,16 +66,16 @@ public class BoruvkaMST {
      * @param G the edge-weighted graph
      */
     public BoruvkaMST(EdgeWeightedGraph G) {
-        UF uf = new UF(G.V());
+        UF uf = new UF(G.getNumberOfVertices());
 
         // repeat at most log V times or until we have V-1 edges
-        for (int t = 1; t < G.V() && mst.size() < G.V() - 1; t = t + t) {
+        for (int t = 1; t < G.getNumberOfVertices() && mst.size() < G.getNumberOfVertices() - 1; t = t + t) {
 
             // foreach tree in forest, find closest edge
             // if edge weights are equal, ties are broken in favor of first edge in G.edges()
-            Edge[] closest = new Edge[G.V()];
+            Edge[] closest = new Edge[G.getNumberOfVertices()];
             for (Edge e : G.edges()) {
-                int v = e.either(), w = e.other(v);
+                int v = e.either(), w = e.edgeOtherVertex(v);
                 int i = uf.find(v), j = uf.find(w);
                 if (i == j) continue;   // same tree
                 if (closest[i] == null || less(e, closest[i])) closest[i] = e;
@@ -83,10 +83,10 @@ public class BoruvkaMST {
             }
 
             // add newly discovered edges to MST
-            for (int i = 0; i < G.V(); i++) {
+            for (int i = 0; i < G.getNumberOfVertices(); i++) {
                 Edge e = closest[i];
                 if (e != null) {
-                    int v = e.either(), w = e.other(v);
+                    int v = e.either(), w = e.edgeOtherVertex(v);
                     // don't add the same edge twice
                     if (uf.find(v) != uf.find(w)) {
                         mst.add(e);
@@ -138,9 +138,9 @@ public class BoruvkaMST {
         }
 
         // check that it is acyclic
-        UF uf = new UF(G.V());
+        UF uf = new UF(G.getNumberOfVertices());
         for (Edge e : edges()) {
-            int v = e.either(), w = e.other(v);
+            int v = e.either(), w = e.edgeOtherVertex(v);
             if (uf.find(v) == uf.find(w)) {
                 System.err.println("Not a forest");
                 return false;
@@ -150,7 +150,7 @@ public class BoruvkaMST {
 
         // check that it is a spanning forest
         for (Edge e : G.edges()) {
-            int v = e.either(), w = e.other(v);
+            int v = e.either(), w = e.edgeOtherVertex(v);
             if (uf.find(v) != uf.find(w)) {
                 System.err.println("Not a spanning forest");
                 return false;
@@ -161,15 +161,15 @@ public class BoruvkaMST {
         for (Edge e : edges()) {
 
             // all edges in MST except e
-            uf = new UF(G.V());
+            uf = new UF(G.getNumberOfVertices());
             for (Edge f : mst) {
-                int x = f.either(), y = f.other(x);
+                int x = f.either(), y = f.edgeOtherVertex(x);
                 if (f != e) uf.union(x, y);
             }
 
             // check that e is min weight edge in crossing cut
             for (Edge f : G.edges()) {
-                int x = f.either(), y = f.other(x);
+                int x = f.either(), y = f.edgeOtherVertex(x);
                 if (uf.find(x) != uf.find(y)) {
                     if (f.weight() < e.weight()) {
                         System.err.println("Edge " + f + " violates cut optimality conditions");

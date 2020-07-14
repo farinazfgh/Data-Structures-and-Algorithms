@@ -18,11 +18,11 @@ public class KruskalMST {
             priorityQueue.insert(e);
         }
 
-        UF uf = new UF(G.V());
-        while (!priorityQueue.isEmpty() && mstQueueEdges.size() < G.V() - 1) {
+        UF uf = new UF(G.getNumberOfVertices());
+        while (!priorityQueue.isEmpty() && mstQueueEdges.size() < G.getNumberOfVertices() - 1) {
             Edge e = priorityQueue.delMin();
             int v = e.either();
-            int w = e.other(v);
+            int w = e.edgeOtherVertex(v);
             if (uf.find(v) != uf.find(w)) { // they dont belong to the same set and v-w does not create a cycle
                 uf.union(v, w);
                 mstQueueEdges.enqueue(e);
@@ -51,7 +51,7 @@ public class KruskalMST {
             return false;
         }
 
-        UF uf = new UF(G.V());
+        UF uf = new UF(G.getNumberOfVertices());
         if (isAcyclic(uf)) return false;
 
         if (isSpanningForest(G, uf)) return false;
@@ -68,15 +68,15 @@ public class KruskalMST {
         for (Edge e : edges()) {
 
             // all edges in MST except e
-            uf = new UF(G.V());
+            uf = new UF(G.getNumberOfVertices());
             for (Edge f : mstQueueEdges) {
-                int x = f.either(), y = f.other(x);
+                int x = f.either(), y = f.edgeOtherVertex(x);
                 if (f != e) uf.union(x, y);
             }
 
             // check that e is min weight edge in crossing cut
             for (Edge f : G.edges()) {
-                int x = f.either(), y = f.other(x);
+                int x = f.either(), y = f.edgeOtherVertex(x);
                 if (uf.find(x) != uf.find(y)) {
                     if (f.weight() < e.weight()) {
                         System.err.println("Edge " + f + " violates cut optimality conditions");
@@ -90,7 +90,7 @@ public class KruskalMST {
 
     private boolean isAcyclic(UF uf) {
         for (Edge e : edges()) {
-            int v = e.either(), w = e.other(v);
+            int v = e.either(), w = e.edgeOtherVertex(v);
             if (uf.find(v) == uf.find(w)) {
                 System.err.println("Not a forest");
                 return true;
@@ -102,7 +102,7 @@ public class KruskalMST {
 
     private boolean isSpanningForest(EdgeWeightedGraph G, UF uf) {
         for (Edge e : G.edges()) {
-            int v = e.either(), w = e.other(v);
+            int v = e.either(), w = e.edgeOtherVertex(v);
             if (uf.find(v) != uf.find(w)) {
                 System.err.println("Not a spanning forest");
                 return true;

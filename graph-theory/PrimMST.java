@@ -72,9 +72,9 @@ import util.StdOut;
 public class PrimMST {
     private static final double FLOATING_POINT_EPSILON = 1E-12;
 
-    private Edge[] edgeTo;        // edgeTo[v] = shortest edge from tree vertex to non-tree vertex
-    private double[] distTo;      // distTo[v] = weight of shortest such edge
-    private boolean[] marked;     // marked[v] = true if v on tree, false otherwise
+    private Edge[] LightestEdge;        // edgeTo[v] = shortest edge from tree vertex to non-tree vertex
+    private double[] lightestEdgeWeight;      // distTo[v] = weight of shortest such edge
+    private boolean[] isOnTree;     // marked[v] = true if v on tree, false otherwise
     private IndexMinPQ<Double> pq;
 
     /**
@@ -83,15 +83,15 @@ public class PrimMST {
      * @param G the edge-weighted graph
      */
     public PrimMST(EdgeWeightedGraph G) {
-        edgeTo = new Edge[G.V()];
-        distTo = new double[G.V()];
-        marked = new boolean[G.V()];
-        pq = new IndexMinPQ<Double>(G.V());
-        for (int v = 0; v < G.V(); v++)
-            distTo[v] = Double.POSITIVE_INFINITY;
+        LightestEdge = new Edge[G.getNumberOfVertices()];
+        lightestEdgeWeight = new double[G.getNumberOfVertices()];
+        isOnTree = new boolean[G.getNumberOfVertices()];
+        pq = new IndexMinPQ<Double>(G.getNumberOfVertices());
+        for (int v = 0; v < G.getNumberOfVertices(); v++)
+            lightestEdgeWeight[v] = Double.POSITIVE_INFINITY;
 
-        for (int v = 0; v < G.V(); v++)      // run from each vertex to find
-            if (!marked[v]) prim(G, v);      // minimum spanning forest
+        for (int v = 0; v < G.getNumberOfVertices(); v++)      // run from each vertex to find
+            if (!isOnTree[v]) prim(G, v);      // minimum spanning forest
 
         // check optimality conditions
         assert check(G);
@@ -99,8 +99,8 @@ public class PrimMST {
 
     // run Prim's algorithm in graph G, starting from vertex s
     private void prim(EdgeWeightedGraph G, int s) {
-        distTo[s] = 0.0;
-        pq.insert(s, distTo[s]);
+        lightestEdgeWeight[s] = 0.0;
+        pq.insert(s, lightestEdgeWeight[s]);
         while (!pq.isEmpty()) {
             int v = pq.delMin();
             scan(G, v);
@@ -109,29 +109,28 @@ public class PrimMST {
 
     // scan vertex v
     private void scan(EdgeWeightedGraph G, int v) {
-        marked[v] = true;
-        for (Edge e : G.adj(v)) {
-            int w = e.other(v);
-            if (marked[w]) continue;         // v-w is obsolete edge
-            if (e.weight() < distTo[w]) {
-                distTo[w] = e.weight();
-                edgeTo[w] = e;
-                if (pq.contains(w)) pq.decreasePriority(w, distTo[w]);
-                else pq.insert(w, distTo[w]);
+        isOnTree[v] = true;
+
+        for (Edge current : G.getAdjacenyEdges(v)) {
+            int w = current.edgeOtherVertex(v);
+            if (isOnTree[w]) continue;         // v-w is obsolete edge
+
+            if (current.weight() < lightestEdgeWeight[w]) {
+                lightestEdgeWeight[w] = current.weight();
+                LightestEdge[w] = current;
+                if (pq.contains(w)) {
+                    pq.decreasePriority(w, lightestEdgeWeight[w]);
+                } else {
+                    pq.insert(w, lightestEdgeWeight[w]);
+                }
             }
         }
     }
 
-    /**
-     * Returns the edges in a minimum spanning tree (or forest).
-     *
-     * @return the edges in a minimum spanning tree (or forest) as
-     * an iterable of edges
-     */
-    public Iterable<Edge> edges() {
+
+    public Iterable<Edge> getMSTEdges() {
         Queue<Edge> mst = new Queue<Edge>();
-        for (int v = 0; v < edgeTo.length; v++) {
-            Edge e = edgeTo[v];
+        for (Edge e : LightestEdge) {
             if (e != null) {
                 mst.enqueue(e);
             }
@@ -139,14 +138,10 @@ public class PrimMST {
         return mst;
     }
 
-    /**
-     * Returns the sum of the edge weights in a minimum spanning tree (or forest).
-     *
-     * @return the sum of the edge weights in a minimum spanning tree (or forest)
-     */
-    public double weight() {
+
+    public double getMSTWeight() {
         double weight = 0.0;
-        for (Edge e : edges())
+        for (Edge e : getMSTEdges())
             weight += e.weight();
         return weight;
     }
@@ -157,58 +152,73 @@ public class PrimMST {
 
         // check weight
         double totalWeight = 0.0;
-        for (Edge e : edges()) {
+        for (Edge e : getMSTEdges()) {
             totalWeight += e.weight();
         }
-        if (Math.abs(totalWeight - weight()) > FLOATING_POINT_EPSILON) {
-            System.err.printf("Weight of edges does not equal weight(): %f vs. %f\n", totalWeight, weight());
+        if (Math.abs(totalWeight - getMSTWeight()) > FLOATING_POINT_EPSILON) {
+            System.err.printf("Weight of edges does not equal weight(): %f vs. %f\n", totalWeight, getMSTWeight());
             return false;
         }
 
+        UF uf = new UF(G.getNumberOfVertices());
+
+        if (isAcyclic(uf)) return false;
+        if (isMinumumSpanningForest(G, uf)) return false;
+
+        if (isMinimalSpanningTree(G)) return false;
+
+        return true;
+    }
+
+    private boolean isAcyclic(UF uf) {
         // check that it is acyclic
-        UF uf = new UF(G.V());
-        for (Edge e : edges()) {
-            int v = e.either(), w = e.other(v);
+        for (Edge e : getMSTEdges()) {
+            int v = e.either(), w = e.edgeOtherVertex(v);
             if (uf.find(v) == uf.find(w)) {
                 System.err.println("Not a forest");
-                return false;
+                return true;
             }
             uf.union(v, w);
         }
+        return false;
+    }
 
+    private boolean isMinumumSpanningForest(EdgeWeightedGraph G, UF uf) {
         // check that it is a spanning forest
         for (Edge e : G.edges()) {
-            int v = e.either(), w = e.other(v);
+            int v = e.either(), w = e.edgeOtherVertex(v);
             if (uf.find(v) != uf.find(w)) {
                 System.err.println("Not a spanning forest");
-                return false;
+                return true;
             }
         }
+        return false;
+    }
 
-        // check that it is a minimal spanning forest (cut optimality conditions)
-        for (Edge e : edges()) {
+    private boolean isMinimalSpanningTree(EdgeWeightedGraph G) {
+        UF uf;// check that it is a minimal spanning forest (cut optimality conditions)
+        for (Edge e : getMSTEdges()) {
 
             // all edges in MST except e
-            uf = new UF(G.V());
-            for (Edge f : edges()) {
-                int x = f.either(), y = f.other(x);
+            uf = new UF(G.getNumberOfVertices());
+            for (Edge f : getMSTEdges()) {
+                int x = f.either(), y = f.edgeOtherVertex(x);
                 if (f != e) uf.union(x, y);
             }
 
             // check that e is min weight edge in crossing cut
             for (Edge f : G.edges()) {
-                int x = f.either(), y = f.other(x);
+                int x = f.either(), y = f.edgeOtherVertex(x);
                 if (uf.find(x) != uf.find(y)) {
                     if (f.weight() < e.weight()) {
                         System.err.println("Edge " + f + " violates cut optimality conditions");
-                        return false;
+                        return true;
                     }
                 }
             }
 
         }
-
-        return true;
+        return false;
     }
 
     /**
@@ -220,10 +230,10 @@ public class PrimMST {
         In in = new In(args[0]);
         EdgeWeightedGraph G = new EdgeWeightedGraph(in);
         PrimMST mst = new PrimMST(G);
-        for (Edge e : mst.edges()) {
+        for (Edge e : mst.getMSTEdges()) {
             StdOut.println(e);
         }
-        StdOut.printf("%.5f\n", mst.weight());
+        StdOut.printf("%.5f\n", mst.getMSTWeight());
     }
 
 
