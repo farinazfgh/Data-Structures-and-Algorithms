@@ -21,8 +21,6 @@
  *
  ******************************************************************************/
 
-import mst.Edge;
-import unionfind.UF;
 import util.Bag;
 import util.In;
 import util.StdOut;

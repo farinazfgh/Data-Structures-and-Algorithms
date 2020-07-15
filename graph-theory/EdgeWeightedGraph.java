@@ -22,7 +22,6 @@
  *
  ******************************************************************************/
 
-import mst.Edge;
 import util.Bag;
 import util.In;
 import util.StdOut;

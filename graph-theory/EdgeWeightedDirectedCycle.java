@@ -2,7 +2,7 @@
 /******************************************************************************
  *  Compilation:  javac EdgeWeightedDirectedCycle.java
  *  Execution:    java EdgeWeightedDirectedCycle getNumberofVertices E F
- *  Dependencies: dijkstra.EdgeWeightedDigraph.java dijkstra.DirectedEdge.java Stack.java
+ *  Dependencies: EdgeWeightedDigraph.java DirectedEdge.java Stack.java
  *
  *  Finds a directed cycle in an edge-weighted digraph.
  *  Runs in O(E + getNumberofVertices) time.
@@ -10,8 +10,6 @@
  *
  ******************************************************************************/
 
-import dijkstra.DirectedEdge;
-import dijkstra.EdgeWeightedDigraph;
 import util.StdOut;
 import util.StdRandom;
 

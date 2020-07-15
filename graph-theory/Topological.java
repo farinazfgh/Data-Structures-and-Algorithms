@@ -2,7 +2,7 @@
  *  Compilation:  javac Topological.java
  *  Execution:    java  Topological filename.txt delimiter
  *  Dependencies: directed.Digraph.java DepthFirstOrder.java directed.DirectedCycle.java
- *                dijkstra.EdgeWeightedDigraph.java EdgeWeightedDirectedCycle.java
+ *                EdgeWeightedDigraph.java EdgeWeightedDirectedCycle.java
  *                SymbolDigraph.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/jobs.txt
  *
@@ -26,9 +26,6 @@
  *
  ******************************************************************************/
 
-import dijkstra.EdgeWeightedDigraph;
-import directed.Digraph;
-import directed.DirectedCycle;
 
 /**
  * A digraph has a topological order if and only if it is a DAG.
