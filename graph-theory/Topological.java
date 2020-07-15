@@ -1,7 +1,7 @@
-package directed; /******************************************************************************
- *  Compilation:  javac directed.Topological.java
- *  Execution:    java  directed.Topological filename.txt delimiter
- *  Dependencies: directed.Digraph.java directed.DepthFirstOrder.java directed.DirectedCycle.java
+/******************************************************************************
+ *  Compilation:  javac Topological.java
+ *  Execution:    java  Topological filename.txt delimiter
+ *  Dependencies: directed.Digraph.java DepthFirstOrder.java directed.DirectedCycle.java
  *                dijkstra.EdgeWeightedDigraph.java EdgeWeightedDirectedCycle.java
  *                SymbolDigraph.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/jobs.txt
@@ -9,7 +9,7 @@ package directed; /*************************************************************
  *  Compute topological ordering of a DAG or edge-weighted DAG.
  *  Runs in O(E + V) time.
  *
- *  % java directed.Topological jobs.txt "/"
+ *  % java Topological jobs.txt "/"
  *  Calculus
  *  Linear Algebra
  *  Introduction to CS
@@ -26,14 +26,16 @@ package directed; /*************************************************************
  *
  ******************************************************************************/
 
-import util.StdOut;
+import dijkstra.EdgeWeightedDigraph;
+import directed.Digraph;
+import directed.DirectedCycle;
 
 /**
  * A digraph has a topological order if and only if it is a DAG.
- * directed.Topological sort:
+ * Topological sort:
  * General model useful apps scheduling events that involve precedence constrains and graph abstraction type.
  * for topological sort to be applicable there should be no cycle or the diagraph and it should be acyclic.
- * directed.Topological order: an order of a graph which all vertices point upward
+ * Topological order: an order of a graph which all vertices point upward
  */
 public class Topological {
     private Iterable<Integer> order;  // topological order
@@ -51,6 +53,18 @@ public class Topological {
         }
     }
 
+    /**
+     * Determines whether the edge-weighted digraph {@code G} has a topological
+     * order and, if so, finds such an order.
+     * @param G the edge-weighted digraph
+     */
+    public Topological(EdgeWeightedDigraph G) {
+        EdgeWeightedDirectedCycle finder = new EdgeWeightedDirectedCycle(G);
+        if (!finder.hasCycle()) {
+            DepthFirstOrder dfs = new DepthFirstOrder(G);
+            order = dfs.reversePost();
+        }
+    }
 
     /**
      * Returns a topological order if the digraph has a topologial order,

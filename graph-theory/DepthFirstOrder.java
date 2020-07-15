@@ -1,8 +1,11 @@
-package directed; /******************************************************************************
+/******************************************************************************
  *  Compute preorder and postorder for a digraph or edge-weighted digraph.
  *  Runs in O(E + getNumberofVertices) time.
  ******************************************************************************/
 
+import dijkstra.DirectedEdge;
+import dijkstra.EdgeWeightedDigraph;
+import directed.Digraph;
 import util.In;
 import util.Queue;
 import util.StdOut;
@@ -10,7 +13,7 @@ import util.StdOut;
 import java.util.Stack;
 
 /**
- * The  directed.DepthFirstOrder class represents a data type for
+ * The  DepthFirstOrder class represents a data type for
  * determining depth-first search ordering of the vertices in a digraph
  * or edge-weighted digraph, including preorder, postorder, and reverse postorder.
  */
@@ -38,10 +41,23 @@ public class DepthFirstOrder {
         assert check();
     }
 
+    /**
+     * Determines a depth-first order for the edge-weighted digraph {@code G}.
+     * @param G the edge-weighted digraph
+     */
+    public DepthFirstOrder(EdgeWeightedDigraph G) {
+        pre    = new int[G.getNumberofVertices()];
+        post   = new int[G.getNumberofVertices()];
+        postorder = new Queue<Integer>();
+        preorder  = new Queue<Integer>();
+        isVisited    = new boolean[G.getNumberofVertices()];
+        for (int v = 0; v < G.getNumberofVertices(); v++)
+            if (!isVisited[v]) dfs(G, v);
+    }
 
 
     /**
-     * Unit tests the {@code directed.DepthFirstOrder} data type.
+     * Unit tests the {@code DepthFirstOrder} data type.
      *
      * @param args the command-line arguments
      */
@@ -91,7 +107,19 @@ public class DepthFirstOrder {
         post[vertex] = postCounter++;
     }
 
-
+    private void dfs(EdgeWeightedDigraph G, int v) {
+        isVisited[v] = true;
+        pre[v] = preCounter++;
+        preorder.enqueue(v);
+        for (DirectedEdge e : G.getAdjacencyEdgesList(v)) {
+            int w = e.to();
+            if (!isVisited[w]) {
+                dfs(G, w);
+            }
+        }
+        postorder.enqueue(v);
+        post[v] = postCounter++;
+    }
 
     /**
      * Returns the preorder number of vertex {@code vertex}.

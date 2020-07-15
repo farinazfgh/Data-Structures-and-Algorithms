@@ -11,7 +11,6 @@
  ******************************************************************************/
 
 import dijkstra.DirectedEdge;
-import directed.Topological;
 import dijkstra.EdgeWeightedDigraph;
 import util.StdOut;
 import util.StdRandom;

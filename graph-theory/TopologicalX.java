@@ -1,56 +1,28 @@
-package directed; /******************************************************************************
- *  Compilation:  javac directed.TopologicalX.java
- *  Execution:    java directed.TopologicalX getNumberofVertices E F
- *  Dependencies: Queue.java directed.Digraph.java
- *
- *  Compute topological ordering of a DAG using queue-based algorithm.
- *  Runs in O(E + getNumberofVertices) time.
- *
- ******************************************************************************/
-
 import dijkstra.DirectedEdge;
 import dijkstra.EdgeWeightedDigraph;
+import directed.Digraph;
+import directed.DigraphGenerator;
+import directed.DirectedCycle;
+import directed.DirectedCycleNonRecursive;
 import util.Queue;
 import util.StdOut;
 import util.StdRandom;
 
 /**
- * The {@code directed.TopologicalX} class represents a data type for
- * determining a topological order of a <em>directed acyclic graph</em> (DAG).
+ * The { TopologicalX} class represents a data type for
+ * determining a topological order of a directed acyclic graph (DAG).
  * A digraph has a topological order if and only if it is a DAG.
- * The <em>hasOrder</em> operation determines whether the digraph has
- * a topological order, and if so, the <em>order</em> operation
- * returns one.
- * <p>
+ * The hasOrder operation determines whether the digraph has a topological order, and if so,
+ * the order operation returns one.
  * This implementation uses a nonrecursive, queue-based algorithm.
- * The constructor takes &Theta;(<em>getNumberofVertices</em> + <em>E</em>) time in the worst
- * case, where <em>getNumberofVertices</em> is the number of vertices and <em>E</em>
- * is the number of edges.
- * Each instance method takes &Theta;(1) time.
- * It uses &Theta;(<em>getNumberofVertices</em>) extra space (not including the digraph).
- * <p>
- * See {@link DirectedCycle}, {@link DirectedCycleNonRecursive}, and
- * {@link EdgeWeightedDirectedCycle} to compute a
- * directed cycle if the digraph is not a DAG.
- * See {@link Topological} for a recursive version that uses depth-first search.
- * <p>
- * For additional documentation,
- * see <a href="https://algs4.cs.princeton.edu/42digraph">Section 4.2</a> of
- * <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- * @author Robert Sedgewick
- * @author Kevin Wayne
+ * The constructor takes O(V + E) time in the worst case, where V is the number of vertices and E is the number of edges.
+ * Each instance method takes O(1) time.
+ * It uses O(V) extra space (not including the digraph).
  */
 public class TopologicalX {
     private Queue<Integer> order;     // vertices in topological order
-    private int[] ranks;              // ranks[v] = order where vertex v appers in order
+    private final int[] ranks;              // ranks[v] = order where vertex v appers in order
 
-    /**
-     * Determines whether the digraph {@code G} has a topological order and, if so,
-     * finds such a topological order.
-     *
-     * @param G the digraph
-     */
     public TopologicalX(Digraph G) {
 
         // indegrees of remaining vertices
@@ -87,12 +59,6 @@ public class TopologicalX {
         assert check(G);
     }
 
-    /**
-     * Determines whether the edge-weighted digraph {@code G} has a
-     * topological order and, if so, finds such a topological order.
-     *
-     * @param G the digraph
-     */
     public TopologicalX(EdgeWeightedDigraph G) {
 
         // indegrees of remaining vertices
@@ -101,7 +67,6 @@ public class TopologicalX {
             indegree[v] = G.indegree(v);
         }
 
-        // initialize 
         ranks = new int[G.getNumberofVertices()];
         order = new Queue<Integer>();
         int count = 0;
@@ -130,37 +95,15 @@ public class TopologicalX {
         assert check(G);
     }
 
-    /**
-     * Returns a topological order if the digraph has a topologial order,
-     * and {@code null} otherwise.
-     *
-     * @return a topological order of the vertices (as an interable) if the
-     * digraph has a topological order (or equivalently, if the digraph is a DAG),
-     * and {@code null} otherwise
-     */
+
     public Iterable<Integer> order() {
         return order;
     }
 
-    /**
-     * Does the digraph have a topological order?
-     *
-     * @return {@code true} if the digraph has a topological order (or equivalently,
-     * if the digraph is a DAG), and {@code false} otherwise
-     */
     public boolean hasOrder() {
         return order != null;
     }
 
-    /**
-     * The the rank of vertex {@code v} in the topological order;
-     * -1 if the digraph is not a DAG
-     *
-     * @param v vertex
-     * @return the position of vertex {@code v} in a topological order
-     * of the digraph; -1 if the digraph is not a DAG
-     * @throws IllegalArgumentException unless {@code 0 <= v < getNumberofVertices}
-     */
     public int rank(int v) {
         validateVertex(v);
         if (hasOrder()) return ranks[v];
@@ -254,18 +197,12 @@ public class TopologicalX {
         return true;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < getNumberofVertices}
+    // throw an IllegalArgumentException unless { 0 <= v < getNumberofVertices}
     private void validateVertex(int v) {
         int getNumberofVertices = ranks.length;
         if (v < 0 || v >= getNumberofVertices)
             throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (getNumberofVertices - 1));
     }
-
-    /**
-     * Unit tests the {@code directed.TopologicalX} data type.
-     *
-     * @param args the command-line arguments
-     */
     public static void main(String[] args) {
 
         // create random DAG with getNumberofVertices vertices and E edges; then add F random edges
@@ -301,7 +238,7 @@ public class TopologicalX {
 
         // or give topologial sort
         else {
-            StdOut.print("directed.Topological order: ");
+            StdOut.print("Topological order: ");
             for (int v : topological1.order()) {
                 StdOut.print(v + " ");
             }
@@ -316,7 +253,7 @@ public class TopologicalX {
 
         // or give topologial sort
         else {
-            StdOut.print("directed.Topological order: ");
+            StdOut.print("Topological order: ");
             for (int v : topological2.order()) {
                 StdOut.print(v + " ");
             }
