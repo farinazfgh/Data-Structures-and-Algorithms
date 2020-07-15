@@ -1,8 +1,6 @@
-/******************************************************************************
+package util; /******************************************************************************
  *  Minimum-oriented indexed PQ implementation using a binary heap.
  ******************************************************************************/
-
-import util.StdOut;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

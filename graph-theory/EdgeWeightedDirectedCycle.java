@@ -2,7 +2,7 @@
 /******************************************************************************
  *  Compilation:  javac EdgeWeightedDirectedCycle.java
  *  Execution:    java EdgeWeightedDirectedCycle getNumberofVertices E F
- *  Dependencies: mst.EdgeWeightedDigraph.java directed.DirectedEdge.java Stack.java
+ *  Dependencies: dijkstra.EdgeWeightedDigraph.java dijkstra.DirectedEdge.java Stack.java
  *
  *  Finds a directed cycle in an edge-weighted digraph.
  *  Runs in O(E + getNumberofVertices) time.
@@ -10,9 +10,9 @@
  *
  ******************************************************************************/
 
-import directed.DirectedEdge;
+import dijkstra.DirectedEdge;
 import directed.Topological;
-import mst.EdgeWeightedDigraph;
+import dijkstra.EdgeWeightedDigraph;
 import util.StdOut;
 import util.StdRandom;
 
@@ -70,7 +70,7 @@ public class EdgeWeightedDirectedCycle {
     private void dfs(EdgeWeightedDigraph G, int vertex) {
         onStack[vertex] = true;
         isVisited[vertex] = true;
-        for (DirectedEdge e : G.getAdjacencyList(vertex)) {
+        for (DirectedEdge e : G.getAdjacencyEdgesList(vertex)) {
             int current = e.to();
 
             // short circuit if directed cycle found

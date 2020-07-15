@@ -1,20 +1,17 @@
-/******************************************************************************
- *  Compilation:  javac IndexMaxPQ.java
- *  Execution:    java IndexMaxPQ
+package util; /******************************************************************************
+ *  Compilation:  javac util.IndexMaxPQ.java
+ *  Execution:    java util.IndexMaxPQ
  *  Dependencies: StdOut.java
  *
  *  Maximum-oriented indexed PQ implementation using a binary heap.
  *
  ******************************************************************************/
 
-import util.StdOut;
-import util.StdRandom;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- *  The {@code IndexMaxPQ} class represents an indexed priority queue of generic keys.
+ *  The {@code util.IndexMaxPQ} class represents an indexed priority queue of generic keys.
  *  It supports the usual <em>insert</em> and <em>delete-the-maximum</em>
  *  operations, along with <em>delete</em> and <em>change-the-key</em> 
  *  methods. In order to let the client refer to items on the priority queue,
@@ -337,7 +334,7 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Integer
     }
 
     /**
-     * Unit tests the {@code IndexMaxPQ} data type.
+     * Unit tests the {@code util.IndexMaxPQ} data type.
      *
      * @param args the command-line arguments
      */

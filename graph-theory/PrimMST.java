@@ -1,13 +1,14 @@
 import mst.Edge;
 import unionfind.UF;
 import util.In;
+import util.IndexMinPQ;
 import util.Queue;
 import util.StdOut;
 /******************************************************************************
  *  Compilation:  javac PrimMST.java
  *  Execution:    java PrimMST filename.txt
  *  Dependencies: EdgeWeightedGraph.java Edge.java Queue.java
- *                IndexMinPQ.java UF.java In.java StdOut.java
+ *                util.IndexMinPQ.java UF.java In.java StdOut.java
  *  Data files:   https://algs4.cs.princeton.edu/43mst/tinyEWG.txt
  *                https://algs4.cs.princeton.edu/43mst/mediumEWG.txt
  *                https://algs4.cs.princeton.edu/43mst/largeEWG.txt

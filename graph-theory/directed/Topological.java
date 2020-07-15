@@ -2,7 +2,7 @@ package directed; /*************************************************************
  *  Compilation:  javac directed.Topological.java
  *  Execution:    java  directed.Topological filename.txt delimiter
  *  Dependencies: directed.Digraph.java directed.DepthFirstOrder.java directed.DirectedCycle.java
- *                mst.EdgeWeightedDigraph.java EdgeWeightedDirectedCycle.java
+ *                dijkstra.EdgeWeightedDigraph.java EdgeWeightedDirectedCycle.java
  *                SymbolDigraph.java
  *  Data files:   https://algs4.cs.princeton.edu/42digraph/jobs.txt
  *

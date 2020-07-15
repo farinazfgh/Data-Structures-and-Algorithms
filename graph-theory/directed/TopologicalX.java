@@ -8,7 +8,8 @@ package directed; /*************************************************************
  *
  ******************************************************************************/
 
-import mst.EdgeWeightedDigraph;
+import dijkstra.DirectedEdge;
+import dijkstra.EdgeWeightedDigraph;
 import util.Queue;
 import util.StdOut;
 import util.StdRandom;
@@ -114,7 +115,7 @@ public class TopologicalX {
             int v = queue.dequeue();
             order.enqueue(v);
             ranks[v] = count++;
-            for (DirectedEdge e : G.getAdjacencyList(v)) {
+            for (DirectedEdge e : G.getAdjacencyEdgesList(v)) {
                 int w = e.to();
                 indegree[w]--;
                 if (indegree[w] == 0) queue.enqueue(w);
@@ -228,7 +229,7 @@ public class TopologicalX {
 
             // check that ranks provide a valid topological order
             for (int v = 0; v < G.getNumberofVertices(); v++) {
-                for (DirectedEdge e : G.getAdjacencyList(v)) {
+                for (DirectedEdge e : G.getAdjacencyEdgesList(v)) {
                     int w = e.to();
                     if (rank(v) > rank(w)) {
                         System.err.printf("%d-%d: rank(%d) = %d, rank(%d) = %d\n",
