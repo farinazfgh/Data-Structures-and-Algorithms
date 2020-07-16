@@ -11,35 +11,66 @@ import java.util.NoSuchElementException;
  * insert
  * delete-the-minimum
  * delete
- * change-the-key
+ * change-the-priority
  * In order to let the client refer to keys on the priority queue, an integer between  0 and  maxN - 1
- * is associated with each key the client uses this integer to specify
- * which key to delete or change.
- * It also supports methods for peeking at the minimum key,
+ * is associated with each priority the client uses this integer to specify
+ * which priority to delete or change.
+ * It also supports methods for peeking at the minimum priority,
  * testing if the priority queue is empty, and iterating through
  * the keys.
  * This implementation uses a binary heap along with an array to associate keys with integers in the given range.
- * The insert, delete-the-minimum, delete, change-key, decrease-key, and increase-key
+ * The insert, delete-the-minimum, delete, change-priority, decrease-priority, and increase-priority
  * operations take O(log n) time in the worst case,
  * where n is the number of elements in the priority queue.
  * Construction takes time proportional to the specified capacity.
  */
 public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer> {
-    private int maxN;        // maximum number of elements on PQ
+    private final int maxN;        // maximum number of elements on PQ
     private int size;           // number of elements on PQ
-    private int[] priorityQueue;        // binary heap using 1-based indexing
-    private int[] inversePriorityQueue;        // inverse of pq - qp[pq[i]] = pq[qp[i]] = i
-    private Key[] keys;      // keys[i] = priority of i
+    private final int[] priorityQueue;        // binary heap using 1-based indexing
+    private final int[] inversePriorityQueue;        // inverse of pq - qp[pq[i]] = pq[qp[i]] = i
+    private final Key[] priorities;      // keys[i] = priority of i
 
     public IndexMinPQ(int maxN) {
         if (maxN < 0) throw new IllegalArgumentException();
         this.maxN = maxN;
         size = 0;
-        keys = (Key[]) new Comparable[maxN + 1];    // make this of length maxN??
+        priorities = (Key[]) new Comparable[maxN + 1];    // make this of length maxN??
         priorityQueue = new int[maxN + 1];
         inversePriorityQueue = new int[maxN + 1];                   // make this of length maxN??
         for (int i = 0; i <= maxN; i++)
             inversePriorityQueue[i] = -1;
+    }
+
+    public static void main(String[] args) {
+        // insert a bunch of strings
+        String[] strings = {"it", "was", "the", "best", "of", "times", "it", "was", "the", "worst"};
+
+        IndexMinPQ<String> pq = new IndexMinPQ<String>(strings.length);
+        for (int i = 0; i < strings.length; i++) {
+            pq.insert(i, strings[i]);
+        }
+
+        // delete and print each priority
+        while (!pq.isEmpty()) {
+            int i = pq.delMin();
+            StdOut.println(i + " " + strings[i]);
+        }
+        StdOut.println();
+
+        // reinsert the same strings
+        for (int i = 0; i < strings.length; i++) {
+            pq.insert(i, strings[i]);
+        }
+
+        // print each priority using the iterator
+        for (int i : pq) {
+            StdOut.println(i + " " + strings[i]);
+        }
+        while (!pq.isEmpty()) {
+            pq.delMin();
+        }
+
     }
 
     public boolean isEmpty() {
@@ -55,13 +86,13 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
         return size;
     }
 
-    public void insert(int i, Key key) {
+    public void insert(int i, Key priority) {
         validateIndex(i);
         if (contains(i)) throw new IllegalArgumentException("index is already in the priority queue");
         size++;
         inversePriorityQueue[i] = size;
         priorityQueue[size] = i;
-        keys[i] = key;
+        priorities[i] = priority;
         swim(size);
     }
 
@@ -72,7 +103,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
 
     public Key minKey() {
         if (size == 0) throw new NoSuchElementException("Priority queue underflow");
-        return keys[priorityQueue[1]];
+        return priorities[priorityQueue[1]];
     }
 
     public int delMin() {
@@ -82,7 +113,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
         sink(1);
         assert min == priorityQueue[size + 1];
         inversePriorityQueue[min] = -1;        // delete
-        keys[min] = null;    // to help with garbage collection
+        priorities[min] = null;    // to help with garbage collection
         priorityQueue[size + 1] = -1;        // not needed
         return min;
     }
@@ -90,44 +121,43 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
     public Key keyOf(int i) {
         validateIndex(i);
         if (!contains(i)) throw new NoSuchElementException("index is not in the priority queue");
-        else return keys[i];
+        else return priorities[i];
     }
 
-    public void changePriority(int i, Key key) {
+    public void changePriority(int i, Key priority) {
         validateIndex(i);
         if (!contains(i)) throw new NoSuchElementException("index is not in the priority queue");
-        keys[i] = key;
+        priorities[i] = priority;
         swim(inversePriorityQueue[i]);
         sink(inversePriorityQueue[i]);
     }
 
     @Deprecated
-    public void change(int i, Key key) {
-        changePriority(i, key);
+    public void change(int i, Key priority) {
+        changePriority(i, priority);
     }
 
-    public void decreasePriority(int i, Key key) {
+    public void decreasePriority(int i, Key priority) {
         validateIndex(i);
         if (!contains(i)) throw new NoSuchElementException("index is not in the priority queue");
-        if (keys[i].compareTo(key) == 0)
-            throw new IllegalArgumentException("Calling decreaseKey() with a key equal to the key in the priority queue");
-        if (keys[i].compareTo(key) < 0)
-            throw new IllegalArgumentException("Calling decreaseKey() with a key strictly greater than the key in the priority queue");
-        keys[i] = key;
+        if (priorities[i].compareTo(priority) == 0)
+            throw new IllegalArgumentException("Calling decreaseKey() with a priority equal to the priority in the priority queue");
+        if (priorities[i].compareTo(priority) < 0)
+            throw new IllegalArgumentException("Calling decreaseKey() with a priority strictly greater than the priority in the priority queue");
+        priorities[i] = priority;
         swim(inversePriorityQueue[i]);
     }
 
-    public void increasePriorityKey(int i, Key key) {
+    public void increasePriorityKey(int i, Key priority) {
         validateIndex(i);
         if (!contains(i)) throw new NoSuchElementException("index is not in the priority queue");
-        if (keys[i].compareTo(key) == 0)
-            throw new IllegalArgumentException("Calling increaseKey() with a key equal to the key in the priority queue");
-        if (keys[i].compareTo(key) > 0)
-            throw new IllegalArgumentException("Calling increaseKey() with a key strictly less than the key in the priority queue");
-        keys[i] = key;
+        if (priorities[i].compareTo(priority) == 0)
+            throw new IllegalArgumentException("Calling increaseKey() with a priority equal to the priority in the priority queue");
+        if (priorities[i].compareTo(priority) > 0)
+            throw new IllegalArgumentException("Calling increaseKey() with a priority strictly less than the priority in the priority queue");
+        priorities[i] = priority;
         sink(inversePriorityQueue[i]);
     }
-
 
     public void delete(int i) {
         validateIndex(i);
@@ -136,7 +166,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
         exchange(index, size--);
         swim(index);
         sink(index);
-        keys[i] = null;
+        priorities[i] = null;
         inversePriorityQueue[i] = -1;
     }
 
@@ -146,7 +176,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
     }
 
     private boolean greater(int i, int j) {
-        return keys[priorityQueue[i]].compareTo(keys[priorityQueue[j]]) > 0;
+        return priorities[priorityQueue[i]].compareTo(priorities[priorityQueue[j]]) > 0;
     }
 
     private void exchange(int i, int j) {
@@ -156,7 +186,6 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
         inversePriorityQueue[priorityQueue[i]] = i;
         inversePriorityQueue[priorityQueue[j]] = j;
     }
-
 
     private void swim(int k) {
         while (k > 1 && greater(k / 2, k)) {
@@ -175,18 +204,17 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
         }
     }
 
-
     public Iterator<Integer> iterator() {
         return new HeapIterator();
     }
 
     private class HeapIterator implements Iterator<Integer> {
-        private IndexMinPQ<Key> copy;
+        private final IndexMinPQ<Key> copy;
 
         public HeapIterator() {
             copy = new IndexMinPQ<Key>(priorityQueue.length - 1);
             for (int i = 1; i <= size; i++)
-                copy.insert(priorityQueue[i], keys[priorityQueue[i]]);
+                copy.insert(priorityQueue[i], priorities[priorityQueue[i]]);
         }
 
         public boolean hasNext() {
@@ -201,37 +229,5 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
             if (!hasNext()) throw new NoSuchElementException();
             return copy.delMin();
         }
-    }
-
-
-    public static void main(String[] args) {
-        // insert a bunch of strings
-        String[] strings = {"it", "was", "the", "best", "of", "times", "it", "was", "the", "worst"};
-
-        IndexMinPQ<String> pq = new IndexMinPQ<String>(strings.length);
-        for (int i = 0; i < strings.length; i++) {
-            pq.insert(i, strings[i]);
-        }
-
-        // delete and print each key
-        while (!pq.isEmpty()) {
-            int i = pq.delMin();
-            StdOut.println(i + " " + strings[i]);
-        }
-        StdOut.println();
-
-        // reinsert the same strings
-        for (int i = 0; i < strings.length; i++) {
-            pq.insert(i, strings[i]);
-        }
-
-        // print each key using the iterator
-        for (int i : pq) {
-            StdOut.println(i + " " + strings[i]);
-        }
-        while (!pq.isEmpty()) {
-            pq.delMin();
-        }
-
     }
 }

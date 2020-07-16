@@ -67,7 +67,7 @@ public class MinPQ<Key> implements Iterable<Key> {
 
 
     public Key min() {
-        if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
+        if (isEmpty()) throw new NoSuchElementException("Vertex queue underflow");
         return priorityQueue[1];
     }
 
@@ -87,7 +87,7 @@ public class MinPQ<Key> implements Iterable<Key> {
     }
 
     public Key delMin() {
-        if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
+        if (isEmpty()) throw new NoSuchElementException("Vertex queue underflow");
         Key min = priorityQueue[1];
         exchange(1, size--);
         sink(1);

@@ -74,7 +74,7 @@ public class MaxPQ<Key> implements Iterable<Key> {
     }
 
     public Key getMax() {
-        if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
+        if (isEmpty()) throw new NoSuchElementException("Vertex queue underflow");
         return priorityQueue[1];
     }
 
@@ -98,7 +98,7 @@ public class MaxPQ<Key> implements Iterable<Key> {
     }
 
     public Key delMax() {
-        if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
+        if (isEmpty()) throw new NoSuchElementException("Vertex queue underflow");
         Key max = priorityQueue[1];
         exchange(1, size--);
         sink(1);
