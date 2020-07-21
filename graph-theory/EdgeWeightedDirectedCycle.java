@@ -1,60 +1,25 @@
-
-/******************************************************************************
- *  Compilation:  javac EdgeWeightedDirectedCycle.java
- *  Execution:    java EdgeWeightedDirectedCycle getNumberofVertices E F
- *  Dependencies: EdgeWeightedDigraph.java DirectedEdge.java Stack.java
- *
- *  Finds a directed cycle in an edge-weighted digraph.
- *  Runs in O(E + getNumberofVertices) time.
- *
- *
- ******************************************************************************/
-
 import util.StdOut;
 import util.StdRandom;
 
 import java.util.Stack;
 
 /**
- * The {@code EdgeWeightedDirectedCycle} class represents a data type for
- * determining whether an edge-weighted digraph has a directed cycle.
- * The <em>hasCycle</em> operation determines whether the edge-weighted
- * digraph has a directed cycle and, if so, the <em>cycle</em> operation
- * returns one.
- * <p>
- * This implementation uses <em>depth-first search</em>.
- * The constructor takes &Theta;(<em>getNumberofVertices</em> + <em>E</em>) time in the
- * worst case, where <em>getNumberofVertices</em> is the number of vertices and
- * <em>E</em> is the number of edges.
- * Each instance method takes &Theta;(1) time.
- * It uses &Theta;(<em>getNumberofVertices</em>) extra space (not including the
- * edge-weighted digraph).
- * <p>
- * See {@link Topological} to compute a topological order if the
- * edge-weighted digraph is acyclic.
- * <p>
- * For additional documentation,
- * see <a href="https://algs4.cs.princeton.edu/44sp">Section 4.4</a> of
- * <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- * @author Robert Sedgewick
- * @author Kevin Wayne
+ * The {EdgeWeightedDirectedCycle} class represents a data type for determining whether an edge-weighted digraph has a directed cycle.
+ * The hasCycle operation determines whether the edge-weighted digraph has a directed cycle and, if so, the cycle operation returns one.
+ * This implementation uses depth-first search.
+ * The constructor takes O(V + E) time in the worst case, where V is the number of vertices and E is the number of edges.
+ * Each instance method takes O(1) time.
+ * It uses O(V) extra space (not including the edge-weighted digraph).
  */
 public class EdgeWeightedDirectedCycle {
     private boolean[] isVisited;             // isVisited[vertex] = has vertex vertex been isVisited?
     private DirectedEdge[] fromEdge;        // fromEdge[vertex] = previous edge on path to vertex
-    private boolean[] onStack;            // onStack[vertex] = is vertex on the stack?
+    private boolean[] isOnStack;            // onStack[vertex] = is vertex on the stack?
     private Stack<DirectedEdge> cycle;    // directed cycle (or null if no such cycle)
 
-    /**
-     * Determines whether the edge-weighted digraph {@code G} has a directed cycle and,
-     * if so, finds such a cycle.
-     *
-     * @param G the edge-weighted digraph
-     */
     public EdgeWeightedDirectedCycle(EdgeWeightedDigraph G) {
         isVisited = new boolean[G.getNumberofVertices()];
-        onStack = new boolean[G.getNumberofVertices()];
+        isOnStack = new boolean[G.getNumberofVertices()];
         fromEdge = new DirectedEdge[G.getNumberofVertices()];
         for (int vertex = 0; vertex < G.getNumberofVertices(); vertex++)
             if (!isVisited[vertex]) dfs(G, vertex);
@@ -65,25 +30,25 @@ public class EdgeWeightedDirectedCycle {
 
     // check that algorithm computes either the topological order or finds a directed cycle
     private void dfs(EdgeWeightedDigraph G, int vertex) {
-        onStack[vertex] = true;
+        isOnStack[vertex] = true;
         isVisited[vertex] = true;
-        for (DirectedEdge e : G.getAdjacencyEdgesList(vertex)) {
-            int current = e.to();
+        for (DirectedEdge edge : G.getAdjacencyEdgesList(vertex)) {
+            int current = edge.to();
 
             // short circuit if directed cycle found
             if (cycle != null) return;
 
                 // found new vertex, so recur
             else if (!isVisited[current]) {
-                fromEdge[current] = e;
+                fromEdge[current] = edge;
                 dfs(G, current);
             }
 
             // trace back directed cycle
-            else if (onStack[current]) {
-                cycle = new Stack<DirectedEdge>();
+            else if (isOnStack[current]) {
+                cycle = new Stack<>();
 
-                DirectedEdge f = e;
+                DirectedEdge f = edge;
                 while (f.from() != current) {
                     cycle.push(f);
                     f = fromEdge[f.from()];
@@ -94,14 +59,14 @@ public class EdgeWeightedDirectedCycle {
             }
         }
 
-        onStack[vertex] = false;
+        isOnStack[vertex] = false;
     }
 
     /**
      * Does the edge-weighted digraph have a directed cycle?
      *
-     * @return {@code true} if the edge-weighted digraph has a directed cycle,
-     * {@code false} otherwise
+     * @return {true} if the edge-weighted digraph has a directed cycle,
+     * {false} otherwise
      */
     public boolean hasCycle() {
         return cycle != null;
@@ -109,10 +74,10 @@ public class EdgeWeightedDirectedCycle {
 
     /**
      * Returns a directed cycle if the edge-weighted digraph has a directed cycle,
-     * and {@code null} otherwise.
+     * and {null} otherwise.
      *
      * @return a directed cycle (as an iterable) if the edge-weighted digraph
-     * has a directed cycle, and {@code null} otherwise
+     * has a directed cycle, and {null} otherwise
      */
     public Iterable<DirectedEdge> cycle() {
         return cycle;
@@ -148,7 +113,7 @@ public class EdgeWeightedDirectedCycle {
     }
 
     /**
-     * Unit tests the {@code EdgeWeightedDirectedCycle} data type.
+     * Unit tests the {EdgeWeightedDirectedCycle} data type.
      *
      * @param args the command-line arguments
      */
