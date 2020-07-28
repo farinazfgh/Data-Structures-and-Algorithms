@@ -136,4 +136,39 @@ public class PrinctonString implements Comparable<String> {
                 return i;
         return N;
     }
+
+    public static void main(String[] args) {
+        for (int i = 0; i <= 52; i++) {
+            System.out.println((char) ('a' + i));
+        }
+        char[] a = {'d', 'a', 'c', 'f', 'f', 'b', 'd', 'b', 'f', 'b', 'e', 'a'};
+        System.out.println();
+        char[] R = {'a', 'b', 'c', 'd', 'e', 'f'};
+        printArray(a);
+        keyIndexCounting(R, a);
+        printArray(a);
+    }
+
+    private static char[] keyIndexCounting(char[] R, char[] a) {
+        System.out.println(a[0] + 1);
+        char[] aux = new char[a.length];
+        int N = a.length;
+        int[] count = new int[R.length + 1];
+        for (int i = 0; i < N; i++)
+            count[(char) (a[i] + 1)]++;
+        for (int r = 0; r < R.length; r++)
+            count[r + 1] += count[r];
+        for (int i = 0; i < N; i++)
+            aux[count[a[i]]++] = a[i];
+        for (int i = 0; i < N; i++)
+            a[i] = aux[i];
+        return a;
+    }
+
+    static void printArray(char[] a) {
+        for (char value : a) {
+            System.out.print(value);
+        }
+        System.out.println();
+    }
 }
