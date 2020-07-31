@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -27,7 +26,7 @@ public class SuffixArrayMatching {
 
 
     public int[] computeSuffixArray(String text) {
-        int[] suffixArray;
+        int[] suffixArray = null;
 
         // write your code here
 
@@ -35,7 +34,7 @@ public class SuffixArrayMatching {
     }
 
     public List<Integer> findOccurrences(String pattern, String text, int[] suffixArray) {
-        List<Integer> result;
+        List<Integer> result = null;
 
         // write your code here
 
@@ -43,7 +42,7 @@ public class SuffixArrayMatching {
     }
 
     static public void main(String[] args) throws IOException {
-        new SuffixArrayMatching_ml().run();
+        new SuffixArrayMatching().run();
     }
 
     public void print(boolean[] x) {

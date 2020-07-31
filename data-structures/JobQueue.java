@@ -67,7 +67,7 @@ public class JobQueue {
             Worker currentWorker = workers.poll();
 
             Job currentJob = jobQueue.poll();
-            if(currentJob.duration)
+            //if(currentJob.duration)
             currentWorker.setJob(currentJob);
         }
 
