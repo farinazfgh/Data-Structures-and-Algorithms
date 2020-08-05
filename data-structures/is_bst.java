@@ -1,5 +1,7 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class is_bst {
     class FastScanner {
@@ -15,6 +17,7 @@ public class is_bst {
                 tok = new StringTokenizer(in.readLine());
             return tok.nextToken();
         }
+
         int nextInt() throws IOException {
             return Integer.parseInt(next());
         }
@@ -22,11 +25,11 @@ public class is_bst {
 
     public class IsBST {
         class Node {
-            int key;
-            int left;
-            int right;
+            Integer key;
+            Integer left;
+            Integer right;
 
-            Node(int key, int left, int right) {
+            Node(Integer key, Integer left, Integer right) {
                 this.left = left;
                 this.right = right;
                 this.key = key;
@@ -36,18 +39,28 @@ public class is_bst {
         int nodes;
         Node[] tree;
 
-        void read() throws IOException {
+        int read() throws IOException {
             FastScanner in = new FastScanner();
             nodes = in.nextInt();
             tree = new Node[nodes];
             for (int i = 0; i < nodes; i++) {
                 tree[i] = new Node(in.nextInt(), in.nextInt(), in.nextInt());
             }
+            return nodes;
         }
 
-        boolean isBinarySearchTree() {
-          // Implement correct algorithm here
-          return true;
+        private boolean isBinarySearchTree() {
+            return isBST(tree[0], null, null);
+        }
+
+        private boolean isBST(Node x, Integer min, Integer max) {
+            if (x == null) return true;
+            if (min != null && x.key.compareTo(min) <= 0) return false;
+            if (max != null && x.key.compareTo(max) >= 0) return false;
+
+            Node lNode = x.left == -1 ? null : tree[x.left];
+            Node rNode = x.right == -1 ? null : tree[x.right];
+            return isBST(lNode, min, x.key) && isBST(rNode, x.key, max);
         }
     }
 
@@ -57,13 +70,20 @@ public class is_bst {
                 try {
                     new is_bst().run();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }, "1", 1 << 26).start();
     }
+
     public void run() throws IOException {
         IsBST tree = new IsBST();
-        tree.read();
+        int n = tree.read();
+        if (n == 0) {
+            System.out.println("CORRECT");
+            return;
+        }
+
         if (tree.isBinarySearchTree()) {
             System.out.println("CORRECT");
         } else {

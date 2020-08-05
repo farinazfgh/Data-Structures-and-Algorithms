@@ -318,8 +318,8 @@ public class BST<Key extends Comparable<Key>, Value> {
             Node x = queue.poll();
             if (x == null) continue;
             keys.offer(x.key);
-            queue.offer(x.left);
-            queue.offer(x.right);
+            if (x.left != null) queue.offer(x.left);
+            if (x.right != null) queue.offer(x.right);
         }
         return keys;
     }
@@ -378,7 +378,7 @@ public class BST<Key extends Comparable<Key>, Value> {
         for (String s : st.levelOrder())
             System.out.println(s + " " + st.get(s));
 
-        System.out.println();
+        System.out.println("*****************************");
 
         for (String s : st.keys())
             System.out.println(s + " " + st.get(s));
