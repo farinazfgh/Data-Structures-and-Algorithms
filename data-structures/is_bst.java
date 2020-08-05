@@ -25,11 +25,11 @@ public class is_bst {
 
     public class IsBST {
         class Node {
-            Integer key;
-            Integer left;
-            Integer right;
+            int key;
+            int left;
+            int right;
 
-            Node(Integer key, Integer left, Integer right) {
+            Node(int key, int left, int right) {
                 this.left = left;
                 this.right = right;
                 this.key = key;
@@ -50,13 +50,14 @@ public class is_bst {
         }
 
         private boolean isBinarySearchTree() {
-            return isBST(tree[0], null, null);
+            return isBST(tree[0], -1, -1);
         }
 
-        private boolean isBST(Node x, Integer min, Integer max) {
+        private boolean isBST(Node x, int min, int max) {
             if (x == null) return true;
-            if (min != null && x.key.compareTo(min) <= 0) return false;
-            if (max != null && x.key.compareTo(max) >= 0) return false;
+
+            if (min != -1 && x.key <= min) return false;
+            if (max != -1 && x.key >= max) return false;
 
             Node lNode = x.left == -1 ? null : tree[x.left];
             Node rNode = x.right == -1 ? null : tree[x.right];
