@@ -1,5 +1,7 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class is_bst_hard {
     class FastScanner {
@@ -15,6 +17,7 @@ public class is_bst_hard {
                 tok = new StringTokenizer(in.readLine());
             return tok.nextToken();
         }
+
         int nextInt() throws IOException {
             return Integer.parseInt(next());
         }
@@ -36,18 +39,29 @@ public class is_bst_hard {
         int nodes;
         Node[] tree;
 
-        void read() throws IOException {
+        int read() throws IOException {
             FastScanner in = new FastScanner();
             nodes = in.nextInt();
             tree = new Node[nodes];
             for (int i = 0; i < nodes; i++) {
                 tree[i] = new Node(in.nextInt(), in.nextInt(), in.nextInt());
             }
+            return nodes;
         }
 
-        boolean isBinarySearchTree() {
-          // Implement correct algorithm here
-          return true;
+        private boolean isBinarySearchTree() {
+            return isBST(tree[0], -1, -1);
+        }
+
+        private boolean isBST(Node x, int min, int max) {
+            if (x == null) return true;
+
+            if (min != -1 && x.key < min) return false;
+            if (max != -1 && x.key >= max) return false;
+
+            Node lNode = x.left == -1 ? null : tree[x.left];
+            Node rNode = x.right == -1 ? null : tree[x.right];
+            return isBST(lNode, min, x.key) && isBST(rNode, x.key, max);
         }
     }
 
@@ -57,13 +71,20 @@ public class is_bst_hard {
                 try {
                     new is_bst_hard().run();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }, "1", 1 << 26).start();
     }
+
     public void run() throws IOException {
         IsBST tree = new IsBST();
-        tree.read();
+        int n = tree.read();
+        if (n == 0) {
+            System.out.println("CORRECT");
+            return;
+        }
+
         if (tree.isBinarySearchTree()) {
             System.out.println("CORRECT");
         } else {
