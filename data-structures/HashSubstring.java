@@ -1,13 +1,15 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.math.BigInteger;
+import java.util.*;
 
 public class HashSubstring {
 
     private static FastScanner in;
     private static PrintWriter out;
+    private static String pattern;
+    private static int patternLength;
+    private static final long Q = longRandomPrime();
+    private final static int R = 256;          // radix
 
     public static void main(String[] args) throws IOException {
         in = new FastScanner();
@@ -29,27 +31,69 @@ public class HashSubstring {
         }
     }
 
+    private static long hash(String key, int m) {
+        long h = 0;
+        for (int j = 0; j < m; j++)
+            h = (R * h + key.charAt(j)) % Q;
+        return h;
+    }
+
+    // Las Vegas version: does pat[] match txt[i..i-m+1] ?
+    private static boolean check(String txt, int i) {
+        for (int j = 0; j < patternLength; j++)
+            if (pattern.charAt(j) != txt.charAt(i + j))
+                return false;
+        return true;
+    }
+
+    // a random 31-bit prime
+    private static long longRandomPrime() {
+        BigInteger prime = BigInteger.probablePrime(31, new Random());
+        return prime.longValue();
+    }
+
     private static List<Integer> getOccurrences(Data input) {
-        String s = input.pattern, t = input.text;
-        int m = s.length(), n = t.length();
-        List<Integer> occurrences = new ArrayList<Integer>();
-        for (int i = 0; i + m <= n; ++i) {
-	    boolean equal = true;
-	    for (int j = 0; j < m; ++j) {
-		if (s.charAt(j) != t.charAt(i + j)) {
-		     equal = false;
- 		    break;
-		}
-	    }
-            if (equal)
-                occurrences.add(i);
-	}
-        return occurrences;
+        String text = input.text;
+
+        pattern = input.pattern;      // save pattern (needed only for Las Vegas)
+
+        patternLength = pattern.length();
+        // precompute R^(m-1) % q for use in removing leading digit
+        long RM = 1;
+        for (int i = 1; i <= patternLength - 1; i++)
+            RM = (R * RM) % Q;
+        long patternHashValue = hash(pattern, patternLength);
+
+        List<Integer> results = new ArrayList<>();
+        if (text.length() < patternLength) return Collections.emptyList();
+        long txtHash = hash(text, patternLength);
+
+        // check for match at offset 0
+        if ((patternHashValue == txtHash) && check(text, 0)) {
+            results.add(0);
+        }
+
+        // check for hash match; if hash match, check for exact match
+        for (int i = patternLength; i < text.length(); i++) {
+            // Remove leading digit, add trailing digit, check for match.
+            txtHash = (txtHash + Q - RM * text.charAt(i - patternLength) % Q) % Q;
+            txtHash = (txtHash * R + text.charAt(i)) % Q;
+
+            // match
+            int offset = i - patternLength + 1;
+            if ((patternHashValue == txtHash) && check(text, offset)) {
+                results.add(offset);
+            }
+        }
+
+        return results;
+
     }
 
     static class Data {
         String pattern;
         String text;
+
         public Data(String pattern, String text) {
             this.pattern = pattern;
             this.text = text;
