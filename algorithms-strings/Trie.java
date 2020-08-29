@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Trie {
-    class FastScanner {
+    static class FastScanner {
         StringTokenizer tok = new StringTokenizer("");
         BufferedReader in;
 

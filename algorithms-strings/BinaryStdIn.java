@@ -226,6 +226,7 @@ public final class BinaryStdIn {
      * it to standard output.
      */
     public static void main(String[] args) {
+        System.out.println();
 
         // read one 8-bit char at a time
         while (!BinaryStdIn.isEmpty()) {
