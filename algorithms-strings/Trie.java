@@ -22,16 +22,47 @@ public class Trie {
             return Integer.parseInt(next());
         }
     }
+    /*
+TrieConstruction(Patterns)
+Trie ← a graph consisting of a single node root
+for each string Pattern in Patterns:
+currentNode ← root
+for 𝑖 from 0 to |Pattern| − 1:
+currentSymbol ← Pattern[𝑖]
+if there is an outgoing edge from currentNode with label currentSymbol:
+currentNode ← ending node of this edge
+else:
+add a new node newNode to Trie
+add a new edge from currentNode to newNode with label currentSymbol
+currentNode ← newNode
+return Trie
+     */
 
     List<Map<Character, Integer>> buildTrie(String[] patterns) {
-        List<Map<Character, Integer>> trie = new ArrayList<Map<Character, Integer>>();
+        List<Map<Character, Integer>> trie = new ArrayList<>();
+        Map<Character, Integer> root = new HashMap<>();
+        trie.add(root);
+        for (String pattern : patterns) {
+            Map<Character, Integer> currentNode = root;
+            for (int i = 0; i < pattern.length(); i++) {
+                Character currentSymbol = pattern.charAt(i);
+                Set<Character> neighbours = currentNode.keySet();
+                if (neighbours.contains(currentSymbol)) {
+                    currentNode = trie.get(currentNode.get(currentSymbol));
+                } else {
+                    Map<Character, Integer> newNode = new HashMap<>();
+                    trie.add(newNode);
+                    currentNode.put(currentSymbol, trie.size() - 1);
+                    currentNode = newNode;
+                }
 
-        // write your code here
-
+            }
+        }
         return trie;
     }
 
     static public void main(String[] args) throws IOException {
+
         new Trie().run();
     }
 
