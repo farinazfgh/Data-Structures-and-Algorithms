@@ -1,41 +1,38 @@
 import java.util.*;
 import java.io.*;
 
-import static java.lang.Integer.max;
-
-public class MaxPairwiseProduct {
-    static int getMaxPairwiseProduct(int[] numbers) {
-        int max_product = 0;
-        int n = numbers.length;
-
-        for (int first = 0; first < n; ++first) {
-            for (int second = first + 1; second < n; ++second) {
-                max_product = max(max_product,
-                    numbers[first] * numbers[second]);
-            }
+public class MajorityElement {
+    private static int getMajorityElement(int[] a, int left, int right) {
+        if (left == right) {
+            return -1;
         }
-
-        return max_product;
+        if (left + 1 == right) {
+            return a[left];
+        }
+        //write your code here
+        return -1;
     }
 
     public static void main(String[] args) {
         FastScanner scanner = new FastScanner(System.in);
         int n = scanner.nextInt();
-        int[] numbers = new int[n];
+        int[] a = new int[n];
         for (int i = 0; i < n; i++) {
-            numbers[i] = scanner.nextInt();
+            a[i] = scanner.nextInt();
         }
-        System.out.println(getMaxPairwiseProduct(numbers));
+        if (getMajorityElement(a, 0, a.length) != -1) {
+            System.out.println(1);
+        } else {
+            System.out.println(0);
+        }
     }
-
     static class FastScanner {
         BufferedReader br;
         StringTokenizer st;
 
         FastScanner(InputStream stream) {
             try {
-                br = new BufferedReader(new
-                    InputStreamReader(stream));
+                br = new BufferedReader(new InputStreamReader(stream));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -56,5 +53,5 @@ public class MaxPairwiseProduct {
             return Integer.parseInt(next());
         }
     }
-
 }
+
