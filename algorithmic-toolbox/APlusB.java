@@ -1,3 +1,5 @@
+package algorithmictollbox;
+
 import java.util.Scanner;
 
 class APlusB {
