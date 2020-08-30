@@ -23,22 +23,23 @@ public class Trie {
         }
     }
     /*
-TrieConstruction(Patterns)
-Trie ← a graph consisting of a single node root
-for each string Pattern in Patterns:
-currentNode ← root
-for 𝑖 from 0 to |Pattern| − 1:
-currentSymbol ← Pattern[𝑖]
-if there is an outgoing edge from currentNode with label currentSymbol:
-currentNode ← ending node of this edge
-else:
-add a new node newNode to Trie
-add a new edge from currentNode to newNode with label currentSymbol
-currentNode ← newNode
-return Trie
+    TrieConstruction(Patterns)
+    Trie ← a graph consisting of a single node root
+    for each string Pattern in Patterns:
+    currentNode ← root
+    for 𝑖 from 0 to |Pattern| − 1:
+    currentSymbol ← Pattern[𝑖]
+    if there is an outgoing edge from currentNode with label currentSymbol:
+    currentNode ← ending node of this edge
+    else:
+    add a new node newNode to Trie
+    add a new edge from currentNode to newNode with label currentSymbol
+    currentNode ← newNode
+    return Trie
      */
 
     List<Map<Character, Integer>> buildTrie(String[] patterns) {
+        //creates a hashmap per charachter AT, AG, AC 4 characters and the first is empty for every trie
         List<Map<Character, Integer>> trie = new ArrayList<>();
         Map<Character, Integer> root = new HashMap<>();
         trie.add(root);
