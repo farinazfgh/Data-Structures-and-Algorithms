@@ -1,19 +1,11 @@
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.io.File;
+import java.util.Scanner;
 
 public class RescheduleExams {
 
-    class Edge {
-        int u, v;
-        public Edge(int u, int v) {
-            this.u = u;
-            this.v = v;
-        }
+    public static void main(String[] args) throws FileNotFoundException {
+        new RescheduleExams().run();
     }
 
     char[] assignNewColors(int n, Edge[] edges, char[] colors) {
@@ -27,7 +19,7 @@ public class RescheduleExams {
         } else {
             return null;
         }
-    } 
+    }
 
     void run() {
         Scanner scanner = new Scanner(System.in);
@@ -36,7 +28,7 @@ public class RescheduleExams {
         int n = scanner.nextInt();
         int m = scanner.nextInt();
         scanner.nextLine();
-        
+
         String colorsLine = scanner.nextLine();
         char[] colors = colorsLine.toCharArray();
 
@@ -58,7 +50,12 @@ public class RescheduleExams {
         writer.close();
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-        new RescheduleExams().run();
+    class Edge {
+        int u, v;
+
+        public Edge(int u, int v) {
+            this.u = u;
+            this.v = v;
+        }
     }
 }

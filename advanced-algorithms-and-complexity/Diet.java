@@ -1,5 +1,9 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Diet {
 
@@ -8,10 +12,21 @@ public class Diet {
     StringTokenizer st;
     boolean eof;
 
+    Diet() throws IOException {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        out = new PrintWriter(System.out);
+        solve();
+        out.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+        new Diet();
+    }
+
     int solveDietProblem(int n, int m, double A[][], double[] b, double[] c, double[] x) {
-      Arrays.fill(x, 1);
-      // Write your code here
-      return 0;
+        Arrays.fill(x, 1);
+        // Write your code here
+        return 0;
     }
 
     void solve() throws IOException {
@@ -48,17 +63,6 @@ public class Diet {
             out.printf("Infinity\n");
             return;
         }
-    }
-
-    Diet() throws IOException {
-        br = new BufferedReader(new InputStreamReader(System.in));
-        out = new PrintWriter(System.out);
-        solve();
-        out.close();
-    }
-
-    public static void main(String[] args) throws IOException {
-        new Diet();
     }
 
     String nextToken() {

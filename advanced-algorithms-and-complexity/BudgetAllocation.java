@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -19,35 +18,15 @@ public class BudgetAllocation {
         writer.writer.flush();
     }
 
-    class ConvertILPToSat {
-        int[][] A;
-        int[] b;
-
-        ConvertILPToSat(int n, int m) {
-            A = new int[n][m];
-            b = new int[n];
-        }
-
-        void printEquisatisfiableSatFormula() {
-            // This solution prints a simple satisfiable formula
-            // and passes about half of the tests.
-            // Change this function to solve the problem.
-            writer.printf("3 2\n");
-            writer.printf("1 2 0\n");
-            writer.printf("-1 -2 0\n");
-            writer.printf("1 -2 0\n");
-        }
-    }
-
     public void run() {
         int n = reader.nextInt();
         int m = reader.nextInt();
 
         ConvertILPToSat converter = new ConvertILPToSat(n, m);
         for (int i = 0; i < n; ++i) {
-          for (int j = 0; j < m; ++j) {
-            converter.A[i][j] = reader.nextInt();
-          }
+            for (int j = 0; j < m; ++j) {
+                converter.A[i][j] = reader.nextInt();
+            }
         }
         for (int i = 0; i < n; ++i) {
             converter.b[i] = reader.nextInt();
@@ -98,6 +77,26 @@ public class BudgetAllocation {
 
         public void printf(String format, Object... args) {
             writer.print(String.format(Locale.ENGLISH, format, args));
+        }
+    }
+
+    class ConvertILPToSat {
+        int[][] A;
+        int[] b;
+
+        ConvertILPToSat(int n, int m) {
+            A = new int[n][m];
+            b = new int[n];
+        }
+
+        void printEquisatisfiableSatFormula() {
+            // This solution prints a simple satisfiable formula
+            // and passes about half of the tests.
+            // Change this function to solve the problem.
+            writer.printf("3 2\n");
+            writer.printf("1 2 0\n");
+            writer.printf("-1 -2 0\n");
+            writer.printf("1 -2 0\n");
         }
     }
 }

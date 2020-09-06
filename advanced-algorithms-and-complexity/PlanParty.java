@@ -1,17 +1,19 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
+import java.util.ArrayList;
 
 class Vertex {
+    int weight;
+    ArrayList<Integer> children;
     Vertex() {
         this.weight = 0;
         this.children = new ArrayList<Integer>();
     }
-
-    int weight;
-    ArrayList<Integer> children;
 }
 
-class starter_java {
+class PlanParty {
     static Vertex[] ReadTree() throws IOException {
         InputStreamReader input_stream = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input_stream);
@@ -60,15 +62,15 @@ class starter_java {
     }
 
     public static void main(String[] args) throws IOException {
-      // This is to avoid stack overflow issues
-      new Thread(null, new Runnable() {
-                    public void run() {
-                        try {
-                            new PlanParty().run();
-                        } catch(IOException e) {
-                        }
-                    }
-                }, "1", 1 << 26).start();
+        // This is to avoid stack overflow issues
+        new Thread(null, new Runnable() {
+            public void run() {
+                try {
+                    new PlanParty().run();
+                } catch (IOException e) {
+                }
+            }
+        }, "1", 1 << 26).start();
     }
 
     public void run() throws IOException {

@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -19,56 +18,6 @@ public class CircuitDesign {
         writer.writer.flush();
     }
 
-    class Clause {
-        int firstVar;
-        int secondVar;
-    }
-
-    class TwoSatisfiability {
-        int numVars;
-        Clause[] clauses;
-
-        TwoSatisfiability(int n, int m) {
-            numVars = n;
-            clauses = new Clause[m];
-            for (int i = 0; i < m; ++i) {
-                clauses[i] = new Clause();
-            }
-        }
-
-        boolean isSatisfiable(int[] result) {
-            // This solution tries all possible 2^n variable assignments.
-            // It is too slow to pass the problem.
-            // Implement a more efficient algorithm here.
-            for (int mask = 0; mask < (1 << numVars); ++mask) {
-                for (int i = 0; i < numVars; ++i) {
-                    result[i] = (mask >> i) & 1;
-                }
-
-                boolean formulaIsSatisfied = true;
-
-                for (Clause clause: clauses) {
-                    boolean clauseIsSatisfied = false;
-                    if ((result[Math.abs(clause.firstVar) - 1] == 1) == (clause.firstVar < 0)) {
-                        clauseIsSatisfied = true;
-                    }
-                    if ((result[Math.abs(clause.secondVar) - 1] == 1) == (clause.secondVar < 0)) {
-                        clauseIsSatisfied = true;
-                    }
-                    if (!clauseIsSatisfied) {
-                        formulaIsSatisfied = false;
-                        break;
-                    }
-                }
-
-                if (formulaIsSatisfied) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
     public void run() {
         int n = reader.nextInt();
         int m = reader.nextInt();
@@ -83,7 +32,7 @@ public class CircuitDesign {
         if (twoSat.isSatisfiable(result)) {
             writer.printf("SATISFIABLE\n");
             for (int i = 1; i <= n; ++i) {
-                if (result[i-1] == 1) {
+                if (result[i - 1] == 1) {
                     writer.printf("%d", -i);
                 } else {
                     writer.printf("%d", i);
@@ -141,6 +90,56 @@ public class CircuitDesign {
 
         public void printf(String format, Object... args) {
             writer.print(String.format(Locale.ENGLISH, format, args));
+        }
+    }
+
+    class Clause {
+        int firstVar;
+        int secondVar;
+    }
+
+    class TwoSatisfiability {
+        int numVars;
+        Clause[] clauses;
+
+        TwoSatisfiability(int n, int m) {
+            numVars = n;
+            clauses = new Clause[m];
+            for (int i = 0; i < m; ++i) {
+                clauses[i] = new Clause();
+            }
+        }
+
+        boolean isSatisfiable(int[] result) {
+            // This solution tries all possible 2^n variable assignments.
+            // It is too slow to pass the problem.
+            // Implement a more efficient algorithm here.
+            for (int mask = 0; mask < (1 << numVars); ++mask) {
+                for (int i = 0; i < numVars; ++i) {
+                    result[i] = (mask >> i) & 1;
+                }
+
+                boolean formulaIsSatisfied = true;
+
+                for (Clause clause : clauses) {
+                    boolean clauseIsSatisfied = false;
+                    if ((result[Math.abs(clause.firstVar) - 1] == 1) == (clause.firstVar < 0)) {
+                        clauseIsSatisfied = true;
+                    }
+                    if ((result[Math.abs(clause.secondVar) - 1] == 1) == (clause.secondVar < 0)) {
+                        clauseIsSatisfied = true;
+                    }
+                    if (!clauseIsSatisfied) {
+                        formulaIsSatisfied = false;
+                        break;
+                    }
+                }
+
+                if (formulaIsSatisfied) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

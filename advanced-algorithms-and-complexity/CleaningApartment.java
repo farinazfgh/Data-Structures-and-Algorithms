@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -17,34 +16,6 @@ public class CleaningApartment {
         OutputWriter writer = new OutputWriter(System.out);
         new CleaningApartment(reader, writer).run();
         writer.writer.flush();
-    }
-
-    class Edge {
-        int from;
-        int to;
-    }
-
-    class ConvertHampathToSat {
-        int numVertices;
-        Edge[] edges;
-
-        ConvertHampathToSat(int n, int m) {
-            numVertices = n;
-            edges = new Edge[m];
-            for (int i = 0; i < m; ++i) {
-                edges[i] = new Edge();
-            }
-        }
-
-        void printEquisatisfiableSatFormula() {
-            // This solution prints a simple satisfiable formula
-            // and passes about half of the tests.
-            // Change this function to solve the problem.
-            writer.printf("3 2\n");
-            writer.printf("1 2 0\n");
-            writer.printf("-1 -2 0\n");
-            writer.printf("1 -2 0\n");
-        }
     }
 
     public void run() {
@@ -102,6 +73,34 @@ public class CleaningApartment {
 
         public void printf(String format, Object... args) {
             writer.print(String.format(Locale.ENGLISH, format, args));
+        }
+    }
+
+    class Edge {
+        int from;
+        int to;
+    }
+
+    class ConvertHampathToSat {
+        int numVertices;
+        Edge[] edges;
+
+        ConvertHampathToSat(int n, int m) {
+            numVertices = n;
+            edges = new Edge[m];
+            for (int i = 0; i < m; ++i) {
+                edges[i] = new Edge();
+            }
+        }
+
+        void printEquisatisfiableSatFormula() {
+            // This solution prints a simple satisfiable formula
+            // and passes about half of the tests.
+            // Change this function to solve the problem.
+            writer.printf("3 2\n");
+            writer.printf("1 2 0\n");
+            writer.printf("-1 -2 0\n");
+            writer.printf("1 -2 0\n");
         }
     }
 }

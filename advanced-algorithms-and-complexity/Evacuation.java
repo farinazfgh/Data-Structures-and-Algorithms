@@ -1,8 +1,9 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Arrays;
 
 public class Evacuation {
     private static FastScanner in;
@@ -53,7 +54,7 @@ public class Evacuation {
         private List<Integer>[] graph;
 
         public FlowGraph(int n) {
-            this.graph = (ArrayList<Integer>[])new ArrayList[n];
+            this.graph = (ArrayList<Integer>[]) new ArrayList[n];
             for (int i = 0; i < n; ++i)
                 this.graph[i] = new ArrayList<>();
             this.edges = new ArrayList<>();

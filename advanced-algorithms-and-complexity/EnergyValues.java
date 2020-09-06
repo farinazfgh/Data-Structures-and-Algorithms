@@ -1,25 +1,22 @@
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 class Equation {
+    double a[][];
+    double b[];
     Equation(double a[][], double b[]) {
         this.a = a;
         this.b = b;
     }
-
-    double a[][];
-    double b[];
 }
 
 class Position {
+    int column;
+    int raw;
     Position(int column, int raw) {
         this.column = column;
         this.raw = raw;
     }
-
-    int column;
-    int raw;
 }
 
 class EnergyValues {

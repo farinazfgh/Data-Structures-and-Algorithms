@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -46,7 +45,7 @@ public class StockCharts {
                 boolean canAdd = true;
                 for (int index : chart)
                     if (!compare(stockData[i], stockData[index]) &&
-                        !compare(stockData[index], stockData[i])) {
+                            !compare(stockData[index], stockData[i])) {
                         canAdd = false;
                         break;
                     }
