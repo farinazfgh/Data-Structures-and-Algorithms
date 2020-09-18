@@ -6,19 +6,19 @@ public class Graph {
     Map<Integer, List<Integer>> neighbors;
 
     public Graph() {
-        this.adjacentVertices = new HashMap<>();
+        this.neighbors = new HashMap<>();
     }
 
     public void addVertex(int vertex) {
-        adjacentVertices.putIfAbsent(vertex, new ArrayList<>());
+        neighbors.putIfAbsent(vertex, new ArrayList<>());
     }
 
     public int V() {
-        return adjacentVertices.size();
+        return neighbors.size();
     }
 
     public void addEdge(int src, int dst) {
-        adjacentVertices.get(src).add(dst);
+        neighbors.get(src).add(dst);
     }
 
     private void visit(int vertex) {
@@ -33,21 +33,21 @@ public class Graph {
             int current = stack.pop();
             isVisited[current] = true;
             visit(current);
-            for (Integer vertex : adjacentVertices.get(current)) {
+            for (Integer vertex : neighbors.get(current)) {
                 if (!isVisited[vertex]) stack.push(vertex);
             }
         }
     }
 
     public void dfsR(int source) {
-        boolean[] isVisited = new boolean[adjacentVertices.size()];
+        boolean[] isVisited = new boolean[V()];
         dfsRecursive(source, isVisited);
     }
 
     public void dfsRecursive(int current, boolean[] isVisited) {
         isVisited[current] = true;
         visit(current);
-        for (Integer vertex : adjacentVertices.get(current)) {
+        for (Integer vertex : neighbors.get(current)) {
             if (!isVisited[vertex])
                 dfsRecursive(vertex, isVisited);
         }
@@ -55,7 +55,7 @@ public class Graph {
 
     public LinkedList<Integer> topologicalSort(int source) {
         LinkedList<Integer> result = new LinkedList<>();
-        boolean[] isVisited = new boolean[adjacentVertices.size()];
+        boolean[] isVisited = new boolean[V()];
         topologicalSortRecursive(source, isVisited, result);
         return result;
 
@@ -63,14 +63,14 @@ public class Graph {
 
     private void topologicalSortRecursive(int current, boolean[] isVisited, LinkedList<Integer> result) {
         isVisited[current] = true;
-        for (int vertex : adjacentVertices.get(current)) {
+        for (int vertex : neighbors.get(current)) {
             if (!isVisited[vertex]) topologicalSortRecursive(vertex, isVisited, result);
         }
         result.addFirst(current);
     }
 
     private void bfs(int source) {
-        boolean[] isVisited = new boolean[adjacentVertices.size()];
+        boolean[] isVisited = new boolean[V()];
 
         Queue<Integer> queue = new Queue<Integer>();
         isVisited[source] = true;
@@ -79,7 +79,7 @@ public class Graph {
         while (!queue.isEmpty()) {
             int vertex = queue.dequeue();
             visit(vertex);
-            for (int current : adjacentVertices.get(vertex)) {
+            for (int current : neighbors.get(vertex)) {
                 if (!isVisited[current]) {
                     isVisited[current] = true;
                     queue.enqueue(current);
