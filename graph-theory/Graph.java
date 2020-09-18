@@ -3,7 +3,7 @@ import util.Queue;
 import java.util.*;
 
 public class Graph {
-    Map<Integer, List<Integer>> adjacentVertices;
+    Map<Integer, List<Integer>> neighbors;
 
     public Graph() {
         this.adjacentVertices = new HashMap<>();
