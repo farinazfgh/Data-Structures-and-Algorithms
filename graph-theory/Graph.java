@@ -13,7 +13,7 @@ public class Graph {
         adjacentVertices.putIfAbsent(vertex, new ArrayList<>());
     }
 
-    public int getNumberOfVerrices() {
+    public int V() {
         return adjacentVertices.size();
     }
 
@@ -27,7 +27,7 @@ public class Graph {
 
     public void dfs(int source) {
         Stack<Integer> stack = new Stack<>();
-        boolean[] isVisited = new boolean[getNumberOfVerrices()];
+        boolean[] isVisited = new boolean[V()];
         stack.push(source);
         while (!stack.isEmpty()) {
             int current = stack.pop();
