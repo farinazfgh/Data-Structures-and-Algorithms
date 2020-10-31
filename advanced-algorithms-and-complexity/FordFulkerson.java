@@ -21,40 +21,50 @@ public class FordFulkerson {
     private final int V;          // number of vertices
     private boolean[] isVisited;     // marked[v] = true iff s->v path in residual graph
     private FlowEdge[] fromEdge;    // edgeTo[v] = last edge on shortest residual s->v path
-    private double value;         // current value of max flow
-
+    private double maxFlow;         // current value of max flow
+    static int count = 0;
 
     public FordFulkerson(FlowNetwork G, int source, int target) {
         V = G.V();
-        validate(source);
-        validate(target);
-        if (source == target) throw new IllegalArgumentException("Source equals sink");
-        if (!isFeasible(G, source, target)) throw new IllegalArgumentException("Initial flow is infeasible");
+        validateAll(G, source, target);
 
         // while there exists an augmenting path, use it
-        value = excess(G, target);
+        maxFlow = excess(G, target);
         while (hasAugmentingPath(G, source, target)) {
-
-            // compute bottleneck capacity
-            double bottleneck = Double.POSITIVE_INFINITY;
-            for (int current = target; current != source; current = fromEdge[current].other(current)) {
-                bottleneck = Math.min(bottleneck, fromEdge[current].residualCapacityTo(current));
-            }
-
-            // augment flow
-            for (int current = target; current != source; current = fromEdge[current].other(current)) {
-                fromEdge[current].addResidualFlowTo(current, bottleneck);
-            }
-
-            value += bottleneck;
+            double bottleneck = getBottleneckCapacity(source, target);
+            augmentFlow(source, target, bottleneck);
+            maxFlow += bottleneck;
         }
 
         // check optimality conditions
         assert check(G, source, target);
     }
 
+    private void augmentFlow(int source, int target, double bottleneck) {
+        // augment flow
+        for (int current = target; current != source; current = fromEdge[current].other(current)) {
+            fromEdge[current].addResidualFlowTo(current, bottleneck);
+        }
+    }
+
+    private double getBottleneckCapacity(int source, int target) {
+        // compute bottleneck capacity
+        double bottleneck = Double.POSITIVE_INFINITY;
+        for (int current = target; current != source; current = fromEdge[current].other(current)) {
+            bottleneck = Math.min(bottleneck, fromEdge[current].residualCapacityTo(current));
+        }
+        return bottleneck;
+    }
+
+    private void validateAll(FlowNetwork g, int source, int target) {
+        validate(source);
+        validate(target);
+        if (source == target) throw new IllegalArgumentException("Source equals sink");
+        if (!isFeasible(g, source, target)) throw new IllegalArgumentException("Initial flow is infeasible");
+    }
+
     public double value() {
-        return value;
+        return maxFlow;
     }
 
     public boolean inCut(int v) {
@@ -73,15 +83,21 @@ public class FordFulkerson {
     // if so, upon termination edgeTo[] will contain a parent-link representation of such a path
     // this implementation finds a shortest augmenting path (fewest number of edges),
     // which performs well both in theory and in practice
-    private boolean hasAugmentingPath(FlowNetwork G, int s, int t) {
+    private boolean hasAugmentingPath(FlowNetwork G, int source, int target) {
+        count++;
+        System.out.println("BFS: " + count);
+        System.out.println("maxFlow: " + maxFlow);
+        printFromege(fromEdge);
+        System.out.println(G);
+        System.out.println("************************");
         fromEdge = new FlowEdge[G.V()];
         isVisited = new boolean[G.V()];
 
         // breadth-first search
         Queue<Integer> queue = new LinkedList<>();
-        queue.offer(s);
-        isVisited[s] = true;
-        while (!queue.isEmpty() && !isVisited[t]) {
+        queue.offer(source);
+        isVisited[source] = true;
+        while (!queue.isEmpty() && !isVisited[target]) {
             int v = queue.poll();
 
             for (FlowEdge e : G.getAdj(v)) {
@@ -99,7 +115,7 @@ public class FordFulkerson {
         }
 
         // is there an augmenting path?
-        return isVisited[t];
+        return isVisited[target];
     }
 
 
@@ -114,7 +130,7 @@ public class FordFulkerson {
     }
 
     // return excess flow at vertex v
-    private boolean isFeasible(FlowNetwork G, int s, int t) {
+    private boolean isFeasible(FlowNetwork G, int source, int target) {
 
         // check that capacity constraints are satisfied
         for (int v = 0; v < G.V(); v++) {
@@ -127,18 +143,18 @@ public class FordFulkerson {
         }
 
         // check that net flow into a vertex equals zero, except at source and sink
-        if (Math.abs(value + excess(G, s)) > FLOATING_POINT_EPSILON) {
-            System.err.println("Excess at source = " + excess(G, s));
-            System.err.println("Max flow         = " + value);
+        if (Math.abs(maxFlow + excess(G, source)) > FLOATING_POINT_EPSILON) {
+            System.err.println("Excess at source = " + excess(G, source));
+            System.err.println("Max flow         = " + maxFlow);
             return false;
         }
-        if (Math.abs(value - excess(G, t)) > FLOATING_POINT_EPSILON) {
-            System.err.println("Excess at sink   = " + excess(G, t));
-            System.err.println("Max flow         = " + value);
+        if (Math.abs(maxFlow - excess(G, target)) > FLOATING_POINT_EPSILON) {
+            System.err.println("Excess at sink   = " + excess(G, target));
+            System.err.println("Max flow         = " + maxFlow);
             return false;
         }
         for (int v = 0; v < G.V(); v++) {
-            if (v == s || v == t) continue;
+            if (v == source || v == target) continue;
             else if (Math.abs(excess(G, v)) > FLOATING_POINT_EPSILON) {
                 System.err.println("Net flow out of " + v + " doesn't equal zero");
                 return false;
@@ -176,11 +192,10 @@ public class FordFulkerson {
             }
         }
 
-        if (Math.abs(mincutValue - value) > FLOATING_POINT_EPSILON) {
-            System.err.println("Max flow value = " + value + ", min cut value = " + mincutValue);
+        if (Math.abs(mincutValue - maxFlow) > FLOATING_POINT_EPSILON) {
+            System.err.println("Max flow value = " + maxFlow + ", min cut value = " + mincutValue);
             return false;
         }
-
         return true;
     }
 
@@ -193,22 +208,22 @@ public class FordFulkerson {
     public static void main(String[] args) {
 
         // create flow network with V vertices and E edges
-        int V = Integer.parseInt(args[0]);
-        int E = Integer.parseInt(args[1]);
-        int s = 0, t = V - 1;
+        int V = 8;
+        int E = 15;
+        int source = 0, target = V - 1;
         FlowNetwork G = new FlowNetwork(V, E);
         System.out.println(G);
 
         // compute maximum flow and minimum cut
-        FordFulkerson maxflow = new FordFulkerson(G, s, t);
-        System.out.println("Max flow from " + s + " to " + t);
+        FordFulkerson maxflow = new FordFulkerson(G, source, target);
+        System.out.println("Max flow from " + source + " to " + target);
         for (int v = 0; v < G.V(); v++) {
             for (FlowEdge e : G.getAdj(v)) {
                 if ((v == e.from()) && e.flow() > 0)
                     System.out.println("   " + e);
             }
         }
-
+        System.out.println("BFS is called:" + count);
         // print min-cut
         System.out.print("Min cut: ");
         for (int v = 0; v < G.V(); v++) {
@@ -217,6 +232,15 @@ public class FordFulkerson {
         System.out.println();
 
         System.out.println("Max flow value = " + maxflow.value());
+    }
+
+    void printFromege(FlowEdge[] flowEdges) {
+        if (flowEdges == null || flowEdges.length == 0) return;
+        System.out.println("------------ from edges ------------------");
+        for (FlowEdge edge : flowEdges) {
+            System.out.println(edge);
+        }
+        System.out.println("--------------------------------------------");
     }
 
 }

@@ -53,4 +53,8 @@ public class FlowEdge {
         } else
             throw new IllegalArgumentException("invalid endpoint!");
     }
+    public String toString() {
+        return v + "->" + w + " " + flow + "/" + capacity;
+    }
+
 }

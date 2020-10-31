@@ -26,26 +26,47 @@ public class FlowNetwork {
             adj[i] = new ArrayList<>();
         }
     }
+
     public Iterable<FlowEdge> getAdj(int v) {
         validateVertex(v);
         return adj[v];
     }
+
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
     private void validateVertex(int v) {
         if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
+            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
     }
 
 
     public FlowNetwork(int v, int e) {
         this(v);
         if (e < 0) throw new IllegalArgumentException("Number of edges must be nonnegative");
-        for (int i = 0; i < e; i++) {
-            int from = uniform(V);
-            int to = uniform(V);
-            double capacity = uniform(100);
-            addEdge(new FlowEdge(from, to, capacity));
-        }
+        addEdges();
+    }
+
+    private void addEdges() {
+        addEdge(new FlowEdge(0, 1, 10));
+        addEdge(new FlowEdge(0, 2, 5));
+        addEdge(new FlowEdge(0, 3, 15));
+
+        addEdge(new FlowEdge(1, 4, 9));
+        addEdge(new FlowEdge(1, 5, 15));
+        addEdge(new FlowEdge(1, 2, 4));
+
+        addEdge(new FlowEdge(2, 5, 8));
+        addEdge(new FlowEdge(2, 3, 4));
+
+        addEdge(new FlowEdge(3, 6, 16));
+
+        addEdge(new FlowEdge(4, 7, 10));
+        addEdge(new FlowEdge(4, 5, 15));
+
+        addEdge(new FlowEdge(5, 7, 10));
+        addEdge(new FlowEdge(5, 6, 15));
+
+        addEdge(new FlowEdge(6, 7, 10));
+        addEdge(new FlowEdge(6, 2, 6));
     }
 
     public void addEdge(FlowEdge edge) {
@@ -63,5 +84,18 @@ public class FlowNetwork {
 
     public int V() {
         return V;
+    }
+
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(V).append(" ").append(E).append(NEWLINE);
+        for (int v = 0; v < V; v++) {
+            s.append(v).append(":  ");
+            for (FlowEdge e : adj[v]) {
+                if (e.to() != v) s.append(e).append("  ");
+            }
+            s.append(NEWLINE);
+        }
+        return s.toString();
     }
 }
