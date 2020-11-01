@@ -56,7 +56,7 @@ public class BipartiteX {
                     fromEdge[w] = v;
                     color[w] = !color[v];
                     q.offer(w);
-                } else if (color[w] == color[v]) {
+                } else if (color[w] == color[v]) {// both are at the same side of the graph
                     isBipartite = false;
 
                     // to form odd cycle, consider s-v path and s-w path
