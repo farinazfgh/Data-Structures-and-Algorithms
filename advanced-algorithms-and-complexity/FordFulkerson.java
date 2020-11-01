@@ -115,6 +115,7 @@ public class FordFulkerson {
         }
 
         // is there an augmenting path?
+        printIsVisited(isVisited);
         return isVisited[target];
     }
 
@@ -241,6 +242,13 @@ public class FordFulkerson {
             System.out.println(edge);
         }
         System.out.println("--------------------------------------------");
+    }
+
+    void printIsVisited(boolean[] array) {
+        for (boolean b : array) {
+            System.out.print(b + " , ");
+        }
+        System.out.println();
     }
 
 }
