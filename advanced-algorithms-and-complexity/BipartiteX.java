@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -199,5 +200,15 @@ public class BipartiteX {
             }
             System.out.println();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "BipartiteX{" +
+                "isBipartite=" + isBipartite +
+                ", color=" + Arrays.toString(color) +
+                ", fromEdge=" + Arrays.toString(fromEdge) +
+                ", cycle=" + cycle +
+                '}';
     }
 }
